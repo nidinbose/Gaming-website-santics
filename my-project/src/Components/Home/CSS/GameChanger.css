@@ -1,0 +1,20 @@
+@keyframes scroll {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .animate-scroll {
+    animation: scroll 15s linear infinite;
+  }
+
+
+  #text1{
+ position: relative;
+ /* font-size: 6vw; */
+ color: transparent;
+ -webkit-text-stroke: 0.3vw rgb(249, 70, 118);
+  }
