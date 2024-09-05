@@ -50,7 +50,32 @@ export async function addCase(req,res){
   }
 
 
+  export async function updateCase(req,res) {
+    try {
+        const {id}=req.params;
+        console.log(id);
+    const {...FormData}=req.body
+    await caseSchema.updateOne({_id:id},{$set:{...FormData}})
+        res.status(201).send({msg:"updated"})
+    } catch (error) {
+        res.status(400).send(error)
+    }
+  }
 
+
+  export async function deleteCase(req, res) {
+    try {
+        const { id } = req.params;
+        console.log(id);    
+  
+      await caseSchema.deleteOne({_id:id});
+       res.status(200).send({msg:"successfully deleted"})
+    } catch (error) {
+        console.error(error);
+        res.status(400).send({ error});
+    }
+    
+  }
 
 //   ------------------------------------Authentication---------------------------------
 

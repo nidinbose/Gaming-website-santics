@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from 'axios'; // Ensure axios is installed
+import axios from 'axios'; 
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -15,17 +16,17 @@ const AdminLogin = () => {
     });
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      // Replace with your API endpoint
       const response = await axios.post('/api/login', formData);
+      
       if (response.data.success) {
-        // Handle successful login, e.g., redirect to dashboard
         console.log('Login successful');
+        navigate('/');
       } else {
-        // Handle login error
         console.log('Login failed');
       }
     } catch (error) {

@@ -26,6 +26,7 @@ import Cart from './Components/Cart'
 import AddProducts from './Components/AdminHandle/AddProduct'
 import ViewProducts from './Components/AdminHandle/ViewProduct'
 import ProductList from './Components/AdminHandle/ProductsList'
+import EditProducts from './Components/AdminHandle/EditProduct'
 
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
         <Route path="/addproducts" Component={AddProducts}/>
         <Route path="/viewproducts/:id" Component={ViewProducts}/>
         <Route path="/productslist" Component={ProductList}/>
+        <Route path="/editproducts/:id" Component={EditProducts}/>
            
 
         <Route path="/signup" Component={Signup}/>

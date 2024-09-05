@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 
 const ProductList = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("All"); // Default category set to "All"
+  const navigate = useNavigate();
+  useEffect(() => {
+  
+    const isAuthenticated = localStorage.getItem('token'); 
 
-  // Fetching products from the API
+    if (!isAuthenticated) {
+      alert("Please log in to continue.");
+      navigate('/login');
+    }
+  }, [navigate]);
   const getCase = async () => {
     try {
       const res = await axios.get("http://localhost:3003/api/getcase");
@@ -22,12 +30,12 @@ const ProductList = () => {
     getCase();
   }, []);
 
-  // Handle category change
+  
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
   };
 
-  // Filter products based on selected category
+
   const filteredProducts = category === "All"
     ? products
     : products.filter((product) => product.category === category);

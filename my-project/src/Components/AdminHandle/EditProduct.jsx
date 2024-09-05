@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
-const AddProducts = () => {
-  const [formData, setFormData] = useState({
+const EditProducts = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [data, setData] = useState({
     imagelink: "",
     hoverimagelink: "",
     name: "",
@@ -27,320 +29,186 @@ const AddProducts = () => {
     category: "",
   });
   const [isEditing, setIsEditing] = useState(false);
-  const { id } = useParams(); // Get the product ID from the URL if editing
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (id) {
-      // Fetch product data for editing
-      const fetchProductData = async () => {
-        try {
-          const response = await axios.get(`http://localhost:3003/api/getcaseedit/${id}`);
-          setFormData(response.data);
-          setIsEditing(true);
-        } catch (error) {
-          console.error("Error fetching product data:", error);
-          alert("Failed to fetch product data.");
-        }
-      };
-
-      fetchProductData();
-    }
-  }, [id]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const updateProduct = async () => {
     try {
-      if (isEditing) {
-        // Update existing product
-        await axios.put(`http://localhost:3003/api/getcaseedit/${id}`, formData);
+      const res = await axios.patch(`http://localhost:3003/api/updatecase/${id}`, data);
+      if (res.status === 201) {
         alert("Product updated successfully!");
-      } else {
-        // Add new product
-        await axios.post("http://localhost:3003/api/addcase", formData);
-        alert("Product added successfully!");
+        navigate("/");  // Redirects after successful update
       }
-      navigate("/products"); // Redirect to the products list or any other page
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Failed to submit form.");
+      console.error("Error updating product:", error);
+      alert("Failed to update product.");
     }
+  };
+
+  const getProduct = async () => {
+    try {
+      const res = await axios.get(`http://localhost:3003/api/getcaseedit/${id}`);
+      setData(res.data);  // Set the response data to populate the form fields
+      setIsEditing(true);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+      alert("Failed to fetch product data.");
+    }
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateProduct();
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-6 text-center">
-        {isEditing ? "Edit Product" : "Add New Product"}
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-gray-700 mb-1">Image URL:</label>
-          <input
-            type="text"
-            name="imagelink"
-            value={formData.imagelink}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter image URL"
-          />
-        </div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+  <div className="w-full max-w-4xl bg-white p-10 rounded-lg shadow-lg">
+    <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+      {isEditing ? "Edit Product" : "Add New Product"}
+    </h1>
+    <form 
+      onSubmit={handleSubmit} 
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:block sm:block"
+    >
+       {/* Specifications Input */}
+       <div className="col-span-2 md:col-span-3 lg:w-full">
+        <label className="block text-gray-700 mb-1">Image</label>
+        <textarea
+          name="image"
+          value={data.imagelink}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter product specifications"
+          rows="1"
+        />
+      </div>
 
-        <div>
-          <label className="block text-gray-700 mb-1">Hover Image URL:</label>
-          <input
-            type="text"
-            name="hoverimagelink"
-            value={formData.hoverimagelink}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter hover image URL"
-          />
-        </div>
+         {/* Specifications Input */}
+         <div className="col-span-2 md:col-span-3 lg:w-full">
+        <label className="block text-gray-700 mb-1">Hover image</label>
+        <textarea
+          name="hoverimagelink"
+          value={data.hoverimagelink}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter product specifications"
+          rows="1"
+        />
+      </div>
+       {/* Specifications Input */}
+       <div className="col-span-2 md:col-span-3 lg:w-full">
+        <label className="block text-gray-700 mb-1">Name</label>
+        <textarea
+          name="name"
+          value={data.name}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter product specifications"
+          rows="1"
+        />
+      </div>
 
-        <div>
-          <label className="block text-gray-700 mb-1">Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter product name"
-          />
-        </div>
+      <div className="col-span-1 lg:w-full">
+        <label className="block text-gray-700 mb-1">Hover Image:</label>
+        <input
+          type="text"
+          name="hoverimagelink"
+          value={data.hoverimagelink}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter hover image URL"
+        />
+      </div>
 
-        <div>
-          <label className="block text-gray-700 mb-1">Specifications:</label>
-          <input
-            type="text"
-            name="specifications"
-            value={formData.specifications}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter specifications"
-          />
-        </div>
+      {/* Name Input */}
+      <div className="col-span-1 lg:w-full">
+        <label className="block text-gray-700 mb-1">Product Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={data.name}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter product name"
+        />
+      </div>
 
-        <div>
-          <label className="block text-gray-700 mb-1">Description:</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter product description"
-          />
-        </div>
+      {/* Category Input */}
+      <div className="col-span-1 lg:w-full">
+        <label className="block text-gray-700 mb-1">Category:</label>
+        <input
+          type="text"
+          name="category"
+          value={data.category}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter category"
+        />
+      </div>
 
-        <div>
-          <label className="block text-gray-700 mb-1">Price:</label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter price"
-          />
-        </div>
+      {/* Price Input */}
+      <div className="col-span-1 lg:w-full">
+        <label className="block text-gray-700 mb-1">Price:</label>
+        <input
+          type="number"
+          min="0"
+          name="price"
+          value={data.price}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter price"
+        />
+      </div>
 
-        <div>
-          <label className="block text-gray-700 mb-1">Key Uses:</label>
-          <input
-            type="text"
-            name="keyUses"
-            value={formData.keyUses}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter key uses (comma separated)"
-          />
-        </div>
+      {/* Specifications Input */}
+      <div className="col-span-2 md:col-span-3 lg:w-full">
+        <label className="block text-gray-700 mb-1">Specifications:</label>
+        <textarea
+          name="specifications"
+          value={data.specifications}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter product specifications"
+          rows="4"
+        />
+      </div>
+         {/* Specifications Input */}
+         <div className="col-span-2 md:col-span-3 lg:w-full">
+        <label className="block text-gray-700 mb-1">Key Uses:</label>
+        <textarea
+          name="specifications"
+          value={data.keyUses}
+          onChange={handleChange}
+          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter product specifications"
+          rows="4"
+        />
+      </div>
 
-        <div>
-          <label className="block text-gray-700 mb-1">Link VF:</label>
-          <input
-            type="text"
-            name="linkvf"
-            value={formData.linkvf}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link VF"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Link VF2:</label>
-          <input
-            type="text"
-            name="linkvf2"
-            value={formData.linkvf2}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link VF2"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Link 1:</label>
-          <input
-            type="text"
-            name="link1"
-            value={formData.link1}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link 1"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Link 2:</label>
-          <input
-            type="text"
-            name="link2"
-            value={formData.link2}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link 2"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Link 3:</label>
-          <input
-            type="text"
-            name="link3"
-            value={formData.link3}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link 3"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Link 4:</label>
-          <input
-            type="text"
-            name="link4"
-            value={formData.link4}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link 4"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Link 5:</label>
-          <input
-            type="text"
-            name="link5"
-            value={formData.link5}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link 5"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Link 6:</label>
-          <input
-            type="text"
-            name="link6"
-            value={formData.link6}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter link 6"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Button Link:</label>
-          <input
-            type="text"
-            name="btnlink"
-            value={formData.btnlink}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter button link"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Video URL:</label>
-          <input
-            type="text"
-            name="video"
-            value={formData.video}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter video URL"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">BNN1:</label>
-          <input
-            type="text"
-            name="bnn1"
-            value={formData.bnn1}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter BNN1"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">BNN2:</label>
-          <input
-            type="text"
-            name="bnn2"
-            value={formData.bnn2}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter BNN2"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">BNN3:</label>
-          <input
-            type="text"
-            name="bnn3"
-            value={formData.bnn3}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter BNN3"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-1">Category:</label>
-          <input
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter category"
-          />
-        </div>
-
+      {/* Submit Button */}
+      <div className="col-span-2 md:col-span-3 lg:w-full">
         <button
           type="submit"
-          className="w-full py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
+          className="w-full py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-300"
         >
           {isEditing ? "Update Product" : "Add Product"}
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
+  </div>
+</div>
+
   );
 };
 
-export default AddProducts;
+export default EditProducts;

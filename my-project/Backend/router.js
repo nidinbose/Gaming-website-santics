@@ -17,5 +17,7 @@ router.route('/home').get(Auth,request.Home)
 router.route('/addcart').post(Auth,request.addCart)
 router.route('/getcart').get(Auth,request.getCart)
 router.route('/logout').get(Auth,request.Logout)
+router.route('/updatecase/:id').patch(request.updateCase)
+router.route('/deletecase/:id').delete(request.deleteCase)
 
 export default router

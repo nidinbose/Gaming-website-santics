@@ -19,37 +19,15 @@ const ViewProducts = () => {
     }
   };
 
-  const handleAddToCart = async () => {
+
+  const handleDelete = async () => {
     try {
-      const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
-
-      if (!userId) {
-        console.error("User is not authenticated. Redirecting to login...");
-        navigate("/login");
-        return;
-      }
-
-      const requestData = {
-        userId,
-        productId: product._id,
-        name: product.name,
-        linkvf: product.linkvf,
-        price: product.price,
-        quantity: 1,
-      };
-
-      const headers = {
-        Authorization: `Bearer ${token}`, // Include the token in headers
-      };
-
-      const response = await axios.post("http://localhost:3003/api/addcart", requestData, { headers });
-      console.log("Item added to cart:", response.data);
+      await axios.delete(`http://localhost:3003/api/deletecase/${id}`);
+      navigate('/productslist'); // Navigate to the student list page
     } catch (error) {
-      console.error("Error adding item to cart:", error.response ? error.response.data : error.message);
+      console.error("Error deleting student:", error);
     }
   };
-
   useEffect(() => {
     getCase();
   }, [id]);
@@ -110,7 +88,7 @@ const ViewProducts = () => {
                 {/* Button to add to cart */}
                 <button
                   className="inline-flex items-center justify-center text-white bg-gray-900 rounded group w-full sm:w-auto"
-                  onClick={handleAddToCart}
+                  onClick={handleDelete}
                 >
                   <span className="px-3.5 py-2 text-white bg-red-500 group-hover:bg-green-300 flex items-center">
                     <svg
@@ -128,17 +106,17 @@ const ViewProducts = () => {
                       ></path>
                     </svg>
                   </span>
-                  <span className="pl-4 pr-5 py-2.5">Add to Cart</span>
+                  <span className="pl-4 pr-5 py-2.5">Delete</span>
                 </button>
 
                 {/* Button link */}
                 <Link
-                  to={`${product.btnlink}`}
+                  to={`/editproducts/${id}`}
                   className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group w-full sm:w-auto"
                 >
                   <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gray-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
                   <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
-                  <span className="relative text-md">See more</span>
+                  <span className="relative text-md">Edit</span>
                 </Link>
               </div>
             </div>
