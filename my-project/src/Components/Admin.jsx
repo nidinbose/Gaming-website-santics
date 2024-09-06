@@ -11,7 +11,7 @@ const Admin = () => {
 
     if (!isAuthenticated) {
       alert("Please log in to continue.");
-      navigate('/login');
+      navigate('/adminlogin');
     }
   }, [navigate]);
 

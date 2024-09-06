@@ -7,6 +7,9 @@ export default {
       animation: {
         rotate: "rotate 10s linear infinite",
       },
+      zIndex: {
+        '10': '10',
+      },
       keyframes: {
         rotate: {
           "0%": { transform: "rotate(0deg) scale(10)" },

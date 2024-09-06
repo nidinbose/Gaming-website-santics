@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartComponent from "./Navbar/Cartdrop";
+// import UserView from "./Navbar/UserView";
 
 const Navbar = ({ user, setUser }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -67,7 +68,8 @@ const Navbar = ({ user, setUser }) => {
   ];
 
   return (
-    <nav className="bg-black text-red-600 shadow-md">
+    <nav className="bg-black text-red-600 shadow-md pb-1 pt-2 font-semibold">
+
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         {/* Logo */}
         <div className="flex items-center">
@@ -103,44 +105,45 @@ const Navbar = ({ user, setUser }) => {
             </div>
           ))}
         </div>
-        <div
-            className="relative"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <Link to="/cart">
-              <button className="focus:outline-none">
-                <img
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAAA2CAMAAAB9Xg5WAAAAaVBMVEUAAAD///9BQUH8/Pzs7Ozk5OTo6Oje3t4GBgZwcHD39/fDw8MZGRltbW3b29vw8PClpaXT09NnZ2cSEhLKysqcnJyFhYWurq45OTmLi4tcXFwzMzO7u7slJSVVVVUtLS17e3uTk5NLS0u/7ioHAAACDklEQVRYhe2W25ajIBBFPSJRUcFbNJpoTP7/I5urY89a3T3B8WUm+4VKEQ8sqAtB8ObN/0pTUcWpO0I8Z9BUR4gHU1EUdQnWHKKuCIH6MPGAoj9OvAc9TrwG7sepEwyX8Gf8rr3FnzH4iHdAxGMJF0CsoauLgHHnyj3Er8BorAdw1cZz3SdDa/8m7NyLxCiNIe821cYFOBsXwc0YE5iPdlCCG+O6asKtB5cFs2eZGEHuQSKRh5AZQ2mqsVHLac/glnsVBhEpTvL6jAFrRLBTEcPiJ56t4UbI7wH4yxH6iS9gdSopSmBRRk1RKU8xAI9CexhL/MQnty0ZJbM2KhuBI3DRRuIu/XW4jZKcwPSlzMZGAUx2Fe/aeXZxFttVeuuoQcxEB+9uOAMnDQPTowChdnQTs6+4zO0vWINlRzO8ySzP8zxJIaYmz2XKMPVbnhdXY95EOzpKAaHHiy1dta0kpY2auysxXhAbFQJPNYRWvLeiIx7e0ktLIPQTiSDSLyVAXSiVFyxHSkF8irnmrPL+W/jTe+PsyKcLEcdpy0A88F2UVPLQmWF70sbjupM36S07mYy8ZSvc5Ga27N++fBsFNdm2hFieVhjZnr2LURfsfnsGOpE62VZ3MyPW4ptM1OV22JX4DoYy7D51So4sTAWWvyCe6tvbxuRT19v2yy9eYW4pXz55rhnl/gXrzZt/iA+c9ReW/99PyAAAAABJRU5ErkJggg=="
-                  alt="Cart"
-                  className="h-9 w-12"
-                />
-              </button>
-            </Link>
+        
 
-            {/* Show CartComponent only on hover */}
-            {isHovered && (
-              <div className="absolute top-full right-0 mt-2 z-50">
-                <CartComponent />
-              </div>
-            )}
-          </div>
+         
         {/* Search & Cart Icons */}
-        <div className="flex items-center space-x-4">
-          <Link to="/login">
-            <button className="focus:outline-none bg-white">
-              <img
-                src="https://cdn3.iconfinder.com/data/icons/feather-5/24/user-1024.png"
-                alt="User"
-                className="h-6 w-6"
-              />
-            </button>
-          </Link>
+        <div className="flex items-center space-x-10">
+      <div
+        className="relative"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Show CartComponent only on hover */}
+        {isHovered && (
+          <div className="absolute top-full right-[90px] mt-2 z-50">
+            <CartComponent />
+          </div>
+        )}
 
-        
+        <Link to="/cart">
+          <button className="focus:outline-none">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAAA2CAMAAAB9Xg5WAAAAaVBMVEUAAAD///9BQUH8/Pzs7Ozk5OTo6Oje3t4GBgZwcHD39/fDw8MZGRltbW3b29vw8PClpaXT09NnZ2cSEhLKysqcnJyFhYWurq45OTmLi4tcXFwzMzO7u7slJSVVVVUtLS17e3uTk5NLS0u/7ioHAAACDklEQVRYhe2W25ajIBBFPSJRUcFbNJpoTP7/I5urY89a3T3B8WUm+4VKEQ8sqAtB8ObN/0pTUcWpO0I8Z9BUR4gHU1EUdQnWHKKuCIH6MPGAoj9OvAc9TrwG7sepEwyX8Gf8rr3FnzH4iHdAxGMJF0CsoauLgHHnyj3Er8BorAdw1cZz3SdDa/8m7NyLxCiNIe821cYFOBsXwc0YE5iPdlCCG+O6asKtB5cFs2eZGEHuQSKRh5AZQ2mqsVHLac/glnsVBhEpTvL6jAFrRLBTEcPiJ56t4UbI7wH4yxH6iS9gdSopSmBRRk1RKU8xAI9CexhL/MQnty0ZJbM2KhuBI3DRRuIu/XW4jZKcwPSlzMZGAUx2Fe/aeXZxFttVeuuoQcxEB+9uOAMnDQPTowChdnQTs6+4zO0vWINlRzO8ySzP8zxJIaYmz2XKMPVbnhdXY95EOzpKAaHHiy1dta0kpY2auysxXhAbFQJPNYRWvLeiIx7e0ktLIPQTiSDSLyVAXSiVFyxHSkF8irnmrPL+W/jTe+PsyKcLEcdpy0A88F2UVPLQmWF70sbjupM36S07mYy8ZSvc5Ga27N++fBsFNdm2hFieVhjZnr2LURfsfnsGOpE62VZ3MyPW4ptM1OV22JX4DoYy7D51So4sTAWWvyCe6tvbxuRT19v2yy9eYW4pXz55rhnl/gXrzZt/iA+c9ReW/99PyAAAAABJRU5ErkJggg=="
+              alt="Cart"
+              className="h-9 w-12"
+            />
+          </button>
+        </Link>
+      </div>
 
-        
-        </div>
+      <Link to="/login">
+        <button className="focus:outline-none bg-black flex">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRQEdoqnWbsHEyqwdFv4iUu5Ug5XpFZWFL5g&s"
+            alt="User"
+            className="h-7 w-6 bg-black"
+          />
+          <h1 className="text-red bg-black text-lg pl-3 font-semibold"></h1>
+        </button>
+      </Link>
+    </div>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden">

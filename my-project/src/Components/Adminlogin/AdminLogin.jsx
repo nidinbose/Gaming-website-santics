@@ -1,98 +1,195 @@
 import React, { useState } from "react";
-import axios from 'axios'; 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Typography, Input, Button } from "@material-tailwind/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import axios from "axios"; // Import Axios
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [e.target.name]: e.target.value,
     });
   };
 
-  
+  const validateForm = () => {
+    let formErrors = {};
+    if (!formData.email) {
+      formErrors.email = "Email is required";
+    }
+    if (!formData.password) {
+      formErrors.password = "Password is required";
+    }
+    return formErrors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
+    setLoading(true);
+    setErrors({});
+
     try {
-      const response = await axios.post('/api/login', formData);
-      
-      if (response.data.success) {
-        console.log('Login successful');
-        navigate('/');
-      } else {
-        console.log('Login failed');
-      }
+      const response = await axios.post("http://localhost:3003/api/adminlogin", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      const { token, userId } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+
+      navigate("/admin");
     } catch (error) {
-      console.error('Error logging in:', error);
+      setErrors({ submit: error.response?.data?.error || "Something went wrong" });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Login</h2>
-          <p className="text-gray-600 mb-6">Enter your credentials to log in.</p>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
+    <section className="grid h-screen place-items-center p-8 bg-white">
+      <div>
+        <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
+          Sign In to Santics Admin Dashboard
+        </Typography>
+        <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
+          Enter your email and password to sign in
+        </Typography>
+        {errors.submit && (
+          <Typography variant="small" className="mb-4 text-red-600 text-center">
+            {errors.submit}
+          </Typography>
+        )}
+        <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
+          <div className="mb-6">
+            <label htmlFor="email">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
+                Your Email
+              </Typography>
+            </label>
+            <Input
+              id="email"
+              color="gray"
+              size="lg"
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="name@mail.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
-              required
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              labelProps={{
+                className: "hidden",
+              }}
             />
-            
-            <input
-              type="password"
+            {errors.email && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.email}
+              </Typography>
+            )}
+          </div>
+          <div className="mb-6 relative">
+            <label htmlFor="password">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
+                Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              labelProps={{
+                className: "hidden",
+              }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type={passwordShown ? "text" : "password"}
               name="password"
-              placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
-              required
+              icon={
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-2/4 transform -translate-y-2/4"
+                >
+                  {passwordShown ? (
+                    <EyeIcon className="h-5 w-5 text-gray-700" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-700" />
+                  )}
+                </button>
+              }
             />
-            
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600"
+            {errors.password && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.password}
+              </Typography>
+            )}
+          </div>
+          <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth>
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
+          <div className="mt-4 flex justify-end">
+            <Typography
+              as="a"
+              href=""
+              color="blue-gray"
+              variant="small"
+              className="font-medium"
             >
-              Log In
-            </button>
-          </form>
-
-          <div className="my-6 flex items-center justify-between">
-            <hr className="w-1/4 border-gray-300" />
-            <span className="text-gray-600">or</span>
-            <hr className="w-1/4 border-gray-300" />
+              Forgot password?
+            </Typography>
           </div>
-
-          <div className="flex flex-col space-y-2">
-            <button className="w-full bg-blue-600 text-white p-3 rounded-lg flex items-center justify-center hover:bg-blue-700">
-              <i className="fab fa-facebook-f mr-2"></i> Log in with Facebook
-            </button>
-            <button className="w-full bg-red-600 text-white p-3 rounded-lg flex items-center justify-center hover:bg-red-700">
-              <i className="fab fa-google mr-2"></i> Log in with Google
-            </button>
-            <button className="w-full bg-black text-white p-3 rounded-lg flex items-center justify-center hover:bg-gray-800">
-              <i className="fab fa-apple mr-2"></i> Log in with Apple
-            </button>
-            <button className="w-full bg-gray-700 text-white p-3 rounded-lg flex items-center justify-center hover:bg-gray-800">
-              <i className="fab fa-windows mr-2"></i> Log in with Windows
-            </button>
-          </div>
-        </div>
+          <Button
+            variant="outlined"
+            size="lg"
+            className="mt-6 flex h-12 items-center justify-center gap-2"
+            fullWidth
+          >
+            <img
+              src="https://www.material-tailwind.com/logos/logo-google.png"
+              alt="google"
+              className="h-6 w-6"
+            />
+            Sign in with Google
+          </Button>
+          <Typography
+            variant="small"
+            color="gray"
+            className="mt-4 text-center font-normal"
+          >
+            Not registered?{" "}
+            <Link to={`/adminregister`} className="font-medium text-gray-900">
+              Create an account
+            </Link>
+          </Typography>
+        </form>
       </div>
-    </div>
+    </section>
   );
 };
 

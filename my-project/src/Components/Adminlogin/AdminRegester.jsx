@@ -1,13 +1,19 @@
 import React, { useState } from "react";
+import axios from 'axios'; 
+import { Link, useNavigate } from "react-router-dom";
+import { Typography, Input, Button } from "@material-tailwind/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
-const AdminRegester = () => {
+const AdminRegister = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
+    username: '',
     password: '',
-    rePassword: '',
-    dob: '',
-    username: '', // Added username to the state
+    cpassword: '' 
   });
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,100 +23,186 @@ const AdminRegester = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const togglePasswordVisibility = () => setPasswordShown((cur) => !cur);
+  const toggleConfirmPasswordVisibility = () => setConfirmPasswordShown((cur) => !cur);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic
+
+    if (formData.password !== formData.cpassword) {
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3003/api/adminregester', formData); // Corrected the API endpoint
+
+      if (response.status === 201) {
+        console.log('Registration successful');
+        navigate('/adminlogin');
+      } else {
+        console.log('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error registering:', error);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Admin Registration</h2>
-          <p className="text-gray-600 mb-6">Sign up to manage the admin panel.</p>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
-              required
-            />
-
-            <input
+    <section className="grid h-screen place-items-center p-8 bg-white">
+      <div>
+        <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
+          Create an Admin Account
+        </Typography>
+        <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
+          Enter your details to register an account
+        </Typography>
+        <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
+          {/* Email Field */}
+          <div className="mb-6">
+            <label htmlFor="email">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
+                Your Email
+              </Typography>
+            </label>
+            <Input
+              id="email"
+              color="gray"
+              size="lg"
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="name@mail.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
-              required
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              labelProps={{
+                className: "hidden",
+              }}
             />
-            
-            <input
-              type="password"
+          </div>
+
+          {/* Username Field */}
+          <div className="mb-6">
+            <label htmlFor="username">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
+                Username
+              </Typography>
+            </label>
+            <Input
+              id="username"
+              color="gray"
+              size="lg"
+              type="text"
+              name="username"
+              placeholder="Enter username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              labelProps={{
+                className: "hidden",
+              }}
+            />
+          </div>
+
+          {/* Password Field */}
+          <div className="mb-6 relative">
+            <label htmlFor="password">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
+                Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              labelProps={{
+                className: "hidden",
+              }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type={passwordShown ? "text" : "password"}
               name="password"
-              placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
-              required
+              icon={
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-2/4 transform -translate-y-2/4"
+                >
+                  {passwordShown ? (
+                    <EyeIcon className="h-5 w-5 text-gray-700" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-700" />
+                  )}
+                </button>
+              }
             />
-
-            <input
-              type="password"
-              name="rePassword"
-              placeholder="Re-enter Password"
-              value={formData.rePassword}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
-              required
-            />
-
-            <input
-              type="date"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg"
-              required
-            />
-            
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600"
-            >
-              Sign Up
-            </button>
-          </form>
-
-          <div className="my-6 flex items-center justify-between">
-            <hr className="w-1/4 border-gray-300" />
-            <span className="text-gray-600">or</span>
-            <hr className="w-1/4 border-gray-300" />
           </div>
 
-          <div className="flex flex-col space-y-2">
-            <button className="w-full bg-blue-600 text-white p-3 rounded-lg flex items-center justify-center hover:bg-blue-700">
-              <i className="fab fa-facebook-f mr-2"></i> Sign up with Facebook
-            </button>
-            <button className="w-full bg-red-600 text-white p-3 rounded-lg flex items-center justify-center hover:bg-red-700">
-              <i className="fab fa-google mr-2"></i> Sign up with Google
-            </button>
-            <button className="w-full bg-black text-white p-3 rounded-lg flex items-center justify-center hover:bg-gray-800">
-              <i className="fab fa-apple mr-2"></i> Sign up with Apple
-            </button>
-            <button className="w-full bg-gray-700 text-white p-3 rounded-lg flex items-center justify-center hover:bg-gray-800">
-              <i className="fab fa-windows mr-2"></i> Sign up with Windows
-            </button>
+          {/* Confirm Password Field */}
+          <div className="mb-6 relative">
+            <label htmlFor="cpassword">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
+                Confirm Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              labelProps={{
+                className: "hidden",
+              }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type={confirmPasswordShown ? "text" : "password"}
+              name="cpassword" // Correct the name to 'cpassword' to match the state
+              value={formData.cpassword}
+              onChange={handleChange}
+              icon={
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute right-3 top-2/4 transform -translate-y-2/4"
+                >
+                  {confirmPasswordShown ? (
+                    <EyeIcon className="h-5 w-5 text-gray-700" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-700" />
+                  )}
+                </button>
+              }
+            />
           </div>
-        </div>
+
+          {/* Submit Button */}
+          <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth onSubmit={handleSubmit}>
+            Register
+          </Button>
+
+          {/* Link to Sign In */}
+          <Typography
+            variant="small"
+            color="gray"
+            className="mt-4 text-center font-normal"
+          >
+            Already registered?{" "}
+            <Link to={`/adminlogin`} className="font-medium text-gray-900">
+              Sign in
+            </Link>
+          </Typography>
+        </form>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default AdminRegester;
+export default AdminRegister;
