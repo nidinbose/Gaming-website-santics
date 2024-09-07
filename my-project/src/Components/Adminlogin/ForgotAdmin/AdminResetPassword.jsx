@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import axios from "axios"; // Import Axios
 
-const AdminLogin = () => {
+const AdminResetPassword = () => {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    otp: "",
+    newPassword: "",
+    confirmPassword: "",
   });
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
@@ -27,11 +26,16 @@ const AdminLogin = () => {
 
   const validateForm = () => {
     let formErrors = {};
-    if (!formData.email) {
-      formErrors.email = "Email is required";
+    if (!formData.otp) {
+      formErrors.otp = "OTP is required";
     }
-    if (!formData.password) {
-      formErrors.password = "Password is required";
+    if (!formData.newPassword) {
+      formErrors.newPassword = "New password is required";
+    } else if (formData.newPassword.length < 6) {
+      formErrors.newPassword = "Password must be at least 6 characters long";
+    }
+    if (formData.newPassword !== formData.confirmPassword) {
+      formErrors.confirmPassword = "Passwords do not match";
     }
     return formErrors;
   };
@@ -49,16 +53,14 @@ const AdminLogin = () => {
     setErrors({});
 
     try {
-      const response = await axios.post("http://localhost:3003/api/adminlogin", {
-        email: formData.email,
-        password: formData.password,
+      const response = await axios.post("http://localhost:3003/api/adminverify", {
+        otp: formData.otp, // OTP is included here
+        newPassword: formData.newPassword,
+        confirmPassword: formData.confirmPassword,
       });
 
-      const { token, userId } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
-
-      navigate("/admin");
+      // If password reset is successful, redirect to login page
+      navigate("/adminlogin");
     } catch (error) {
       setErrors({ submit: error.response?.data?.error || "Something went wrong" });
     } finally {
@@ -70,10 +72,10 @@ const AdminLogin = () => {
     <section className="grid h-screen place-items-center p-8 bg-white">
       <div>
         <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
-          Sign In to Santics Admin Dashboard
+          Reset Your Password
         </Typography>
         <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
-          Enter your email and password to sign in
+          Enter the OTP sent to your email and a new password to reset it.
         </Typography>
         {errors.submit && (
           <Typography variant="small" className="mb-4 text-red-600 text-center">
@@ -82,41 +84,33 @@ const AdminLogin = () => {
         )}
         <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
           <div className="mb-6">
-            <label htmlFor="email">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-gray-900"
-              >
-                Your Email
+            <label htmlFor="otp">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                OTP
               </Typography>
             </label>
             <Input
-              id="email"
-              color="gray"
               size="lg"
-              type="email"
-              name="email"
-              placeholder="name@mail.com"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              placeholder="Enter OTP"
               labelProps={{
                 className: "hidden",
               }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type="text"
+              name="otp"
+              value={formData.otp}
+              onChange={handleChange}
             />
-            {errors.email && (
+            {errors.otp && (
               <Typography variant="small" color="red" className="mt-1">
-                {errors.email}
+                {errors.otp}
               </Typography>
             )}
           </div>
-          <div className="mb-6 relative">
-            <label htmlFor="password">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-gray-900"
-              >
-                Password
+          <div className="mb-6">
+            <label htmlFor="newPassword">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                New Password
               </Typography>
             </label>
             <Input
@@ -127,8 +121,8 @@ const AdminLogin = () => {
               }}
               className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
               type={passwordShown ? "text" : "password"}
-              name="password"
-              value={formData.password}
+              name="newPassword"
+              value={formData.newPassword}
               onChange={handleChange}
               icon={
                 <button
@@ -144,54 +138,43 @@ const AdminLogin = () => {
                 </button>
               }
             />
-            {errors.password && (
+            {errors.newPassword && (
               <Typography variant="small" color="red" className="mt-1">
-                {errors.password}
+                {errors.newPassword}
+              </Typography>
+            )}
+          </div>
+          <div className="mb-6">
+            <label htmlFor="confirmPassword">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                Confirm Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              labelProps={{
+                className: "hidden",
+              }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+            {errors.confirmPassword && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.confirmPassword}
               </Typography>
             )}
           </div>
           <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth>
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Resetting Password..." : "Reset Password"}
           </Button>
-          <div className="mt-4 flex justify-end">
-           <Link to={`/adminforgotpassword`}>
-           <Typography
-              as="a"
-                        color="blue-gray"
-              variant="small"
-              className="font-medium"
-            >
-              Forgot password?
-            </Typography>
-           </Link>
-          </div>
-          <Button
-            variant="outlined"
-            size="lg"
-            className="mt-6 flex h-12 items-center justify-center gap-2"
-            fullWidth
-          >
-            <img
-              src="https://www.material-tailwind.com/logos/logo-google.png"
-              alt="google"
-              className="h-6 w-6"
-            />
-            Sign in with Google
-          </Button>
-          <Typography
-            variant="small"
-            color="gray"
-            className="mt-4 text-center font-normal"
-          >
-            Not registered?{" "}
-            <Link to={`/adminregister`} className="font-medium text-gray-900">
-              Create an account
-            </Link>
-          </Typography>
         </form>
       </div>
     </section>
   );
 };
 
-export default AdminLogin;
+export default AdminResetPassword;

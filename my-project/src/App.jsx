@@ -27,6 +27,9 @@ import AddProducts from './Components/AdminHandle/AddProduct'
 import ViewProducts from './Components/AdminHandle/ViewProduct'
 import ProductList from './Components/AdminHandle/ProductsList'
 import EditProducts from './Components/AdminHandle/EditProduct'
+import ResetPassword from './Components/Loginpage/ResetPassword'
+import AdminForgotPassword from './Components/Adminlogin/ForgotAdmin/AdminForgotPassword'
+import AdminResetPassword from './Components/Adminlogin/ForgotAdmin/AdminResetPassword'
 
 
 function App() {
@@ -51,6 +54,8 @@ function App() {
         <Route path="/viewcase" Component={ViewCase}/>
 
         <Route path="/adminregester" Component={AdminRegester}/>
+        <Route path="/adminforgotpassword" Component={AdminForgotPassword}/>
+        <Route path="/adminresetpassword" Component={AdminResetPassword}/>
         
         <Route path="/adminlogin" Component={AdminLogin}/>
 
@@ -66,6 +71,9 @@ function App() {
         <Route path="/signup" Component={Signup}/>
         <Route path="/login" Component={Login}/>
         <Route path="/cart" Component={Cart}/>
+
+        <Route path="/resetpassword" Component={ResetPassword}/>
+
 
 
         

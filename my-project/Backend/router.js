@@ -12,7 +12,10 @@ router.route('/getcaseedit/:id').get(request.getCaseEdit)
 
 router.route('/user').post(request.userRegister)
 router.route('/login').post(request.userLogin)
-router.route('/getuser/:id').post(Auth,request.getuser)
+// router.route('/forgot').post(request.Forget)
+
+router.route('/adminforgot').post(request.adminForget)
+router.route('/adminotp').post(request.adminOtp)
 
 router.route('/adminhome').post(Auth,request.adminHome)
 router.route('/home').get(Auth,request.Home)

@@ -5,6 +5,7 @@ import pkg from 'jsonwebtoken'
 // import cartSchema from './models/cart.model.js'
 import Cart from './models/cart.model.js'
 import adminSchema from './models/admin.model.js'
+import nodemailer from 'nodemailer'
 
 // products  CRUD
 export async function addCase(req,res){
@@ -219,7 +220,7 @@ export async function getCart(req,res){
 
 export async function adminRegister(req,res) {
 
-  const {username,email,password,cpassword}=req.body
+  const {username,email,password,cpassword,otp}=req.body
 
   if(!(username&&email&&password&&cpassword))
       return res.status(404).send("fields are empty")
@@ -297,16 +298,96 @@ export async function adminHome(req, res) {
   }
 }
 
+const transporter = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  secure: false, // Use `true` for port 465, `false` for all other ports
+  auth: {
+    user: "b61b6c0d2da033",
+    pass: "eadc5f952d3437",
+  },
+});
 
+export async function adminForget(req, res) {
+  const { email } = req.body;
+  console.log("Received email:", email);
 
-export async function getuser(req,res) {
   try {
-      const {id}=req.params;
-      console.log(id);
-      const data = await userSchema.findOne({_id:id})
-      console.log(data);
-      res.status(200).send(data)
+    // Check if the email exists in the database
+    const data = await adminSchema.findOne({ email: email });
+    if (!data) {
+      return res.status(400).send({ msg: "User not found" });
+    }
+
+    // Generate a random 6-digit numeric OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    console.log("Generated OTP:", otp);
+
+    // Update the OTP field in the database for the user
+    data.otp = otp;
+    await data.save();
+
+    // Ensure transporter is defined before trying to send the email
+    if (!transporter) {
+      console.error("Email transporter is not configured properly.");
+      return res.status(500).send({ msg: "Email configuration error" });
+    }
+
+    // Send the OTP to the user's email
+    const info = await transporter.sendMail({
+      from: 'peterspidy5@gmail.com', // Sender's email
+      to: data.email, // Receiver's email
+      subject: "OTP Verification", // Email subject
+      text: `Your OTP is ${otp}`, // Plain text body
+      html: `<b>Your OTP is ${otp}</b>`, // HTML body
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    // Respond with success if OTP is sent
+    res.status(200).send({ msg: "OTP sent successfully" });
   } catch (error) {
-      res.status(400).send(error)
+    console.error("Error in adminForget function:", error.message || error);
+
+    // Handle any other errors
+    res.status(500).send({ msg: "An error occurred while processing your request" });
   }
 }
+
+
+
+
+
+
+export async function adminOtp(req, res) {
+  const { email, otp, newPassword } = req.body;
+
+  try {
+    // Find the user by email
+    const data = await adminSchema.findOne({ email: email });
+    if (!data) {
+      return res.status(400).send({ msg: "User not found" });
+    }
+
+    // Check if the OTP matches
+    if (data.otp === otp) {
+      // Clear OTP from the database after successful verification
+      data.otp = null;
+
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      data.password = hashedPassword;
+
+      // Save the updated user data
+      await data.save();
+
+      return res.status(200).send({ msg: "Password updated successfully" });
+    } else {
+      return res.status(400).send({ msg: "Invalid OTP" });
+    }
+  } catch (error) {
+    console.error("Error in adminOtp function:", error);
+    return res.status(500).send({ msg: "An error occurred while processing your request" });
+  }
+}
+
