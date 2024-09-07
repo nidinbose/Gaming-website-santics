@@ -53,7 +53,7 @@ const AdminResetPassword = () => {
     setErrors({});
 
     try {
-      const response = await axios.post("http://localhost:3003/api/adminverify", {
+      const response = await axios.post("http://localhost:3003/api/adminotp", {
         otp: formData.otp, // OTP is included here
         newPassword: formData.newPassword,
         confirmPassword: formData.confirmPassword,

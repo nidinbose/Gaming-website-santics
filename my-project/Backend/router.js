@@ -18,7 +18,7 @@ router.route('/adminforgot').post(request.adminForget)
 router.route('/adminotp').post(request.adminOtp)
 
 router.route('/adminhome').post(Auth,request.adminHome)
-router.route('/home').get(Auth,request.Home)
+router.route('/home').post(Auth,request.Home)
 
 router.route('/addcart').post(Auth,request.addCart)
 router.route('/getcart').get(Auth,request.getCart)

@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
-// import logoImage from '/images/a.avif';
+import { useNavigate, Link } from 'react-router-dom';  // Import useNavigate and Link
+import { Typography, Input, Button } from "@material-tailwind/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
 function Signup() {
   const [formData, setFormData] = useState({
-      email: '',
+    email: '',
     username: '',
     password: '',
     cpassword: '',
-  
   });
 
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
   const navigate = useNavigate(); 
-  const handleLoginClick = () => {
-    // Logic for login validation and handling goes here
 
-    // Navigate to the target page
-    navigate("/login");
-  };
-  // Initialize useNavigate
+  const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
+  const toggleConfirmPasswordVisibility = () => setConfirmPasswordShown(!confirmPasswordShown);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -58,124 +56,136 @@ function Signup() {
   };
 
   return (
-    <div className="container mx-auto p-4 flex flex-col items-center">
-      <div className="flex flex-col-reverse md:flex-row w-full justify-end items-center space-y-6 md:space-y-0 md:space-x-12 mt-10">
-        <div className="logo mb-6 md:mb-0 flex-shrink-0">
-          <img
-            src={``}
-            alt="logo"
-            className="w-32 md:w-36 lg:w-48 xl:w-[620px]"
-          />
-        </div>
+    <section className="grid h-screen place-items-center p-8 bg-white">
+      <div>
+        <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
+          Create an user Account
+        </Typography>
+        <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
+          Enter your details to register an account
+        </Typography>
+        <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
+          {/* Email Field */}
+          <div className="mb-6">
+            <label htmlFor="email">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                Your Email
+              </Typography>
+            </label>
+            <Input
+              id="email"
+              color="gray"
+              size="lg"
+              type="email"
+              name="email"
+              placeholder="name@mail.com"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              labelProps={{ className: "hidden" }}
+            />
+          </div>
 
-        <div className="lp flex flex-col items-center md:items-start w-full">
-          <div className="field w-full md:w-3/4 lg:w-1/2 bg-white shadow-lg p-6 rounded-lg">
-            <h1 className="text-lg font-semibold mb-4 text-center md:text-left">
-              Welcome Back :)
-            </h1>
-            <p className="text-sm text-gray-500 mb-8 text-center md:text-left">
-              To keep connected with us please login with your personal
-              information by email address and password
-            </p>
+          {/* Username Field */}
+          <div className="mb-6">
+            <label htmlFor="username">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                Username
+              </Typography>
+            </label>
+            <Input
+              id="username"
+              color="gray"
+              size="lg"
+              type="text"
+              name="username"
+              placeholder="Enter username"
+              value={formData.username}
+              onChange={handleInputChange}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              labelProps={{ className: "hidden" }}
+            />
+          </div>
 
-            <form onSubmit={handleSubmit}>
-        
-
-              <div className="mb-4">
-                <label
-                  className="text-xs text-gray-400 font-semibold block"
-                  htmlFor="email"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  id="email"
-                  className="w-full bg-gray-100 p-2 rounded-lg mt-2 text-sm focus:outline-none"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-           
-              <div className="mb-4">
-                <label
-                  className="text-xs text-gray-400 font-semibold block"
-                  htmlFor="username"
-                >
-                  Username
-                </label>
-                <input
-                  type="text"
-                  placeholder="Username"
-                  name="username"
-                  id="username"
-                  className="w-full bg-gray-100 p-2 rounded-lg mt-2 text-sm focus:outline-none"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  className="text-xs text-gray-400 font-semibold block"
-                  htmlFor="password"
-                >
-                  Enter password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  id="password"
-                  className="w-full bg-gray-100 p-2 rounded-lg mt-2 text-sm focus:outline-none"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  className="text-xs text-gray-400 font-semibold block"
-                  htmlFor="cpassword"
-                >
-                  Confirm password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Confirm password"
-                  name="cpassword"
-                  id="cpassword"
-                  className="w-full bg-gray-100 p-2 rounded-lg mt-2 text-sm focus:outline-none"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-            
-
-              <div className="flex gap-4">
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-pink-500 text-white font-semibold rounded-full hover:bg-pink-600"
-                >
-                  Sign up
-                </button>
+          {/* Password Field */}
+          <div className="mb-6 relative">
+            <label htmlFor="password">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              labelProps={{ className: "hidden" }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type={passwordShown ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              icon={
                 <button
                   type="button"
-                  onClick={handleLoginClick}
-                  className="w-full py-3 bg-gray-200 text-gray-500 font-semibold rounded-full hover:bg-gray-300"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-2/4 transform -translate-y-2/4"
                 >
-                  Login
+                  {passwordShown ? (
+                    <EyeIcon className="h-5 w-5 text-gray-700" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-700" />
+                  )}
                 </button>
-              </div>
-            </form>
+              }
+            />
           </div>
-        </div>
+
+          {/* Confirm Password Field */}
+          <div className="mb-6 relative">
+            <label htmlFor="cpassword">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                Confirm Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              labelProps={{ className: "hidden" }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type={confirmPasswordShown ? "text" : "password"}
+              name="cpassword"
+              value={formData.cpassword}
+              onChange={handleInputChange}
+              icon={
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute right-3 top-2/4 transform -translate-y-2/4"
+                >
+                  {confirmPasswordShown ? (
+                    <EyeIcon className="h-5 w-5 text-gray-700" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-700" />
+                  )}
+                </button>
+              }
+            />
+          </div>
+
+          {/* Submit Button */}
+          <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth>
+            Register
+          </Button>
+
+          {/* Link to Sign In */}
+          <Typography variant="small" color="gray" className="mt-4 text-center font-normal">
+            Already registered?{" "}
+            <Link to={`/adminlogin`} className="font-medium text-gray-900">
+              Sign in
+            </Link>
+          </Typography>
+        </form>
       </div>
-    </div>
+    </section>
   );
 }
 

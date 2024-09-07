@@ -115,26 +115,25 @@ export async function userRegister(req,res) {
   export async function userLogin(req, res) {
     try {
       const { email, password } = req.body;
+      console.log(email);
       const user = await userSchema.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).send({ msg: "User not found" });
-      }
-  
+      const { username } = user;
+      if (user == null) return res.status(500).send({ msg: "admin not found" });
       const success = await bcrypt.compare(password, user.password);
-      if (!success) {
-        return res.status(400).send({ msg: "Password not matched" });
-      }
-  
-      const { _id: id } = user;
-      const token = await sign({ id, email }, process.env.JWT_KEY, { expiresIn: "24h" });
-  
-      return res.status(200).send({ token });
+      if (success !== true)
+        return res.status(401).send("Incorrect username or password");
+      const token = await sign({ username }, process.env.JWT_KEY, {
+        expiresIn: "24h",
+      });
+      return res.status(200).send({ msg: "successfully logedin", token });
     } catch (error) {
-      res.status(500).send({ error: error.message });
+      return res.status(400).send(error);
     }
   }
-
+  
+  export async function Home(req,res){
+  res.status(200).send(req.user);
+  }
 
 
   export async function Logout(req, res) {
@@ -142,7 +141,7 @@ export async function userRegister(req,res) {
       
       req.session = null; 
   
-      res.status(200).send({ message: 'Logged out successfully' });
+      res.status(200).send({ message: 'Logged out successfully',token });
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
@@ -150,22 +149,7 @@ export async function userRegister(req,res) {
   
   
   
-  
-  export async function Home(req, res) {
-    try {
-        if (!req.user) {
-            return res.status(401).send({ error: "Unauthorized" });
-        }
-  
-        const { username } = req.user;
-  
-        console.log(req.user);
-        res.status(200).send({ username });
-    } catch (error) {
-        console.error('Error in Home function:', error);
-        res.status(500).send({ error: "Internal Server Error" });
-    }
-  }
+
   
 
   
@@ -359,35 +343,36 @@ export async function adminForget(req, res) {
 
 
 
+
+
 export async function adminOtp(req, res) {
-  const { email, otp, newPassword } = req.body;
-
   try {
-    // Find the user by email
-    const data = await adminSchema.findOne({ email: email });
-    if (!data) {
-      return res.status(400).send({ msg: "User not found" });
+    const { email, password } = req.body; // Extract email and password from request body
+
+    // Find the admin user by email
+    const user = await adminSchema.findOne({ email });
+
+    // If the user is not found, send an error response
+    if (!user) {
+      return res.status(404).send({ error: "Email not found" });
     }
 
-    // Check if the OTP matches
-    if (data.otp === otp) {
-      // Clear OTP from the database after successful verification
-      data.otp = null;
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Hash the new password
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      data.password = hashedPassword;
+    // Update the user's password in the database
+    await adminSchema.updateOne(
+      { email: user.email }, // Find the user by email
+      { password: hashedPassword } // Update password
+    );
 
-      // Save the updated user data
-      await data.save();
+    // Send success response
+    return res.status(200).send({ msg: "Password updated successfully!" });
 
-      return res.status(200).send({ msg: "Password updated successfully" });
-    } else {
-      return res.status(400).send({ msg: "Invalid OTP" });
-    }
   } catch (error) {
-    console.error("Error in adminOtp function:", error);
-    return res.status(500).send({ msg: "An error occurred while processing your request" });
+    // Catch any errors and send a response
+    console.error("Error in adminOtp:", error);
+    return res.status(500).send({ error: "Internal Server Error" });
   }
 }
 

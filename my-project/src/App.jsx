@@ -30,6 +30,7 @@ import EditProducts from './Components/AdminHandle/EditProduct'
 import ResetPassword from './Components/Loginpage/ResetPassword'
 import AdminForgotPassword from './Components/Adminlogin/ForgotAdmin/AdminForgotPassword'
 import AdminResetPassword from './Components/Adminlogin/ForgotAdmin/AdminResetPassword'
+import UserView from './Components/Navbar/UserView'
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
         <Route path="/signup" Component={Signup}/>
         <Route path="/login" Component={Login}/>
         <Route path="/cart" Component={Cart}/>
+        <Route path="/home" Component={UserView}/>
 
         <Route path="/resetpassword" Component={ResetPassword}/>
 

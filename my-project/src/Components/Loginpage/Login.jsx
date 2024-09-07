@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Typography, Input, Button } from "@material-tailwind/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import axios from "axios"; // Ensure axios is imported
 
 function Login() {
   const navigate = useNavigate();
@@ -9,6 +12,7 @@ function Login() {
     password: "",
   });
 
+  const [passwordShown, setPasswordShown] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -17,6 +21,10 @@ function Login() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
   };
 
   const validateForm = () => {
@@ -43,119 +51,134 @@ function Login() {
     setErrors({});
 
     try {
-      const response = await fetch("http://localhost:3003/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      // Perform the login request
+      const res = await axios.post("http://localhost:3003/api/login", formData);
 
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.error || "Something went wrong");
+      // Check if login is successful
+      if (res.status === 200) {
+        const { token, userId } = res.data; // Extract token and userId from response
+        localStorage.setItem("token", token); // Store the token
+        localStorage.setItem("userId", userId); // Store the userId
+        console.log("Login successful!");
+
+        // Navigate to the appropriate home page (adjust according to user type if necessary)
+        navigate("/home");
       }
-
-      const { token, userId } = result; // Extract userId from the result
-      localStorage.setItem("token", token); // Store the token in localStorage
-      localStorage.setItem("userId", userId); // Store the user ID in localStorage
-
-      // Navigate to the home page or another appropriate page after login
-      navigate("/");
     } catch (error) {
-      setErrors({ submit: error.message });
+      console.error("Login Error:", error.response ? error.response.data : error.message);
+      setErrors({ submit: error.response?.data?.message || "Login failed. Please try again." });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-center items-center flex-col md:flex-row xl:mt-[200px]">
-        <div className="logo mb-6 md:mb-0">
-          <img src="" alt="logo" className="w-24 md:w-36 lg:w-48 xl:w-60" />
-        </div>
-
-        <div className="lp flex flex-col md:flex-row items-center md:items-start gap-8">
-          <div className="image">
-            <img
-              src="/"
-              alt=""
-              className="w-80 h-auto md:w-96 md:h-[70vh] lg:w-[55vw] lg:h-[70vh] object-cover"
+    <section className="grid h-screen place-items-center p-8 bg-white">
+      <div>
+        <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
+          Sign In
+        </Typography>
+        <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
+          Enter your email and password to sign in
+        </Typography>
+        {errors.submit && (
+          <Typography variant="small" className="mb-4 text-red-600 text-center">
+            {errors.submit}
+          </Typography>
+        )}
+        <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
+          <div className="mb-6">
+            <label htmlFor="email">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                Your Email
+              </Typography>
+            </label>
+            <Input
+              id="email"
+              color="gray"
+              size="lg"
+              type="email"
+              name="email"
+              placeholder="name@mail.com"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              labelProps={{ className: "hidden" }}
             />
+            {errors.email && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.email}
+              </Typography>
+            )}
           </div>
-
-          <div className="field p-4 md:w-1/2">
-            <h1 className="text-lg font-semibold mb-4">Welcome Back :)</h1>
-            <b className="text-sm text-gray-500 mb-8">
-              To keep connected with us, please login with your personal
-              information using your email address and password.
-            </b>
-
-            <form onSubmit={handleSubmit}>
-              <div className="email mb-4 bg-gray-100 p-2 rounded-lg relative mt-4">
-                <p className="text-xs text-gray-400 font-semibold">
-                  Email Address
-                </p>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  id="email1"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full border-none bg-transparent text-black mt-2 focus:outline-none text-sm"
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-xs mt-2">{errors.email}</p>
-                )}
-              </div>
-
-              <div className="password mb-4 bg-gray-100 p-2 rounded-lg relative">
-                <p className="text-xs text-gray-400 font-semibold">Password</p>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  id="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full border-none bg-transparent text-black mt-2 focus:outline-none text-sm"
-                />
-                {errors.password && (
-                  <p className="text-red-500 text-xs mt-2">{errors.password}</p>
-                )}
-              </div>
-
-              <div className="forgot-password mb-4 text-right">
-                <Link to="/signup" className="text-pink-500 text-sm hover:underline">
-                  Forgot Password?
-                </Link>
-              </div>
-
-              {errors.submit && (
-                <p className="text-red-500 text-xs mb-4">{errors.submit}</p>
-              )}
-
-              <div className="btn flex gap-4">
+          <div className="mb-6 relative">
+            <label htmlFor="password">
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+                Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              labelProps={{ className: "hidden" }}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type={passwordShown ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              icon={
                 <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3 bg-pink-500 text-white font-semibold rounded-full hover:bg-pink-600"
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-2/4 transform -translate-y-2/4"
                 >
-                  {loading ? "Logging in..." : "Login"}
+                  {passwordShown ? (
+                    <EyeIcon className="h-5 w-5 text-gray-700" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-700" />
+                  )}
                 </button>
-              </div>
-            </form>
+              }
+            />
+            {errors.password && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.password}
+              </Typography>
+            )}
           </div>
-        </div>
+          <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth>
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
+          <div className="mt-4 flex justify-end">
+            <Link to={`/forgotpassword`}>
+              <Typography as="a" color="blue-gray" variant="small" className="font-medium">
+                Forgot password?
+              </Typography>
+            </Link>
+          </div>
+          <Button
+            variant="outlined"
+            size="lg"
+            className="mt-6 flex h-12 items-center justify-center gap-2"
+            fullWidth
+          >
+            <img
+              src="https://www.material-tailwind.com/logos/logo-google.png"
+              alt="google"
+              className="h-6 w-6"
+            />
+            Sign in with Google
+          </Button>
+          <Typography variant="small" color="gray" className="mt-4 text-center font-normal">
+            Not registered?{" "}
+            <Link to={`/signup`} className="font-medium text-gray-900">
+              Create an account
+            </Link>
+          </Typography>
+        </form>
       </div>
-    </div>
+    </section>
   );
 }
 
 export default Login;
-
