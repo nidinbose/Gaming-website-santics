@@ -56,7 +56,7 @@ const Category = () => {
   ];
 
   return (
-    <div className="flex space-x-12 overflow-x-auto p-4 xl:pt-[20vh]"
+    <div className="flex space-x-12 overflow-x-auto p-4 xl:pt-[20vh] "
     style={{ backgroundImage: "url('/images/bg.png')" }}
     id="scroll" >
       {categories.map((category, index) => (

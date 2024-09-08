@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Overview3 = () => {
   return (
-    <div className="container mx-auto h-screen flex items-center justify-center p-8"
+    <div className="container mx-auto h-screen flex items-center justify-center p-8 "
     style={{ backgroundImage: "url('/images/bg.png')" }}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Text Column */}

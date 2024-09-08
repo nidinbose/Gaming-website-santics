@@ -15,7 +15,7 @@ const Overview = () => {
        
     >
       <motion.h3
-        className="text-4xl sm:text-1xl md:text-5xl lg:text-5xl xl:text-7xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-blue-500 to-red-900 mb-4"
+        className="text-4xl sm:text-1xl md:text-5xl lg:text-5xl xl:text-6xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-blue-500 to-red-900 mb-4"
         initial={{ opacity: 0, x: -100 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 1.2 }}
@@ -34,22 +34,30 @@ const Overview = () => {
           >
 
 <motion.h1
-      className="text-4xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-3"
-      variants={slideInFromRight}
-      initial="hidden"
-      animate="visible"
-      transition={{ duration: 1, ease: "easeOut" }}
-    >
-      Be The Game Changer
-    </motion.h1>
+  className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-10 xl:h-14"
+  variants={slideInFromRight}
+  initial="hidden"
+  animate="visible"
+  transition={{ duration: 1, ease: "easeOut" }}
+>
+  Be The Game Changer
+</motion.h1>
+
     <motion.p
-      className="text-base md:text-lg text-white"
+      className="text-base md:text-lg text-white/40 xl:mb-[10vh] "
       variants={slideInFromRight}
       initial="hidden"
       animate="visible"
       transition={{ duration: 1, ease: "easeOut" }}
     >
-      This is a description that gives more details about the topic. It can be as long or as short as needed.
+      ROG (Republic of Gamers) is a gaming brand developed by ASUS, focused on creating high-performance hardware and gear specifically for gamers and PC enthusiasts. The ROG line includes products designed for immersive gaming experiences, high-end performance, and cutting-edge innovation. Here’s a breakdown of the most popular categories of ROG products:
+
+      <br />
+      <br />
+      ROG graphics cards often feature custom cooling solutions, RGB lighting, and factory overclocking for enhanced gaming performance. They use NVIDIA’s GeForce and AMD’s Radeon chipsets, with models like:
+
+ROG Strix GeForce RTX: Offering NVIDIA’s latest ray-tracing technology and DLSS for high-end gaming.
+ROG Strix Radeon: AMD’s GPUs optimized for gamers and creators alike.
     </motion.p>
 
           </motion.div>

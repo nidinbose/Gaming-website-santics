@@ -13,7 +13,9 @@ const Oview1 = () => {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        Mother Boardes
+        Mother Boardes <br />
+
+        <span className="text-lg">all the cure  dshuwuifj acjwd</span>
       </motion.h1>
 
       {/* Grid of Photos */}
@@ -32,7 +34,7 @@ const Oview1 = () => {
     alt="Photo 1"
     className="w-full h-full object-cover"
   />
-  <h1 className="absolute inset-0 flex items-top justify-center text-red-500 text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300">
+  <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
     Rog
   </h1>
 </motion.div>
@@ -50,8 +52,8 @@ const Oview1 = () => {
     alt="Photo 2"
     className="w-full xl:h-[4b0vh] object-cover"
   />
-   <h1 className="absolute inset-0 flex items-top justify-center text-red-500 text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300">
-    Rog
+   <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
+    Msi
   </h1>
 </motion.div>
 
@@ -69,8 +71,8 @@ const Oview1 = () => {
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
-   <h1 className="absolute inset-0 flex items-top justify-center text-red-500 text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300">
-    Rog
+   <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
+    Predator
   </h1>
 </motion.div>
         <motion.div
@@ -86,8 +88,8 @@ const Oview1 = () => {
             alt="Photo 2"
             className="w-full h-full object-cover"
           />
-           <h1 className="absolute inset-0 flex items-top justify-center text-red-500 text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300">
-    Rog
+           <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
+    Asus
   </h1>
         </motion.div>
 

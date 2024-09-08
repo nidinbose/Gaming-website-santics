@@ -58,12 +58,12 @@ const Product1 = () => {
                   {product.name}
                   <span className="absolute left-0 bottom-0 h-[1px] bg-gray-300 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out w-full"></span>
                 </h2>
-                <p className="text-sm text-blue-200 mb-2">
-                  {product.specifications}
-                </p>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-blue-200 mb-2 h-14 overflow-y-auto">
+  {product.specifications}
+</p>
+                {/* <p className="text-sm text-gray-600 mb-4">
                   {product.description}
-                </p>
+                </p> */}
                 <div className="flex-grow" />
               </div>
               <div className="flex items-center justify-between p-4 bg-black/60 border-t border-gray-900">

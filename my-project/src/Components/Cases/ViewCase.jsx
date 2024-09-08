@@ -59,8 +59,8 @@ const ViewCase = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="bg-black shadow-md overflow-hidden rounded-lg xl:h-[90vh] w-full mb-8">
+    <div className="container mx-auto px-4 py-8 pb-10">
+      <div className="bg-black shadow-md overflow-hidden rounded-lg xl:h-[90vh] w-full mb-8 ">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
           {/* Product Image */}
           <motion.div
@@ -91,7 +91,7 @@ const ViewCase = () => {
             <p className="text-md sm:text-lg text-blue-300 mb-2">{product.specifications}</p>
             <p className="text-sm sm:text-base md:text-lg text-gray-400 mb-5">{product.description}</p>
 
-            <ul className="list-disc list-inside mb-4">
+            <ul className="list-disc list-inside mb-4 overflow-y-auto h-[25vh]">
               {product.keyUses.split(',').map((use, index) => (
                 <p key={index} className="text-gray-400 mb-2">
                   {use.trim()}

@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 
 const Oview2 = () => {
@@ -19,7 +20,8 @@ const Oview2 = () => {
       {/* Grid of Photos */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
         {/* Photo 1 */}
-        <motion.div
+     <Link to={`http://localhost:5173/viewcase/66d8a3ddf3083324b076cda0`}>
+     <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
@@ -35,14 +37,15 @@ const Oview2 = () => {
 
   <motion.div
     className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
-    whileHover={{ opacity: 3 }}
+    whileHover={{ opacity: 1 }}
     transition={{ duration: 0.2 }}
   >
-    <h1 className="text-white text-5xl">
-      Rog
+    <h1 className="text-white text-5xl font-bold text-center">
+      ROG <br />
+      <span className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-blue-300 to-red-500">Ultra edge gaming monitor</span>
     </h1>
   </motion.div>
-</motion.div>
+</motion.div></Link>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}

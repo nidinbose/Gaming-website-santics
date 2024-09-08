@@ -213,7 +213,7 @@ export async function adminRegister(req,res) {
       return res.status(404).send("password not matched")
 
 bcrypt.hash(password,10).then(async(hpassword)=>{
-  adminSchema.create({username,password:hpassword,email}).then(()=>{
+  adminSchema.create({username,password:hpassword,email,otp:""}).then(()=>{
       return res.status(201).send({msg:"successfully created"})
 
   })
@@ -343,36 +343,21 @@ export async function adminForget(req, res) {
 
 
 
-
-
 export async function adminOtp(req, res) {
   try {
-    const { email, password } = req.body; // Extract email and password from request body
+   
 
-    // Find the admin user by email
-    const user = await adminSchema.findOne({ email });
-
-    // If the user is not found, send an error response
-    if (!user) {
-      return res.status(404).send({ error: "Email not found" });
+    // Validate OTP
+    if (password !== user.otp) {
+      return res.status(401).send({ error: "Invalid OTP" });
     }
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // OTP is valid; proceed with the rest of your code
+    // ... rest of your code
 
-    // Update the user's password in the database
-    await adminSchema.updateOne(
-      { email: user.email }, // Find the user by email
-      { password: hashedPassword } // Update password
-    );
-
-    // Send success response
-    return res.status(200).send({ msg: "Password updated successfully!" });
-
+    return res.status(200).send({ message: "OTP validated successfully" });
   } catch (error) {
-    // Catch any errors and send a response
     console.error("Error in adminOtp:", error);
-    return res.status(500).send({ error: "Internal Server Error" });
+    return res.status(500).send({ error: "Internal server error" });
   }
 }
-

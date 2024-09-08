@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import './CSS/Overview2.css';
-
+const slideInFromRight = {
+  hidden: { opacity: 0, x: '100%' },
+  visible: { opacity: 1, x: 0 },
+};
 const Overview2 = () => {
   return (
     <div
@@ -10,10 +13,15 @@ const Overview2 = () => {
 
        
     >
-{/* <h3 className="text-4xl sm:text-1xl md:text-5xl lg:text-5xl xl:text-7xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-green-600 via-blue-700 to-red-900 h-32">
-  Predator Gaming
-</h3> */}
-
+<motion.h1
+  className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-5xl font-bold bg-clip-text text-transparent bg-clip-text text-transparent bg-gradient-to-r from-green-600 via-blue-700 to-red-900 xl:h-14 xl:ml-[7vw]"
+  variants={slideInFromRight}
+  initial="hidden"
+  animate="visible"
+  transition={{ duration: 1, ease: "easeOut" }}
+>
+  Gaming with Predator
+</motion.h1>
       <div className="container mx-auto h-full flex items-center px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
           {/* Text Description Column */}
@@ -27,8 +35,16 @@ const Overview2 = () => {
   Delever Experience with <br />
   Predator
 </h1>
-            <p className="text-base md:text-lg text-white">
-              This is a description that gives more details about the topic. It can be as long or as short as needed.
+            <p className="text-base md:text-lg text-white/40">
+            
+Predator Gaming is a premium gaming brand from Acer, known for its powerful gaming devices and hardware designed to provide high-performance experiences for gamers. Predator products are known for their cutting-edge technology, bold designs, and advanced cooling systems, targeting both casual gamers and esports professionals. Here’s an overview of the key Predator Gaming products:
+
+<br />
+<br />
+Predator desktops are built for high-performance gaming with cutting-edge components and a focus on cooling and expandability. Models include:
+
+Predator Orion Series: High-performance gaming desktops with Intel or AMD processors, NVIDIA RTX GPUs, and customizable RGB lighting. These desktops are known for their sleek designs and advanced cooling solutions like FrostBlade fans.
+Predator Orion 9000: A powerhouse desktop featuring Intel Core i9 processors, multiple graphics cards, and liquid cooling for extreme gaming and content creation.
             </p>
           </motion.div>
 
