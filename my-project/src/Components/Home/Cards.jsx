@@ -38,7 +38,7 @@ const Cards = () => {
 
   return (
     <div className="container mx-auto px-4 py-8"
-    style={{ backgroundImage: "url('')" }} >
+    style={{ backgroundImage: "url('https://storage-asset.msi.com/global/picture/wallpaper/QD-OLED-3840x2160_MAG.jpg')" }} >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {cardData.map((product) => (
           <motion.div
