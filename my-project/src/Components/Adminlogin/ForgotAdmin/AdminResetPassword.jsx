@@ -1,30 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typography, Input, Button } from "@material-tailwind/react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 
-const AdminResetPassword = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    otp: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
+const ResetPassword = () => {
+  const [formData, setFormData] = useState({ otp: "", newPassword: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [passwordShown, setPasswordShown] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
-  const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
-
+  // Handle form field changes
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const validateForm = () => {
+  // Validate inputs
+  const validateInputs = () => {
     let formErrors = {};
     if (!formData.otp) {
       formErrors.otp = "OTP is required";
@@ -32,18 +24,15 @@ const AdminResetPassword = () => {
     if (!formData.newPassword) {
       formErrors.newPassword = "New password is required";
     } else if (formData.newPassword.length < 6) {
-      formErrors.newPassword = "Password must be at least 6 characters long";
-    }
-    if (formData.newPassword !== formData.confirmPassword) {
-      formErrors.confirmPassword = "Passwords do not match";
+      formErrors.newPassword = "Password should be at least 6 characters long";
     }
     return formErrors;
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formErrors = validateForm();
+    const formErrors = validateInputs();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
@@ -51,18 +40,20 @@ const AdminResetPassword = () => {
 
     setLoading(true);
     setErrors({});
+    setSuccessMessage("");
 
     try {
-      const response = await axios.post("http://localhost:3003/api/adminotp", {
-        otp: formData.otp, // OTP is included here
+      const response = await axios.post("http://localhost:3003/api/resetadminpassword", {
+        otp: formData.otp,
         newPassword: formData.newPassword,
-        confirmPassword: formData.confirmPassword,
       });
 
-      // If password reset is successful, redirect to login page
-      navigate("/adminlogin");
+      setSuccessMessage("Password has been reset successfully.");
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login after success
+      }, 2000);
     } catch (error) {
-      setErrors({ submit: error.response?.data?.error || "Something went wrong" });
+      setErrors({ submit: error.response?.data?.msg || "Something went wrong." });
     } finally {
       setLoading(false);
     }
@@ -70,19 +61,26 @@ const AdminResetPassword = () => {
 
   return (
     <section className="grid h-screen place-items-center p-8 bg-white">
-      <div>
+      <div className="max-w-[24rem] mx-auto">
         <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
-          Reset Your Password
+          Reset Password
         </Typography>
         <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
-          Enter the OTP sent to your email and a new password to reset it.
+          Enter the OTP sent to your email and your new password.
         </Typography>
+
         {errors.submit && (
           <Typography variant="small" className="mb-4 text-red-600 text-center">
             {errors.submit}
           </Typography>
         )}
-        <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
+        {successMessage && (
+          <Typography variant="small" className="mb-4 text-green-600 text-center">
+            {successMessage}
+          </Typography>
+        )}
+
+        <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label htmlFor="otp">
               <Typography variant="small" className="mb-2 block font-medium text-gray-900">
@@ -91,15 +89,13 @@ const AdminResetPassword = () => {
             </label>
             <Input
               size="lg"
-              placeholder="Enter OTP"
-              labelProps={{
-                className: "hidden",
-              }}
-              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
-              type="text"
+              placeholder="Enter the OTP"
               name="otp"
               value={formData.otp}
               onChange={handleChange}
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type="text"
+              error={Boolean(errors.otp)}
             />
             {errors.otp && (
               <Typography variant="small" color="red" className="mt-1">
@@ -107,6 +103,7 @@ const AdminResetPassword = () => {
               </Typography>
             )}
           </div>
+
           <div className="mb-6">
             <label htmlFor="newPassword">
               <Typography variant="small" className="mb-2 block font-medium text-gray-900">
@@ -115,28 +112,13 @@ const AdminResetPassword = () => {
             </label>
             <Input
               size="lg"
-              placeholder="********"
-              labelProps={{
-                className: "hidden",
-              }}
-              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
-              type={passwordShown ? "text" : "password"}
+              placeholder="Enter your new password"
               name="newPassword"
               value={formData.newPassword}
               onChange={handleChange}
-              icon={
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute right-3 top-2/4 transform -translate-y-2/4"
-                >
-                  {passwordShown ? (
-                    <EyeIcon className="h-5 w-5 text-gray-700" />
-                  ) : (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-700" />
-                  )}
-                </button>
-              }
+              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
+              type="password"
+              error={Boolean(errors.newPassword)}
             />
             {errors.newPassword && (
               <Typography variant="small" color="red" className="mt-1">
@@ -144,31 +126,8 @@ const AdminResetPassword = () => {
               </Typography>
             )}
           </div>
-          <div className="mb-6">
-            <label htmlFor="confirmPassword">
-              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
-                Confirm Password
-              </Typography>
-            </label>
-            <Input
-              size="lg"
-              placeholder="********"
-              labelProps={{
-                className: "hidden",
-              }}
-              className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-            {errors.confirmPassword && (
-              <Typography variant="small" color="red" className="mt-1">
-                {errors.confirmPassword}
-              </Typography>
-            )}
-          </div>
-          <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth>
+
+          <Button type="submit" color="" size="lg" className="mt-6 h-12 bg-gray-800" fullWidth disabled={loading}>
             {loading ? "Resetting Password..." : "Reset Password"}
           </Button>
         </form>
@@ -177,4 +136,5 @@ const AdminResetPassword = () => {
   );
 };
 
-export default AdminResetPassword;
+export default ResetPassword;
+

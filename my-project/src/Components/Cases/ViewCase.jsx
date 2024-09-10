@@ -18,35 +18,26 @@ const ViewCase = () => {
       console.error("Error fetching case data:", error);
     }
   };
-
   const handleAddToCart = async () => {
     try {
-      const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      };
 
-      if (!userId) {
-        console.error("User is not authenticated. Redirecting to login...");
-        navigate("/login");
-        return;
+      const data = {
+        productId: product?._id,
+      };
+
+      const response = await axios.post('/api/add-to-cart', data, config);
+
+      if (response.status === 200) {
+        alert('Successfully added to cart!');
       }
-
-      const requestData = {
-        userId,
-        productId: product._id,
-        name: product.name,
-        linkvf: product.linkvf,
-        price: product.price,
-        quantity: 1,
-      };
-
-      const headers = {
-        Authorization: `Bearer ${token}`, 
-      };
-
-      const response = await axios.post("http://localhost:3003/api/addcart", requestData, { headers });
-      console.log("Item added to cart:", response.data);
     } catch (error) {
-      console.error("Error adding item to cart:", error.response ? error.response.data : error.message);
+      console.error('Error adding to cart:', error);
+      alert('Error adding to cart.');
     }
   };
 

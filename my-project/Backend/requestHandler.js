@@ -158,45 +158,81 @@ export async function userRegister(req,res) {
   // cart
 
 
-  export async function addCart(req, res) {
+  export async function addToCart(req, res) {
+    const { productId } = req.body;
+    const { userId } = req.user;
+    console.log(productId, userId);
+  
     try {
-        const { userID, productID, name, linkvf,price,quantity } = req.body;
-
-       
-        const newCart = new Cart({
-            userID,
-            productID,
-            name,
-            linkvf,
-            price,
-            quantity
-        });
-
-                const savedCart = await newCart.save(); 
-
-      
-        res.status(201).json(savedCart);
+  
+      const existingCartItem = await cart.findOne({ productId, userId });
+  
+      const product = await productsModel.findOne({ _id: productId });
+      const actualProductCount = product ? product.stock : 0;
+  
+      if (existingCartItem) {
+        if (existingCartItem.count < actualProductCount) {
+          existingCartItem.count += 1;
+          await existingCartItem.save();
+          return res.status(200).json({ msg: 'Item added to cart successfully!' });
+        } else {
+          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
+        }
+      } else {
+        if (1 <= actualProductCount) {
+          await cartModel.create({ productId, userId, count: 1 });
+          return res.status(200).json({ msg: 'Item added to cart successfully!' });
+        } else {
+          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
+        }
+      }
     } catch (error) {
-       
-        res.status(500).json({ message: 'Failed to add to cart', error });
+      console.error('Error adding to cart:', error);
+      return res.status(500).json({ msg: 'Error adding to cart.' });
     }
-}
+  }
 
 
 
+  
+export async function getCart(req, res) {
+  const { userId } = req.user;
 
+  try {
+    const cartItems = await cartModel.find({ userId });
+    const productIds = cartItems.map(cartItem => cartItem.productId);
 
+    const products = await productsModel.find({ _id: { $in: productIds } });
 
-export async function getCart(req,res){
-  try{
+    if (!products) {
+      return res.status(404).json({ msg: 'Products not found' });
+    }
 
-      const data=await Cart.find();
-      res.status(200).send(data)
-      console.log(data);
-  }catch (error){
-      res.status(500).send(error)
+    const cartDetails = cartItems.map(cartItem => {
+      const product = products.find(p => p._id.toString() === cartItem.productId.toString());
+      return {
+        ...cartItem._doc,
+        product,
+      };
+    });
+
+    res.status(200).json({
+      msg: 'Cart details found',
+      cartDetails,
+    });
+  } catch (error) {
+    console.error('Error fetching cart items:', error);
+    res.status(500).json({ msg: 'Error fetching cart items.' });
   }
 }
+
+
+
+
+
+
+
+
 
 
 // //   ------------------------------------Authentication ADMIN---------------------------------
@@ -343,21 +379,73 @@ export async function adminForget(req, res) {
 
 
 
-export async function adminOtp(req, res) {
-  try {
-   
 
-    // Validate OTP
-    if (password !== user.otp) {
-      return res.status(401).send({ error: "Invalid OTP" });
+// export async function resetPassword(req, res) {
+//   const { email, otp, newPassword } = req.body;
+//   console.log("Received reset request:", email, otp);
+
+//   try {
+//     // Check if the email exists in the database
+//     const user = await userSchema.findOne({ email: email });
+//     if (!user) {
+//       return res.status(400).send({ msg: "User not found" });
+//     }
+
+//     // Verify if the OTP matches
+//     if (user.otp !== otp) {
+//       return res.status(400).send({ msg: "Invalid OTP" });
+//     }
+
+//     // Hash the new password before saving
+//     const saltRounds = 10;
+//     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+//     // Update the user's password and clear the OTP
+//     user.password = hashedPassword;
+//     user.otp = null; // Clear the OTP once it's used for security reasons
+//     await user.save();
+
+//     // Respond with success if the password is reset
+//     res.status(200).send({ msg: "Password reset successfully" });
+//   } catch (error) {
+//     console.error("Error in resetPassword function:", error.message || error);
+
+//     // Handle any other errors
+//     res.status(500).send({ msg: "An error occurred while resetting your password" });
+//   }
+// }
+
+
+
+
+
+
+export async function resetAdminPassword(req, res) {
+  const { otp, newPassword } = req.body;
+  console.log("Received reset request:", otp);
+
+  try {
+    // Check if the admin exists with the given OTP
+    const admin = await adminSchema.findOne({ otp: otp });
+    if (!admin) {
+      return res.status(400).send({ msg: "Invalid OTP or OTP expired" });
     }
 
-    // OTP is valid; proceed with the rest of your code
-    // ... rest of your code
+    // Hash the new password before saving
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
-    return res.status(200).send({ message: "OTP validated successfully" });
+    // Update the admin's password and clear the OTP
+    admin.password = hashedPassword;
+    admin.otp = null; // Clear the OTP once it's used for security reasons
+    await admin.save();
+
+    // Respond with success if the password is reset
+    res.status(200).send({ msg: "Password reset successfully" });
   } catch (error) {
-    console.error("Error in adminOtp:", error);
-    return res.status(500).send({ error: "Internal server error" });
+    console.error("Error in resetAdminPassword function:", error.message || error);
+
+    // Handle any other errors
+    res.status(500).send({ msg: "An error occurred while resetting the password" });
   }
 }
