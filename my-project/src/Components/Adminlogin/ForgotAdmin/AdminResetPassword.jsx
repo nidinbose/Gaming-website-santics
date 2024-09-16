@@ -50,7 +50,7 @@ const ResetPassword = () => {
 
       setSuccessMessage("Password has been reset successfully.");
       setTimeout(() => {
-        navigate("/login"); // Redirect to login after success
+        navigate("/adminlogin"); // Redirect to login after success
       }, 2000);
     } catch (error) {
       setErrors({ submit: error.response?.data?.msg || "Something went wrong." });

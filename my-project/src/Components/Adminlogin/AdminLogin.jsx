@@ -60,7 +60,7 @@ const AdminLogin = () => {
 
       navigate("/admin");
     } catch (error) {
-      setErrors({ submit: error.response?.data?.error || "Something went wrong" });
+      setErrors({ submit: error.response?.data?.error || "incorrect password/email" });
     } finally {
       setLoading(false);
     }
