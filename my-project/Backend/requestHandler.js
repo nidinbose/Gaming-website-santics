@@ -130,29 +130,40 @@ export async function userRegister(req,res) {
       return res.status(400).send(error);
     }
   }
-  
-  export async function Home(req,res){
-  res.status(200).send(req.user);
-  }
 
+  
+  
+  
+
+  export async function Home(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).send({ error: "Unauthorized" });
+        }
+  
+        const { username } = req.user;
+  
+        console.log(req.user);
+        res.status(200).send({ username });
+    } catch (error) {
+        console.error('Error in Home function:', error);
+        res.status(500).send({ error: "Internal Server Error" });
+    }
+  }
 
   export async function Logout(req, res) {
     try {
-      
-      req.session = null; 
+      // If you want to blacklist tokens or manage sessions on the server side:
+      // You can store the token in a blacklist or manage a token expiration strategy.
   
-      res.status(200).send({ message: 'Logged out successfully',token });
+      // If using sessions (for example, with cookies):
+      req.session = null; // If you're using sessions, this will clear the session.
+  
+      res.status(200).send({ message: 'Logged out successfully' });
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
   }
-  
-  
-  
-
-  
-
-  
 
 
   // cart
@@ -377,49 +388,6 @@ export async function adminForget(req, res) {
 
 
 
-
-
-
-// export async function resetPassword(req, res) {
-//   const { email, otp, newPassword } = req.body;
-//   console.log("Received reset request:", email, otp);
-
-//   try {
-//     // Check if the email exists in the database
-//     const user = await userSchema.findOne({ email: email });
-//     if (!user) {
-//       return res.status(400).send({ msg: "User not found" });
-//     }
-
-//     // Verify if the OTP matches
-//     if (user.otp !== otp) {
-//       return res.status(400).send({ msg: "Invalid OTP" });
-//     }
-
-//     // Hash the new password before saving
-//     const saltRounds = 10;
-//     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
-//     // Update the user's password and clear the OTP
-//     user.password = hashedPassword;
-//     user.otp = null; // Clear the OTP once it's used for security reasons
-//     await user.save();
-
-//     // Respond with success if the password is reset
-//     res.status(200).send({ msg: "Password reset successfully" });
-//   } catch (error) {
-//     console.error("Error in resetPassword function:", error.message || error);
-
-//     // Handle any other errors
-//     res.status(500).send({ msg: "An error occurred while resetting your password" });
-//   }
-// }
-
-
-
-
-
-
 export async function resetAdminPassword(req, res) {
   const { otp, newPassword } = req.body;
   console.log("Received reset request:", otp);
@@ -449,3 +417,5 @@ export async function resetAdminPassword(req, res) {
     res.status(500).send({ msg: "An error occurred while resetting the password" });
   }
 }
+
+

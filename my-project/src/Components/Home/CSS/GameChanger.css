@@ -23,7 +23,7 @@ section .scroll div {
   white-space: nowrap;
   font-weight: 900;
   text-transform: uppercase;
-  animation: animate 20s linear 1s infinite;
+  animation: animate 20s linear 20s infinite;
   -webkit-text-stroke: 0.3vw rgb(249, 70, 118);
 }
 
