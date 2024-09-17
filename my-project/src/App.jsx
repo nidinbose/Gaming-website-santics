@@ -38,8 +38,11 @@ function App() {
 
   return (
     <>
+  
       <BrowserRouter>
+      <Navbar/>
       <Routes>
+        
         <Route path="/" Component={Home}/>
         <Route path="/cases" Component={Cases}/>
         <Route path="/motherboard" Component={MotherBoard}/>
