@@ -18,28 +18,28 @@ const ViewCase = () => {
       console.error("Error fetching case data:", error);
     }
   };
-  const handleAddToCart = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      };
+    const handleAddToCart = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        };
 
-      const data = {
-        productId: product?._id,
-      };
+        const data = {
+          productId: product?._id,
+        };
 
-      const response = await axios.post('/api/add-to-cart', data, config);
+        const response = await axios.post('/api/add-to-cart', data, config);
 
-      if (response.status === 200) {
-        alert('Successfully added to cart!');
+        if (response.status === 200) {
+          alert('Successfully added to cart!');
+        }
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Error adding to cart.');
       }
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Error adding to cart.');
-    }
-  };
+    };
 
   useEffect(() => {
     getCase();

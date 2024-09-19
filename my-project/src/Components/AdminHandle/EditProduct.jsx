@@ -29,6 +29,8 @@ const EditProducts = () => {
     category: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewHoverImage, setPreviewHoverImage] = useState("");
 
   const handleChange = (e) => {
     setData((prev) => ({
@@ -37,12 +39,29 @@ const EditProducts = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (e.target.name === "imagelink") {
+          setPreviewImage(reader.result);
+          setData((prev) => ({ ...prev, imagelink: reader.result }));
+        } else if (e.target.name === "hoverimagelink") {
+          setPreviewHoverImage(reader.result);
+          setData((prev) => ({ ...prev, hoverimagelink: reader.result }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const updateProduct = async () => {
     try {
       const res = await axios.patch(`http://localhost:3003/api/updatecase/${id}`, data);
       if (res.status === 201) {
         alert("Product updated successfully!");
-        navigate("/");  // Redirects after successful update
+        navigate("/admin"); 
       }
     } catch (error) {
       console.error("Error updating product:", error);
@@ -53,8 +72,10 @@ const EditProducts = () => {
   const getProduct = async () => {
     try {
       const res = await axios.get(`http://localhost:3003/api/getcaseedit/${id}`);
-      setData(res.data);  // Set the response data to populate the form fields
+      setData(res.data);  
       setIsEditing(true);
+      setPreviewImage(res.data.imagelink);
+      setPreviewHoverImage(res.data.hoverimagelink);
     } catch (error) {
       console.error("Error fetching product data:", error);
       alert("Failed to fetch product data.");
@@ -72,142 +93,121 @@ const EditProducts = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-  <div className="w-full max-w-4xl bg-white p-10 rounded-lg shadow-lg">
-    <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
-      {isEditing ? "Edit Product" : "Add New Product"}
-    </h1>
-    <form 
-      onSubmit={handleSubmit} 
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:block sm:block"
-    >
-       {/* Specifications Input */}
-       <div className="col-span-2 md:col-span-3 lg:w-full">
-        <label className="block text-gray-700 mb-1">Image</label>
-        <textarea
-          name="image"
-          value={data.imagelink}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter product specifications"
-          rows="1"
-        />
-      </div>
+      <div className="w-full max-w-4xl bg-white p-10 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+          {isEditing ? "Edit Product" : "Add New Product"}
+        </h1>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Image</label>
+            <input
+              type="file"
+              name="imagelink"
+              onChange={handleFileChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+            />
+            {previewImage && (
+              <img src={previewImage} alt="Product" className="mt-4 max-w-full h-auto rounded-md" />
+            )}
+          </div>
 
-         {/* Specifications Input */}
-         <div className="col-span-2 md:col-span-3 lg:w-full">
-        <label className="block text-gray-700 mb-1">Hover image</label>
-        <textarea
-          name="hoverimagelink"
-          value={data.hoverimagelink}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter product specifications"
-          rows="1"
-        />
-      </div>
-       {/* Specifications Input */}
-       <div className="col-span-2 md:col-span-3 lg:w-full">
-        <label className="block text-gray-700 mb-1">Name</label>
-        <textarea
-          name="name"
-          value={data.name}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter product specifications"
-          rows="1"
-        />
-      </div>
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Hover Image</label>
+            <input
+              type="file"
+              name="hoverimagelink"
+              onChange={handleFileChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+            />
+            {previewHoverImage && (
+              <img src={previewHoverImage} alt="Hover Product" className="mt-4 max-w-full h-auto rounded-md" />
+            )}
+          </div>
 
-      <div className="col-span-1 lg:w-full">
-        <label className="block text-gray-700 mb-1">Hover Image:</label>
-        <input
-          type="text"
-          name="hoverimagelink"
-          value={data.hoverimagelink}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter hover image URL"
-        />
-      </div>
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={data.name}
+              onChange={handleChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter product name"
+            />
+          </div>
 
-      {/* Name Input */}
-      <div className="col-span-1 lg:w-full">
-        <label className="block text-gray-700 mb-1">Product Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={data.name}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter product name"
-        />
-      </div>
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Category</label>
+            <input
+              type="text"
+              name="category"
+              value={data.category}
+              onChange={handleChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter category"
+            />
+          </div>
 
-      {/* Category Input */}
-      <div className="col-span-1 lg:w-full">
-        <label className="block text-gray-700 mb-1">Category:</label>
-        <input
-          type="text"
-          name="category"
-          value={data.category}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter category"
-        />
-      </div>
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Price</label>
+            <input
+              type="number"
+              min="0"
+              name="price"
+              value={data.price}
+              onChange={handleChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter price"
+            />
+          </div>
 
-      {/* Price Input */}
-      <div className="col-span-1 lg:w-full">
-        <label className="block text-gray-700 mb-1">Price:</label>
-        <input
-          type="number"
-          min="0"
-          name="price"
-          value={data.price}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter price"
-        />
-      </div>
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Specifications</label>
+            <textarea
+              name="specifications"
+              value={data.specifications}
+              onChange={handleChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter product specifications"
+              rows="4"
+            />
+          </div>
 
-      {/* Specifications Input */}
-      <div className="col-span-2 md:col-span-3 lg:w-full">
-        <label className="block text-gray-700 mb-1">Specifications:</label>
-        <textarea
-          name="specifications"
-          value={data.specifications}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter product specifications"
-          rows="4"
-        />
-      </div>
-         {/* Specifications Input */}
-         <div className="col-span-2 md:col-span-3 lg:w-full">
-        <label className="block text-gray-700 mb-1">Key Uses:</label>
-        <textarea
-          name="specifications"
-          value={data.keyUses}
-          onChange={handleChange}
-          className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter product specifications"
-          rows="4"
-        />
-      </div>
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Key Uses</label>
+            <textarea
+              name="keyUses"
+              value={data.keyUses}
+              onChange={handleChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter key uses"
+              rows="4"
+            />
+          </div>
 
-      {/* Submit Button */}
-      <div className="col-span-2 md:col-span-3 lg:w-full">
-        <button
-          type="submit"
-          className="w-full py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-300"
-        >
-          {isEditing ? "Update Product" : "Add Product"}
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
+          <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Link VF</label>
+            <textarea
+              name="linkvf"
+              value={data.linkvf}
+              onChange={handleChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter link VF"
+              rows="4"
+            />
+          </div>
 
+          <div className="col-span-1">
+            <button
+              type="submit"
+              className="w-full py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-300"
+            >
+              {isEditing ? "Update Product" : "Add Product"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 

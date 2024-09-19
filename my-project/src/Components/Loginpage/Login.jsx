@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import axios from "axios"; // Ensure axios is imported
+import axios from "axios"; 
 
-function Login() {
+const Login = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -12,19 +12,17 @@ function Login() {
     password: "",
   });
 
-  const [passwordShown, setPasswordShown] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const togglePasswordVisibility = () => {
-    setPasswordShown(!passwordShown);
   };
 
   const validateForm = () => {
@@ -51,22 +49,18 @@ function Login() {
     setErrors({});
 
     try {
-      // Perform the login request
-      const res = await axios.post("http://localhost:3003/api/login", formData);
+      const response = await axios.post("http://localhost:3003/api/login", {
+        email: formData.email,
+        password: formData.password,
+      });
 
-      // Check if login is successful
-      if (res.status === 200) {
-        const { token, userId } = res.data; // Extract token and userId from response
-        localStorage.setItem("token", token); // Store the token
-        localStorage.setItem("userId", userId); // Store the userId
-        console.log("Login successful!");
+      const { token, userId } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
 
-        // Navigate to the appropriate home page (adjust according to user type if necessary)
-        navigate("/home");
-      }
+      navigate("/");
     } catch (error) {
-      console.error("Login Error:", error.response ? error.response.data : error.message);
-      setErrors({ submit: error.response?.data?.message || "Login failed. Please try again." });
+      setErrors({ submit: error.response?.data?.error || "incorrect password/email" });
     } finally {
       setLoading(false);
     }
@@ -76,7 +70,7 @@ function Login() {
     <section className="grid h-screen place-items-center p-8 bg-white">
       <div>
         <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
-          Sign In
+          Sign In to Santics user
         </Typography>
         <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
           Enter your email and password to sign in
@@ -89,7 +83,10 @@ function Login() {
         <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
           <div className="mb-6">
             <label htmlFor="email">
-              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
                 Your Email
               </Typography>
             </label>
@@ -103,7 +100,9 @@ function Login() {
               value={formData.email}
               onChange={handleChange}
               className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
-              labelProps={{ className: "hidden" }}
+              labelProps={{
+                className: "hidden",
+              }}
             />
             {errors.email && (
               <Typography variant="small" color="red" className="mt-1">
@@ -113,14 +112,19 @@ function Login() {
           </div>
           <div className="mb-6 relative">
             <label htmlFor="password">
-              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900"
+              >
                 Password
               </Typography>
             </label>
             <Input
               size="lg"
               placeholder="********"
-              labelProps={{ className: "hidden" }}
+              labelProps={{
+                className: "hidden",
+              }}
               className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
               type={passwordShown ? "text" : "password"}
               name="password"
@@ -150,11 +154,16 @@ function Login() {
             {loading ? "Signing in..." : "Sign in"}
           </Button>
           <div className="mt-4 flex justify-end">
-            <Link to={`/forgotpassword`}>
-              <Typography as="a" color="blue-gray" variant="small" className="font-medium">
-                Forgot password?
-              </Typography>
-            </Link>
+           <Link to={`/adminforgotpassword`}>
+           <Typography
+              as="a"
+                        color="blue-gray"
+              variant="small"
+              className="font-medium"
+            >
+              Forgot password?
+            </Typography>
+           </Link>
           </div>
           <Button
             variant="outlined"
@@ -169,9 +178,13 @@ function Login() {
             />
             Sign in with Google
           </Button>
-          <Typography variant="small" color="gray" className="mt-4 text-center font-normal">
-            Not registered?{" "}
-            <Link to={`/signup`} className="font-medium text-gray-900">
+          <Typography
+            variant="small"
+            color="gray"
+            className="mt-4 text-center font-normal"
+          >
+            Not registered?{`adminregester`}
+            <Link to={`/adminregester`} className="font-medium text-gray-900">
               Create an account
             </Link>
           </Typography>
@@ -179,6 +192,6 @@ function Login() {
       </div>
     </section>
   );
-}
+};
 
 export default Login;

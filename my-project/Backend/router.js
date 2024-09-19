@@ -18,7 +18,7 @@ router.route('/adminforgot').post(request.adminForget)
 router.route('/resetadminpassword').post(request.resetAdminPassword)
 
 router.route('/adminhome').post(Auth,request.adminHome)
-router.route('/home').post(Auth,request.Home)
+router.route('/home').get(Auth,request.Home)
 
 // router.route("/add-to-cart").post(Auth,product.addToCart);
 // router.route("/get-cart").get(Auth,product.getCart);
@@ -32,4 +32,12 @@ router.route('/deletecase/:id').delete(request.deleteCase)
 router.route('/adminregester').post(request.adminRegister)
 router.route('/adminlogin').post(request.adminLogin)
 
+
+
+router.route("/add-to-cart").post(Auth,request.addToCart);
+router.route("/get-cart").get(Auth,request.getCart);
+router.route("/increment-cart").post(request.incrementCart);
+router.route("/decrement-cart").post(request.decrementCart);
+router.route("/delete-cart-item").delete(Auth,request.deleteCartItem);
+router.route("/check-cart/:productId").get(Auth,request .checkCart);
 export default router

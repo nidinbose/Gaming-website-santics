@@ -17,7 +17,7 @@ const Home=()=>{
     return (
         <div>
            
-             <Navbar/>
+             {/* <Navbar/> */}
              <Curosals/>
              <Category/>
              <GameChanger/>

@@ -6,6 +6,7 @@ import pkg from 'jsonwebtoken'
 import Cart from './models/cart.model.js'
 import adminSchema from './models/admin.model.js'
 import nodemailer from 'nodemailer'
+import cartSchema from './models/cart.model.js'
 
 // products  CRUD
 export async function addCase(req,res){
@@ -111,77 +112,120 @@ export async function userRegister(req,res) {
   }
   
   
+export async function userLogin(req, res) {
+  try {
+         const { email, password } = req.body;
+      if (!email || !password) {
+          return res.status(400).json({
+              msg: "Email or password cannot be empty!"
+          });
+      }
 
-  export async function userLogin(req, res) {
-    try {
-      const { email, password } = req.body;
-      console.log(email);
-      const user = await userSchema.findOne({ email });
-      const { username } = user;
-      if (user == null) return res.status(500).send({ msg: "admin not found" });
-      const success = await bcrypt.compare(password, user.password);
-      if (success !== true)
-        return res.status(401).send("Incorrect username or password");
-      const token = await sign({ username }, process.env.JWT_KEY, {
-        expiresIn: "24h",
+          const user = await userSchema.findOne({ email });
+      if (!user) {
+          return res.status(400).json({
+              msg: "Invalid email or password!"
+          });
+      }
+
+          const isMatch = await bcrypt.compare(password, user.password);
+      if (isMatch) {
+                  const token = pkg.sign({
+              email: user.email,
+              userId: user._id
+              
+          }, process.env.JWT_KEY, {
+              expiresIn: "48h"
+          });
+          return res.status(200).json({
+              msg: "Login successful!",
+              token
+              
+          });
+      }
+
+           return res.status(400).json({
+          msg: "Invalid email or password!"
       });
-      return res.status(200).send({ msg: "successfully logedin", token });
-    } catch (error) {
-      return res.status(400).send(error);
-    }
+  } catch (error) {
+      console.error("Login error:", error);
+      return res.status(500).json({
+          msg: "An error occurred during login.",
+          error: error.message
+      });
   }
+}
 
-  
-  
-  
+
+
 
   export async function Home(req, res) {
     try {
-        if (!req.user) {
-            return res.status(401).send({ error: "Unauthorized" });
+          const token = req.headers.authorization?.split(" ")[1];
+  
+      if (!token) {
+        return res.status(401).json({ msg: 'Unauthorized access. No token provided.' });
+      }
+        const decoded = pkg.verify(token, process.env.JWT_KEY);
+      const { userId, email } = decoded;
+  
+      const user = await userSchema.findOne({ _id: userId }, { password: 0 });
+  
+      if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+      }
+  
+      const { username } = user;
+  
+      return res.status(200).json({
+        msg: 'User profile found',
+        user: {
+          email,
+          username,
+          token
         }
-  
-        const { username } = req.user;
-  
-        console.log(req.user);
-        res.status(200).send({ username });
+      });
     } catch (error) {
-        console.error('Error in Home function:', error);
-        res.status(500).send({ error: "Internal Server Error" });
+      console.error("Error fetching user data:", error);
+      return res.status(500).json({
+        msg: 'An error occurred!',
+        error: error.message
+      });
     }
   }
+    
+  
+  
+
 
   export async function Logout(req, res) {
     try {
-      // If you want to blacklist tokens or manage sessions on the server side:
-      // You can store the token in a blacklist or manage a token expiration strategy.
-  
-      // If using sessions (for example, with cookies):
-      req.session = null; // If you're using sessions, this will clear the session.
-  
+   
+      req.session = null; 
       res.status(200).send({ message: 'Logged out successfully' });
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
   }
 
-
   // cart
 
 
+  
   export async function addToCart(req, res) {
     const { productId } = req.body;
-    const { userId } = req.user;
-    console.log(productId, userId);
-  
+    const { userId } = req.user; // Assuming userId is attached to the request via middleware (e.g., JWT)
+    
     try {
+      // Find if this product is already in the user's cart
+      const existingCartItem = await cartSchema.findOne({ productId, userId });
   
-      const existingCartItem = await cart.findOne({ productId, userId });
-  
-      const product = await productsModel.findOne({ _id: productId });
+      // Check the stock of the product
+      const product = await caseSchema.findById(productId);
       const actualProductCount = product ? product.stock : 0;
   
       if (existingCartItem) {
+        // If the item already exists in the cart, increment the count, but ensure it doesn't exceed stock
         if (existingCartItem.count < actualProductCount) {
           existingCartItem.count += 1;
           await existingCartItem.save();
@@ -190,8 +234,9 @@ export async function userRegister(req,res) {
           return res.status(400).json({ msg: 'Item count exceeds available stock.' });
         }
       } else {
+        // If the item is not yet in the cart, add it, but ensure it doesn't exceed stock
         if (1 <= actualProductCount) {
-          await cartModel.create({ productId, userId, count: 1 });
+          await cartSchema.create({ productId, userId, count: 1 });
           return res.status(200).json({ msg: 'Item added to cart successfully!' });
         } else {
           return res.status(400).json({ msg: 'Item count exceeds available stock.' });
@@ -202,18 +247,17 @@ export async function userRegister(req,res) {
       return res.status(500).json({ msg: 'Error adding to cart.' });
     }
   }
-
-
-
   
+
+
 export async function getCart(req, res) {
   const { userId } = req.user;
 
   try {
-    const cartItems = await cartModel.find({ userId });
+    const cartItems = await cartSchema.find({ userId });
     const productIds = cartItems.map(cartItem => cartItem.productId);
 
-    const products = await productsModel.find({ _id: { $in: productIds } });
+    const products = await caseSchema.find({ _id: { $in: productIds } });
 
     if (!products) {
       return res.status(404).json({ msg: 'Products not found' });
@@ -237,6 +281,104 @@ export async function getCart(req, res) {
   }
 }
 
+
+
+export async function incrementCart(req, res) {
+  const { productId, userId } = req.body;
+
+  try {
+    let cartItem = await cartSchema.findOne({ productId, userId });
+
+    if (cartItem) {
+      const product = await caseSchema.findOne({ _id: productId });
+      const actualProductCount = product ? product.stock : 0;
+
+      if (cartItem.count < actualProductCount) {
+        cartItem.count += 1;
+        await cartItem.save();
+        return res.status(200).json({ msg: 'Item added to cart successfully!' });
+      } else {
+        return res.status(400).json({ msg: 'Item count exceeds available stock.' });
+      }
+    }
+
+    res.status(404).json({ msg: 'Item not found in the cart.' });
+  } catch (error) {
+    console.error('Error incrementing cart item count:', error);
+    res.status(500).json({ msg: 'Error incrementing cart item count.' });
+  }
+}
+
+
+
+
+export async function decrementCart(req, res) {
+  const { productId, userId } = req.body;
+  console.log(req.body);
+  try {
+    let cartItem = await cartSchema.findOne({ productId, userId });
+
+    if (!cartItem) {
+      return res.status(404).json({ msg: 'Cart item not found' });
+    }
+
+
+    if (cartItem.count > 1) {
+      cartItem.count -= 1;
+      await cartItem.save();
+
+      res.status(200).json({ msg: 'Cart item count decremented successfully!' });
+    } else {
+      res.status(400).json({ msg: 'Cannot decrement count below 1' });
+    }
+  } catch (error) {
+    console.error('Error decrementing cart item count:', error);
+    res.status(500).json({ msg: 'Error decrementing cart item count.' });
+  }
+}
+
+
+
+export async function deleteCartItem(req, res) {
+  const { productId, userId } = req.body;
+
+  try {
+    const cartItem = await cartSchema.findOne({ productId, userId });
+
+    if (!cartItem) {
+      return res.status(404).json({ msg: 'Cart item not found.' });
+    }
+
+    await cartSchema.deleteOne({ productId, userId });
+
+    res.status(200).json({ msg: 'Cart item deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting cart item:', error);
+    res.status(500).json({ msg: 'Error deleting cart item.' });
+  }
+}
+
+
+export async function checkCart(req, res) {
+  const { productId } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const cartItem = await cartSchema.findOne({ productId, userId });
+
+    const isAddedToCart = Boolean(cartItem);
+
+    res.status(200).json({ isAddedToCart });
+  } catch (error) {
+    console.error('Error checking if added to cart:', error);
+    res.status(500).json({ msg: 'Error checking if added to cart.' });
+  }
+}
+
+
+
+
+  
 
 
 
@@ -419,3 +561,20 @@ export async function resetAdminPassword(req, res) {
 }
 
 
+
+
+
+
+function convertToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}

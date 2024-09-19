@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import axios from "axios"; // Import Axios
+import axios from "axios"; 
 
 const AdminLogin = () => {
   const navigate = useNavigate();

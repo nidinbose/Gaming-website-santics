@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -24,27 +24,51 @@ const AddProducts = () => {
     bnn1: "",
     bnn2: "",
     bnn3: "",
-    category:""
+    category: "",
   });
 
+  const [preview, setPreview] = useState({
+    imagelink: null,
+    hoverimagelink: null,
+  });
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   useEffect(() => {
-  
-    const isAuthenticated = localStorage.getItem('token'); 
-
+    const isAuthenticated = localStorage.getItem('token');
     if (!isAuthenticated) {
       alert("Please log in to continue.");
       navigate('/login');
     }
   }, [navigate]);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFileChange = async (e) => {
+    const { name, files } = e.target;
+    if (files.length === 0) return;
+
+    const file = files[0];
+    const base64 = await convertToBase64(file);
+
+    setFormData((prev) => ({ ...prev, [name]: base64 }));
+    setPreview((prev) => ({
+      ...prev,
+      [name]: URL.createObjectURL(file),
+    }));
+  };
+
+  function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => resolve(fileReader.result);
+      fileReader.onerror = (error) => reject(error);
+    });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,39 +76,41 @@ const AddProducts = () => {
     try {
       const response = await axios.post("http://localhost:3003/api/addcase", formData);
       console.log("Response:", response.data);
-      alert("Case added successfully!");
+      alert("Product added successfully!");
     } catch (error) {
-      console.error("Error adding case:", error);
-      alert("Failed to add case.");
+      console.error("Error adding product:", error);
+      alert("Failed to add product.");
     }
   };
 
   return (
     <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-6 text-center">Add New Case</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">Add New Product</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-gray-700 mb-1">Image URL:</label>
           <input
-            type="text"
+            type="file"
             name="imagelink"
-            value={formData.imagelink}
-            onChange={handleChange}
+            onChange={handleFileChange}
             className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter image URL"
           />
+          {preview.imagelink && (
+            <img src={preview.imagelink} alt="Preview" className="mt-2" />
+          )}
         </div>
 
         <div>
           <label className="block text-gray-700 mb-1">Hover Image URL:</label>
           <input
-            type="text"
+            type="file"
             name="hoverimagelink"
-            value={formData.hoverimagelink}
-            onChange={handleChange}
+            onChange={handleFileChange}
             className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter hover image URL"
           />
+          {preview.hoverimagelink && (
+            <img src={preview.hoverimagelink} alt="Preview" className="mt-2" />
+          )}
         </div>
 
         <div>
@@ -255,14 +281,14 @@ const AddProducts = () => {
         </div>
 
         <div>
-          <label className="block text-gray-700 mb-1">Video:</label>
+          <label className="block text-gray-700 mb-1">Video URL:</label>
           <input
             type="text"
             name="video"
             value={formData.video}
             onChange={handleChange}
             className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter video link"
+            placeholder="Enter video URL"
           />
         </div>
 
@@ -274,7 +300,7 @@ const AddProducts = () => {
             value={formData.bnn1}
             onChange={handleChange}
             className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter banner 1 link"
+            placeholder="Enter banner 1 URL"
           />
         </div>
 
@@ -286,7 +312,7 @@ const AddProducts = () => {
             value={formData.bnn2}
             onChange={handleChange}
             className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter banner 2 link"
+            placeholder="Enter banner 2 URL"
           />
         </div>
 
@@ -298,9 +324,10 @@ const AddProducts = () => {
             value={formData.bnn3}
             onChange={handleChange}
             className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter banner 3 link"
+            placeholder="Enter banner 3 URL"
           />
         </div>
+
         <div>
           <label className="block text-gray-700 mb-1">Category:</label>
           <select
@@ -312,7 +339,7 @@ const AddProducts = () => {
             <option value="" disabled>Select a category</option>
             <option value="cases">Cases</option>
             <option value="motherboard">Motherboards</option>
-            <option value="gaming">Gaming</option>
+            {/* <option value="gaming">Gaming</option>x */}
             <option value="monitors">Monitors</option>
             <option value="cpu">CPU</option>
             <option value="gaming-chair">Gaming Chairs</option>
@@ -323,12 +350,11 @@ const AddProducts = () => {
             <option value="accessories">Accessories</option>
           </select>
         </div>
-
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+          className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
-          Submit
+          Add Product
         </button>
       </form>
     </div>
