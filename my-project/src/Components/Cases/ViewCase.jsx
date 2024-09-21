@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 const ViewCase = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [hovered, setHovered] = useState(false);
-  const navigate = useNavigate();
+  const [count, setCount] = useState(1); // State for count
 
   // Fetch product details
   const getCase = async () => {
@@ -18,28 +18,43 @@ const ViewCase = () => {
       console.error("Error fetching case data:", error);
     }
   };
-    const handleAddToCart = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        };
 
-        const data = {
-          productId: product?._id,
-        };
+  const handleAddToCart = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
 
-        const response = await axios.post('/api/add-to-cart', data, config);
-
-        if (response.status === 200) {
-          alert('Successfully added to cart!');
-        }
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-        alert('Error adding to cart.');
+      if (!userId || !token) {
+        alert("You need to be logged in to add items to the cart.");
+        return;
       }
-    };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const data = {
+        productId: product?._id,
+        userId,
+        count: count, // Include count here
+      };
+      console.log(userId);
+      
+
+      const response = await axios.post("http://localhost:3003/api/add-to-cart", data, config);
+
+      if (response.status === 200) {
+        alert("Successfully added to cart!");
+      } else {
+        alert(response.data.msg || "Error adding to cart.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert(error.response?.data?.msg || "Error adding to cart.");
+    }
+  };
 
   useEffect(() => {
     getCase();
@@ -51,7 +66,7 @@ const ViewCase = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 pb-10">
-      <div className="bg-black shadow-md overflow-hidden rounded-lg xl:h-full w-full mb-8 ">
+      <div className="bg-black shadow-md overflow-hidden rounded-lg xl:h-full w-full mb-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
           {/* Product Image */}
           <motion.div
@@ -82,13 +97,15 @@ const ViewCase = () => {
             <p className="text-md sm:text-lg text-blue-300 mb-2">{product.specifications}</p>
             <p className="text-sm sm:text-base md:text-lg text-gray-400 mb-5">{product.description}</p>
 
-            <ul className="list-disc list-inside mb-4 overflow-y-auto h-[25vh]">
-              {product.keyUses.split(',').map((use, index) => (
-                <p key={index} className="text-gray-400 mb-2">
-                  {use.trim()}
-                </p>
-              ))}
-            </ul>
+            {product.keyUses && (
+              <ul className="list-disc list-inside mb-4 overflow-y-auto h-[25vh]">
+                {product.keyUses.split(",").map((use, index) => (
+                  <p key={index} className="text-gray-400 mb-2">
+                    {use.trim()}
+                  </p>
+                ))}
+              </ul>
+            )}
 
             <p className="text-md sm:text-lg lg:text-xl xl:text-2xl font-bold text-white mb-4">
               INR : {product.price}
@@ -98,6 +115,15 @@ const ViewCase = () => {
 
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 mt-auto">
               <div className="grid grid-cols-2 gap-4">
+                {/* Input for count */}
+                {/* <input
+                  type="number"
+                  value={count}
+                  onChange={(e) => setCount(e.target.value)}
+                  className="border rounded px-2 py-1 text-black"
+                  min="1"
+                /> */}
+
                 {/* Button to add to cart */}
                 <button
                   className="inline-flex items-center justify-center text-white bg-gray-900 rounded group w-full sm:w-auto"
@@ -123,22 +149,42 @@ const ViewCase = () => {
                 </button>
 
                 {/* Button link */}
-                <Link
-                  to={`${product.btnlink}`}
-                  className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group w-full sm:w-auto"
-                >
-                  <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gray-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
-                  <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
-                  <span className="relative text-md">See more</span>
-                </Link>
+                {product.btnlink && (
+                  <Link
+                    to={product.btnlink}
+                    className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group w-full sm:w-auto"
+                  >
+                    <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gray-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
+                    <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
+                    <span className="relative text-md">See more</span>
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>
         </div>
+      </div>
+
+      {/* Image Gallery */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-[70vw] xl:w-[60vw] items-center gap-4 xl:ml-[15vw] xl:mt-[20vh]">
+        {[product.link1, product.link2, product.link3, product.link4, product.link5, product.link6]
+          .filter((link) => link) // Only show if the link exists
+          .map((link, index) => (
+            <motion.div
+              key={index}
+              className="relative overflow-hidden"
+              whileHover={{ scale: 1.1 }} // Zoom effect on hover
+            >
+              <motion.img
+                src={link}
+                alt={`product-${index}`}
+                className="object-cover w-full h-full transition-transform duration-500 ease-in-out hover:scale-150"
+              />
+            </motion.div>
+          ))}
       </div>
     </div>
   );
 };
 
 export default ViewCase;
-

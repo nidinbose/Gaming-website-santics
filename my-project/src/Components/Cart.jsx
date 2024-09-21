@@ -16,9 +16,9 @@ const Cart = () => {
 
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get("http://localhost:3003/api/getcart", {
+        const response = await axios.get("http://localhost:3003/api/get-cart", {
           headers: {
-            Authorization: `Bearer ${token}`, // Pass the token in the headers
+            Authorization: `Bearer ${token}`,
           },
         });
         const items = response.data || [];
@@ -28,6 +28,8 @@ const Cart = () => {
         console.error("Error fetching cart items:", error);
         if (error.response && error.response.status === 401) {
           navigate("/login");
+        } else {
+          alert("Failed to fetch cart items. Please try again later.");
         }
       }
     };
@@ -80,6 +82,8 @@ const Cart = () => {
       console.error("Error during checkout:", error);
       if (error.response && error.response.status === 401) {
         navigate("/login");
+      } else {
+        alert("Checkout failed. Please try again.");
       }
     }
   };
@@ -89,7 +93,6 @@ const Cart = () => {
       <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
       <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
         <div className="rounded-lg md:w-2/3">
-          {/* Loop through cartItems */}
           {cartItems.map((item, index) => (
             <div
               key={item.id}
@@ -147,7 +150,6 @@ const Cart = () => {
           ))}
         </div>
 
-        {/* Subtotal Section */}
         <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
           <div className="mb-2 flex justify-between">
             <p className="text-gray-700">Subtotal</p>

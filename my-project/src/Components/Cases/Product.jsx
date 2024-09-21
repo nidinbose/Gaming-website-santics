@@ -7,7 +7,9 @@ const Product = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [products, setProducts] = useState([]);
 
-  
+  // Get userId from localStorage
+  const userId = localStorage.getItem("userId");
+
   const getCase = async () => {
     try {
       const res = await axios.get("http://localhost:3003/api/getcase");
@@ -21,25 +23,24 @@ const Product = () => {
     getCase();
   }, []);
 
-
   const filteredProducts = products.filter(product => product.category === "cases");
 
   return (
-    <div className="container mx-auto px-4 py-8" 
-    >
+    <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         {filteredProducts.map((product) => (
           <Link 
-            to={`/viewcase/${product._id}`} 
-            state={{ product }}
+            to={{
+              pathname: `/viewcase/${product._id}`,  // Pass product ID in the route
+              state: { product, userId }  // Pass product and userId via state
+            }}
             key={product._id}
           >
             <motion.div
-              className="bg-white/10 shadow-md overflow-hidden border-transparent flex flex-col "
+              className="bg-white/10 shadow-md overflow-hidden border-transparent flex flex-col"
               whileHover={{
                 borderColor: ["#ff0000", "#ffffff"],
                 boxShadow: "0px 0px 1px rgba(255, 255, 255, 0.7)",
-                // borderWidth: "1px",
                 transition: {
                   duration: 0.7,
                   ease: "easeInOut",
@@ -67,14 +68,22 @@ const Product = () => {
                 <div className="flex-grow" />
               </div>
               <div className="flex items-center justify-between p-4 bg-black/60 border-t border-gray-900">
-                <p className="text-xl font-semibold bg-clip-text text-transparent bg-gray-400">INR : {product.price} <br /><span className="text-xs text-blue-200">(included all taxes)</span></p>
-                <Link to={``} className="relative inline-flex items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-gray-700 shadow-md group">
+                <p className="text-xl font-semibold bg-clip-text text-transparent bg-gray-400">
+                  INR : {product.price} <br />
+                  <span className="text-xs text-blue-200">(included all taxes)</span>
+                </p>
+                <Link 
+                  to={``} 
+                  className="relative inline-flex items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-gray-700 shadow-md group"
+                >
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-transparant group-hover:translate-x-0 ease">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>
                   </span>
-                  <span className="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease">Add to cart</span>
+                  <span className="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease">
+                    Add to cart
+                  </span>
                   <span className="relative invisible">Add to cart</span>
                 </Link>
               </div>
@@ -87,6 +96,3 @@ const Product = () => {
 };
 
 export default Product;
-
-
-

@@ -17,6 +17,7 @@ const caseSchema= new mongoose.Schema({
    link2: { type: String },
    link3: { type: String },
    link4: { type: String },
+   link5: { type: String },
    link6: { type: String },
    link4: { type: String },
    btnlink: { type: String },
@@ -24,7 +25,8 @@ const caseSchema= new mongoose.Schema({
    bnn1: { type: String },
    bnn2: { type: String },
    bnn3: { type: String },
-   category:{type:String}
+   category:{type:String},
+   stock:{type:Number}
    
 })
 

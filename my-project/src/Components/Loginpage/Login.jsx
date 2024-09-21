@@ -26,7 +26,7 @@ const Login = () => {
   };
 
   const validateForm = () => {
-    let formErrors = {};
+    const formErrors = {};
     if (!formData.email) {
       formErrors.email = "Email is required";
     }
@@ -54,13 +54,16 @@ const Login = () => {
         password: formData.password,
       });
 
+      // Ensure your backend responds with a token and userId
       const { token, userId } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
+      localStorage.setItem("userId", userId); // Store userId here
 
       navigate("/");
     } catch (error) {
-      setErrors({ submit: error.response?.data?.error || "incorrect password/email" });
+      setErrors({ 
+        submit: error.response?.data?.error || "Incorrect password/email" 
+      });
     } finally {
       setLoading(false);
     }
@@ -83,10 +86,7 @@ const Login = () => {
         <form onSubmit={handleSubmit} className="mx-auto max-w-[24rem]">
           <div className="mb-6">
             <label htmlFor="email">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-gray-900"
-              >
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
                 Your Email
               </Typography>
             </label>
@@ -100,9 +100,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
-              labelProps={{
-                className: "hidden",
-              }}
+              labelProps={{ className: "hidden" }}
             />
             {errors.email && (
               <Typography variant="small" color="red" className="mt-1">
@@ -112,19 +110,14 @@ const Login = () => {
           </div>
           <div className="mb-6 relative">
             <label htmlFor="password">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-gray-900"
-              >
+              <Typography variant="small" className="mb-2 block font-medium text-gray-900">
                 Password
               </Typography>
             </label>
             <Input
               size="lg"
               placeholder="********"
-              labelProps={{
-                className: "hidden",
-              }}
+              labelProps={{ className: "hidden" }}
               className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
               type={passwordShown ? "text" : "password"}
               name="password"
@@ -154,16 +147,11 @@ const Login = () => {
             {loading ? "Signing in..." : "Sign in"}
           </Button>
           <div className="mt-4 flex justify-end">
-           <Link to={`/adminforgotpassword`}>
-           <Typography
-              as="a"
-                        color="blue-gray"
-              variant="small"
-              className="font-medium"
-            >
-              Forgot password?
-            </Typography>
-           </Link>
+            <Link to={`/adminforgotpassword`}>
+              <Typography as="a" color="blue-gray" variant="small" className="font-medium">
+                Forgot password?
+              </Typography>
+            </Link>
           </div>
           <Button
             variant="outlined"
@@ -178,12 +166,8 @@ const Login = () => {
             />
             Sign in with Google
           </Button>
-          <Typography
-            variant="small"
-            color="gray"
-            className="mt-4 text-center font-normal"
-          >
-            Not registered?{`adminregester`}
+          <Typography variant="small" color="gray" className="mt-4 text-center font-normal">
+            Not registered?{" "}
             <Link to={`/adminregester`} className="font-medium text-gray-900">
               Create an account
             </Link>

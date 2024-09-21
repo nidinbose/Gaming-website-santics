@@ -25,6 +25,7 @@ const AddProducts = () => {
     bnn2: "",
     bnn3: "",
     category: "",
+    stock:"",
   });
 
   const [preview, setPreview] = useState({
@@ -322,6 +323,18 @@ const AddProducts = () => {
             type="text"
             name="bnn3"
             value={formData.bnn3}
+            onChange={handleChange}
+            className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+            placeholder="Enter banner 3 URL"
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-1">Stock:</label>
+          <input
+            type="number"
+            name="stock"
+            value={formData.stock}
             onChange={handleChange}
             className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
             placeholder="Enter banner 3 URL"

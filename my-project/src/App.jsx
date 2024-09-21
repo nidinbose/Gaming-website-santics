@@ -44,6 +44,13 @@ function App() {
       <Routes>
         
         <Route path="/" Component={Home}/>
+        <Route path="/signup" Component={Signup}/>
+        <Route path="/login" Component={Login}/>
+        <Route path="/cart" Component={Cart}/>
+
+
+        
+        <Route path="/home" Component={UserView}/>
         <Route path="/cases" Component={Cases}/>
         <Route path="/motherboard" Component={MotherBoard}/>
         <Route path="/monitors" Component={Monitors}/>
@@ -72,10 +79,7 @@ function App() {
         <Route path="/editproducts/:id" Component={EditProducts}/>
            
 
-        <Route path="/signup" Component={Signup}/>
-        <Route path="/login" Component={Login}/>
-        <Route path="/cart" Component={Cart}/>
-        <Route path="/home" Component={UserView}/>
+      
 
         <Route path="/resetpassword" Component={ResetPassword}/>
 

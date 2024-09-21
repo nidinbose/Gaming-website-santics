@@ -212,100 +212,69 @@ export async function userLogin(req, res) {
 
 
   
-  export async function addToCart(req, res) {
-    const { productId } = req.body;
-    const { userId } = req.user; // Assuming userId is attached to the request via middleware (e.g., JWT)
-    
-    try {
-      // Find if this product is already in the user's cart
-      const existingCartItem = await cartSchema.findOne({ productId, userId });
-  
-      // Check the stock of the product
-      const product = await caseSchema.findById(productId);
-      const actualProductCount = product ? product.stock : 0;
-  
-      if (existingCartItem) {
-        // If the item already exists in the cart, increment the count, but ensure it doesn't exceed stock
-        if (existingCartItem.count < actualProductCount) {
-          existingCartItem.count += 1;
-          await existingCartItem.save();
-          return res.status(200).json({ msg: 'Item added to cart successfully!' });
-        } else {
-          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
-        }
+export async function addToCart(req, res) {
+  const { productId } = req.body;
+  const userId = req.user_id;
+
+  try {
+    const existingCartItem = await cartSchema.findOne({ productId, userId });
+    const product = await caseSchema.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ msg: 'Product not found.' });
+    }
+
+    const availableStock = product.stock;
+
+    if (existingCartItem) {
+      if (existingCartItem.count < availableStock) {
+        existingCartItem.count += 1;
+        await existingCartItem.save();
+        return res.status(200).json({ msg: 'Item added to cart successfully!' });
       } else {
-        // If the item is not yet in the cart, add it, but ensure it doesn't exceed stock
-        if (1 <= actualProductCount) {
-          await cartSchema.create({ productId, userId, count: 1 });
-          return res.status(200).json({ msg: 'Item added to cart successfully!' });
-        } else {
-          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
-        }
+        return res.status(400).json({ msg: 'Item count exceeds available stock.' });
       }
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      return res.status(500).json({ msg: 'Error adding to cart.' });
-    }
-  }
-  
-
-
-export async function getCart(req, res) {
-  const { userId } = req.user;
-
-  try {
-    const cartItems = await cartSchema.find({ userId });
-    const productIds = cartItems.map(cartItem => cartItem.productId);
-
-    const products = await caseSchema.find({ _id: { $in: productIds } });
-
-    if (!products) {
-      return res.status(404).json({ msg: 'Products not found' });
-    }
-
-    const cartDetails = cartItems.map(cartItem => {
-      const product = products.find(p => p._id.toString() === cartItem.productId.toString());
-      return {
-        ...cartItem._doc,
-        product,
-      };
-    });
-
-    res.status(200).json({
-      msg: 'Cart details found',
-      cartDetails,
-    });
-  } catch (error) {
-    console.error('Error fetching cart items:', error);
-    res.status(500).json({ msg: 'Error fetching cart items.' });
-  }
-}
-
-
-
-export async function incrementCart(req, res) {
-  const { productId, userId } = req.body;
-
-  try {
-    let cartItem = await cartSchema.findOne({ productId, userId });
-
-    if (cartItem) {
-      const product = await caseSchema.findOne({ _id: productId });
-      const actualProductCount = product ? product.stock : 0;
-
-      if (cartItem.count < actualProductCount) {
-        cartItem.count += 1;
-        await cartItem.save();
+    } else {
+      if (availableStock > 0) {
+        await cartSchema.create({ productId, userId });
         return res.status(200).json({ msg: 'Item added to cart successfully!' });
       } else {
         return res.status(400).json({ msg: 'Item count exceeds available stock.' });
       }
     }
-
-    res.status(404).json({ msg: 'Item not found in the cart.' });
   } catch (error) {
-    console.error('Error incrementing cart item count:', error);
-    res.status(500).json({ msg: 'Error incrementing cart item count.' });
+    console.error('Error adding to cart:', error);
+    return res.status(500).json({ msg: 'Error adding to cart.' });
+  }
+}
+  
+export async function getCart(req, res) {
+  const { productId, count } = req.body; // Get productId and count from the request body
+
+  try {
+      // Find the user's cart
+      let cart = await Cart.findOne({ userId: req.user.id });
+
+      // If no cart exists for the user, create one
+      if (!cart) {
+          cart = new Cart({ userId: req.user.id, items: [] });
+      }
+
+      // Check if the item already exists in the cart
+      const existingItem = cart.items.find(item => item.productId === productId);
+
+      // If the item exists, update the quantity; otherwise, add a new item
+      if (existingItem) {
+          existingItem.count += count; // Update the existing item count
+      } else {
+          cart.items.push({ productId, count }); // Add new item
+      }
+
+      // Save the cart
+      await cart.save();
+      res.status(200).json(cart); // Return the updated cart
+  } catch (error) {
+      res.status(500).json({ message: error.message }); // Handle errors
   }
 }
 
