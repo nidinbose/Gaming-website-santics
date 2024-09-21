@@ -8,12 +8,12 @@ const Oview3 = () => {
     >
       {/* Heading */}
       <motion.h1
-        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-white xl:mb-[20vh] xl:mt-[10vh]"
+        className="text-3xl sm:text-5xl md:text-5xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-[20vh] xl:mt-[10vh] bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-blue-300 to-red-500"
         initial={{ x: -200, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        Monitors
+        Builded CPU
       </motion.h1>
 
       {/* Grid of Photos */}
@@ -34,12 +34,14 @@ const Oview3 = () => {
   />
 
   <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
+    className="absolute inset-0 bg-black bg-opacity-50 flex items-top justify-center opacity-0 mt-2"
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.2 }}
   >
-    <h1 className="text-white text-5xl">
-      Rog
+    <h1 className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-blue-400 to-pink-500 text-3xl font-bold">
+      Rog builded 
+         <br />
+      
     </h1>
   </motion.div>
 </motion.div>

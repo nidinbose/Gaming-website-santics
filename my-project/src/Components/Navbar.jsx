@@ -62,7 +62,7 @@ const Navbar = () => {
 
   const navItems = [
     {
-      name: "Product",
+      name: "Products",
       links: [
         { name: "Cases", path: "/cases" },
         { name: "Motherboards", path: "/motherboard" },
@@ -115,11 +115,11 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex space-x-12">
           {navItems.map((item, index) => (
             <div key={index} className="relative">
               <button
-                className="hover:text-red-500 focus:outline-none"
+                className="inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-20 after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 hover:text-red-500"
                 onClick={() => toggleDropdown(index)}
               >
                 {item.name}
@@ -131,13 +131,16 @@ const Navbar = () => {
                 }`}
               >
                 {item.links.map((link, i) => (
-                  <Link
-                    key={i}
-                    to={link.path}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500"
-                  >
-                    {link.name}
-                  </Link>
+                 <Link
+                 key={i}
+                 to={link.path}
+                 className="block px-4 py-2 text-sm text-gray-700 relative hover:text-red-500"
+               >
+                 <span className="inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-36 after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 ">
+                   {link.name}
+                 </span>
+               </Link>
+               
                 ))}
               </div>
             </div>
@@ -148,7 +151,7 @@ const Navbar = () => {
         <div className="flex items-center space-x-10">
           {/* Cart Hover */}
           <div className="relative group">
-            <Link to="/cart" className="">
+            <Link to="/cart" className=" hover:text-red-500">
             <MdShoppingCart/>
             </Link>
             {/* Show CartComponent only on hover */}
@@ -171,7 +174,7 @@ const Navbar = () => {
           ) : (
             <Link to="/login">
               <button className="focus:outline-none bg-black flex items-center">
-                <h1 className="text-red bg-black text-lg pl-3 font-semibold">
+                <h1 className="text-red bg-black text-lg pl-3 font-semibold  hover:text-red-500">
                 <SlUserFollow/>
                 </h1>
               </button>

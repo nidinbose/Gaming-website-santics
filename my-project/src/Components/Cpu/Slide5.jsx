@@ -7,6 +7,7 @@ const Slide5 = () => {
    
     'https://dlcdnwebimgs.asus.com/gain/0B173084-0CAC-4D53-B211-2D2FD8FD20A5/fwebp',
     'https://storage-asset.msi.com/event/2023/CND/DT-NVIDIA-Landing/images/msi-dt-nvidia-studio-kv.jpg',
+    'https://in-media.apjonlinecdn.com/magefan_blog/hp-pavilion-gaming-desktop-review-hero.jpg'
 
   ];
 
