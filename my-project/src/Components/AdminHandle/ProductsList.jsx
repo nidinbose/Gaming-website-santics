@@ -111,8 +111,8 @@ const ProductList = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>
                   </span>
-                  <span className="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease">Add to cart</span>
-                  <span className="relative invisible">Add to cart</span>
+                  <span className="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease">Stock</span>
+                  <span className="relative invisible">Stock</span>
                 </Link>
               </div>
             </motion.div>
