@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { Link ,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductList = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState("All"); // Default category set to "All"
+  const [category, setCategory] = useState("All"); 
+  const [searchQuery, setSearchQuery] = useState(""); 
   const navigate = useNavigate();
+
   useEffect(() => {
-  
     const isAuthenticated = localStorage.getItem('token'); 
 
     if (!isAuthenticated) {
@@ -17,6 +18,7 @@ const ProductList = () => {
       navigate('/login');
     }
   }, [navigate]);
+
   const getCase = async () => {
     try {
       const res = await axios.get("http://localhost:3003/api/getcase");
@@ -30,24 +32,33 @@ const ProductList = () => {
     getCase();
   }, []);
 
-  
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
   };
 
-
-  const filteredProducts = category === "All"
-    ? products
-    : products.filter((product) => product.category === category);
+   const filteredProducts = products
+    .filter((product) =>
+      category === "All" || product.category === category
+    )
+    .filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Category Dropdown */}
-      <div className="mb-6">
+      {/* Search and Category Dropdown */}
+      <div className="flex justify-between mb-6">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="border px-4 py-2 rounded-md w-full max-w-md bg-white/10 text-blue-300"
+        />
         <select
           value={category}
           onChange={handleCategoryChange}
-          className="border px-4 py-2 rounded-md"
+          className="border px-4 py-2 rounded-md ml-4 bg-white/10 text-red-600 font-semibold"
         >
           <option value="All">All</option>
           <option value="cases">Cases</option>
@@ -95,15 +106,12 @@ const ProductList = () => {
                 <p className="text-sm text-blue-200 mb-2 h-14 overflow-y-auto">
                   {product.specifications}
                 </p>
-                {/* <p className="text-sm text-gray-600 mb-4">
-                  {product.description}
-                </p> */}
                 <div className="flex-grow" />
               </div>
               <div className="flex items-center justify-between p-4 bg-black/60 border-t border-gray-900">
                 <p className="text-xl font-semibold bg-clip-text text-transparent bg-gray-400">
                   INR : {product.price} <br />
-                  <span className="text-xs text-blue-200">(included all taxes)</span>
+                  <span className="text-md text-blue-200">Stock : ({product.stock})</span>
                 </p>
                 <Link to={``} className="relative inline-flex items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-gray-700 shadow-md group">
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-transparant group-hover:translate-x-0 ease">

@@ -199,6 +199,19 @@ const EditProducts = () => {
           </div>
 
           <div className="col-span-1">
+            <label className="block text-gray-700 mb-1">Stock</label>
+            <input
+              type="number"
+              min="0"
+              name="stock"
+              value={data.stock}
+              onChange={handleChange}
+              className="w-full p-3 border rounded focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter price"
+            />
+          </div>
+
+          <div className="col-span-1">
             <button
               type="submit"
               className="w-full py-3 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-300"

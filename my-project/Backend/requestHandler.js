@@ -228,7 +228,7 @@ export async function userRegister(req,res) {
   
   export async function addToCart(req, res) {
     const { productId } = req.body;
-    const userId = req.user_id; // Extracted from middleware
+    const userId = req.user_id; 
   
     try {
       const existingCartItem = await Cart.findOne({ productId, userId });
@@ -250,7 +250,7 @@ export async function userRegister(req,res) {
         }
       } else {
         if (availableStock > 0) {
-          await Cart.create({ productId, userId, count: 1 }); // Ensure count starts at 1
+          await Cart.create({ productId, userId, count: 1 }); 
           return res.status(200).json({ msg: 'Item added to cart successfully!' });
         } else {
           return res.status(400).json({ msg: 'Item count exceeds available stock.' });
