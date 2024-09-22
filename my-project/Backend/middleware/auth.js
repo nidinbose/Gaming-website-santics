@@ -3,7 +3,7 @@ const {verify}=pkg
 export default async function Auth(req,res,next){
    
    try {
-      console.log("hai");
+      // console.log("hai");
 console.log(req.headers.authorization);
     const key=req.headers.authorization;
     console.log(key);

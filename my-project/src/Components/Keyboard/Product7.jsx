@@ -25,7 +25,7 @@ const Product7 = () => {
   const filteredProducts = products.filter(product => product.category === "keyboard");
 
   return (
-    <div className="container mx-auto px-4 py-8" 
+    <div className="container mx-auto px-4 py-8 xl:h-[20vh]" 
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         {filteredProducts.map((product) => (

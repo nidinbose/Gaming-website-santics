@@ -4,9 +4,10 @@ const Slide9 = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
-   
-    'https://dlcdnwebimgs.asus.com/gain/0B173084-0CAC-4D53-B211-2D2FD8FD20A5/fwebp',
-    'https://storage-asset.msi.com/event/2023/CND/DT-NVIDIA-Landing/images/msi-dt-nvidia-studio-kv.jpg',
+   'https://hajaan.com/wp-content/uploads/2020/12/Keyboard-Overview-2.png',
+    'https://dlcdnwebimgs.asus.com/gain/6235D3D4-5233-45CD-AF99-319FF14927C3/fwebp',
+    'https://dlcdnwebimgs.asus.com/gain/D8769BF4-15B6-4DB3-BB2D-0EA641059360/fwebp',
+    
 
   ];
 

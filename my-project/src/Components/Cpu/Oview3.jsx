@@ -33,17 +33,7 @@ const Oview3 = () => {
     className="w-full xl:h-[42vh] object-cover"
   />
 
-  <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-top justify-center opacity-0 mt-2"
-    whileHover={{ opacity: 3 }}
-    transition={{ duration: 0.2 }}
-  >
-    <h1 className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-blue-400 to-pink-500 text-3xl font-bold">
-      Rog builded 
-         <br />
-      
-    </h1>
-  </motion.div>
+
 </motion.div>
 <motion.div
   className="relative overflow-hidden image-container"
@@ -59,15 +49,7 @@ const Oview3 = () => {
     className="w-full xl:h-full object-cover"
   />
 
-  <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
-    whileHover={{ opacity: 3 }}
-    transition={{ duration: 0.6 }}
-  >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
-  </motion.div>
+
 </motion.div>
 
      
@@ -85,15 +67,7 @@ const Oview3 = () => {
     className="w-full xl:h-[42vh] object-cover"
   />
 
-  <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
-    whileHover={{ opacity: 3 }}
-    transition={{ duration: 0.3 }}
-  >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
-  </motion.div>
+  
 </motion.div>
 
 

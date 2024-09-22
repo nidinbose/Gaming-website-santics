@@ -10,6 +10,9 @@ export default {
       zIndex: {
         '10': '10',
       },
+      fontFamily: {
+        tradegothic: ['"Trade Gothic LT Pro Bold Condensed"', 'sans-serif'],
+      },
       keyframes: {
         rotate: {
           "0%": { transform: "rotate(0deg) scale(10)" },

@@ -31,6 +31,7 @@ import ResetPassword from './Components/Loginpage/ResetPassword'
 import AdminForgotPassword from './Components/Adminlogin/ForgotAdmin/AdminForgotPassword'
 import AdminResetPassword from './Components/Adminlogin/ForgotAdmin/AdminResetPassword'
 import UserView from './Components/Navbar/UserView'
+import Footer from './Components/Footer'
 
 
 function App() {
@@ -87,7 +88,7 @@ function App() {
 
         
       </Routes>
-      
+      <Footer/>
       </BrowserRouter>
    
     </>

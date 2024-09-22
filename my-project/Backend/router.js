@@ -31,6 +31,8 @@ router.route('/deletecase/:id').delete(request.deleteCase)
 
 router.route('/adminregester').post(request.adminRegister)
 router.route('/adminlogin').post(request.adminLogin)
+router.route('/usercount').get(request.userCount)
+router.route('/productcount').get(request.productCount)
 
 
 

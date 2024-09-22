@@ -111,50 +111,64 @@ export async function userRegister(req,res) {
     
   }
   
+
   
-export async function userLogin(req, res) {
-  try {
-         const { email, password } = req.body;
+  export async function userLogin(req, res) {
+    try {
+      const { email, password } = req.body;
+      
+      // Check if email or password is empty
       if (!email || !password) {
-          return res.status(400).json({
-              msg: "Email or password cannot be empty!"
-          });
+        return res.status(400).json({
+          msg: "Email or password cannot be empty!"
+        });
       }
-
-          const user = await userSchema.findOne({ email });
+  
+      // Check if the user exists
+      const user = await userSchema.findOne({ email });
       if (!user) {
-          return res.status(400).json({
-              msg: "Invalid email or password!"
-          });
-      }
-
-          const isMatch = await bcrypt.compare(password, user.password);
-      if (isMatch) {
-                  const token = pkg.sign({
-              email: user.email,
-              userId: user._id
-              
-          }, process.env.JWT_KEY, {
-              expiresIn: "48h"
-          });
-          return res.status(200).json({
-              msg: "Login successful!",
-              token
-              
-          });
-      }
-
-           return res.status(400).json({
+        return res.status(400).json({
           msg: "Invalid email or password!"
+        });
+      }
+  
+      // Compare provided password with stored password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (isMatch) {
+        // Create a token with user's email and userId
+        const token = pkg.sign(
+          {
+            email: user.email,
+            userId: user._id
+          },
+          process.env.JWT_KEY,
+          {
+            expiresIn: "48h"
+          }
+        );
+        
+        // Return the token and userId to the frontend
+        return res.status(200).json({
+          msg: "Login successful!",
+          token,
+          userId: user._id  // Passing the userId to the frontend
+        });
+      }
+  
+      // If password does not match
+      return res.status(400).json({
+        msg: "Invalid email or password!"
       });
-  } catch (error) {
+  
+    } catch (error) {
       console.error("Login error:", error);
       return res.status(500).json({
-          msg: "An error occurred during login.",
-          error: error.message
+        msg: "An error occurred during login.",
+        error: error.message
       });
+    }
   }
-}
+  
 
 
 
@@ -212,42 +226,46 @@ export async function userLogin(req, res) {
 
 
   
-export async function addToCart(req, res) {
-  const { productId } = req.body;
-  const userId = req.user_id;
-
-  try {
-    const existingCartItem = await cartSchema.findOne({ productId, userId });
-    const product = await caseSchema.findById(productId);
-
-    if (!product) {
-      return res.status(404).json({ msg: 'Product not found.' });
-    }
-
-    const availableStock = product.stock;
-
-    if (existingCartItem) {
-      if (existingCartItem.count < availableStock) {
-        existingCartItem.count += 1;
-        await existingCartItem.save();
-        return res.status(200).json({ msg: 'Item added to cart successfully!' });
-      } else {
-        return res.status(400).json({ msg: 'Item count exceeds available stock.' });
-      }
-    } else {
-      if (availableStock > 0) {
-        await cartSchema.create({ productId, userId });
-        return res.status(200).json({ msg: 'Item added to cart successfully!' });
-      } else {
-        return res.status(400).json({ msg: 'Item count exceeds available stock.' });
-      }
-    }
-  } catch (error) {
-    console.error('Error adding to cart:', error);
-    return res.status(500).json({ msg: 'Error adding to cart.' });
-  }
-}
+  export async function addToCart(req, res) {
+    const { productId } = req.body;
+    const userId = req.user_id; // Extracted from middleware
   
+    try {
+      const existingCartItem = await Cart.findOne({ productId, userId });
+      const product = await caseSchema.findById(productId);
+  
+      if (!product) {
+        return res.status(404).json({ msg: 'Product not found.' });
+      }
+  
+      const availableStock = product.stock;
+  
+      if (existingCartItem) {
+        if (existingCartItem.count < availableStock) {
+          existingCartItem.count += 1;
+          await existingCartItem.save();
+          return res.status(200).json({ msg: 'Item added to cart successfully!' });
+        } else {
+          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
+        }
+      } else {
+        if (availableStock > 0) {
+          await Cart.create({ productId, userId, count: 1 }); // Ensure count starts at 1
+          return res.status(200).json({ msg: 'Item added to cart successfully!' });
+        } else {
+          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
+        }
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      return res.status(500).json({ msg: 'Error adding to cart.' });
+    }
+  }
+  
+  
+
+
+
 export async function getCart(req, res) {
   const { productId, count } = req.body; // Get productId and count from the request body
 
@@ -546,4 +564,25 @@ function convertToBase64(file) {
       reject(error);
     };
   });
+}
+
+
+export async function userCount(req, res) {
+  try {
+    const userCount = await userSchema.countDocuments({});
+      res.status(200).json({ count: userCount });
+  } catch (error) {
+    console.error('Error fetching student count:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export async function productCount(req, res) {
+  try {
+    const ProductCounts = await caseSchema.countDocuments({});
+      res.status(200).json({ count: ProductCounts });
+  } catch (error) {
+    console.error('Error fetching student count:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }

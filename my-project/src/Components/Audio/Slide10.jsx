@@ -5,8 +5,9 @@ const Slide10 = () => {
 
   const images = [
    
-    'https://dlcdnwebimgs.asus.com/gain/0B173084-0CAC-4D53-B211-2D2FD8FD20A5/fwebp',
-    'https://storage-asset.msi.com/event/2023/CND/DT-NVIDIA-Landing/images/msi-dt-nvidia-studio-kv.jpg',
+    'https://dlcdnwebimgs.asus.com/gain/DC4C8F96-7F37-487D-8903-A7E0B93E3CDE/fwebp',
+    'https://dlcdnwebimgs.asus.com/gain/99A9B323-1E4A-49E5-9D6C-F60E71BBD8F0/fwebp' ,
+    'https://i.ytimg.com/vi/4lro2eeHwRk/maxresdefault.jpg',
 
   ];
 

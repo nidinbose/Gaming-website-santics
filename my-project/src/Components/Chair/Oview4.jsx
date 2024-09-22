@@ -13,7 +13,7 @@ const Oview4 = () => {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        Monitors
+        Gaming Chairs
       </motion.h1>
 
       {/* Grid of Photos */}
@@ -33,15 +33,7 @@ const Oview4 = () => {
     className="w-full xl:h-[42vh] object-cover"
   />
 
-  <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
-    whileHover={{ opacity: 3 }}
-    transition={{ duration: 0.2 }}
-  >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
-  </motion.div>
+
 </motion.div>
 <motion.div
   className="relative overflow-hidden image-container"
@@ -57,15 +49,7 @@ const Oview4 = () => {
     className="w-full xl:h-full object-cover"
   />
 
-  <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
-    whileHover={{ opacity: 3 }}
-    transition={{ duration: 0.6 }}
-  >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
-  </motion.div>
+
 </motion.div>
 
      
@@ -83,15 +67,7 @@ const Oview4 = () => {
     className="w-full xl:h-[42vh] object-cover"
   />
 
-  <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
-    whileHover={{ opacity: 3 }}
-    transition={{ duration: 0.3 }}
-  >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
-  </motion.div>
+
 </motion.div>
 
 

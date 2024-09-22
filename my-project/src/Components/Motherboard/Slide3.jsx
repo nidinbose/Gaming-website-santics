@@ -4,10 +4,9 @@ const Slide3 = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
-   
     'https://dlcdnwebimgs.asus.com/gain/6EC3882A-2435-4B81-B431-E990EC3FCD0B/fwebp',
-    'https://storage-asset.msi.com/global/picture/image/feature/mb/Z790/mag-z790-tomahawk-max-wifi/cooliing-pc.webp',
-
+    'https://storage-asset.msi.com/global/picture/banner/banner_1725444679a80ecaab388a3c0c3b2995557eb6a2ec.jpeg',
+    'https://storage-asset.msi.com/global/picture/banner/banner_16630476728c7ed36f679ee221ebf6c5073e3071cb.jpeg',
   ];
 
   useEffect(() => {
@@ -19,14 +18,13 @@ const Slide3 = () => {
   }, [images.length]);
 
   return (
-    <section
-      className="relative w-full min-h-[82vh] bg-cover bg-center py-24 px-4 flex items-center justify-center transition-all duration-500 ease-in-out"
-      style={{ backgroundImage: `url(${images[currentImageIndex]})` }} 
-    >
-    
+    <section className="relative w-full min-h-[82vh] py-24 px-4 flex items-center justify-center overflow-hidden">
       <div
-        className="absolute inset-0 transform scale-100 hover:scale-105 transition-transform duration-700 ease-in-out"
-        style={{ backgroundImage: `url(${images[currentImageIndex]})`, zIndex: -1 }} 
+        className="absolute inset-0 w-full h-full bg-cover bg-center "
+        style={{
+          backgroundImage: `url(${images[currentImageIndex]})`,
+          objectFit: 'cover',
+        }}
       ></div>
     </section>
   );

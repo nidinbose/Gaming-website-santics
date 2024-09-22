@@ -166,7 +166,7 @@ const Navbar = () => {
               <span className="text-red-600">{user.username}</span>
               <button
                 onClick={handleLogout}
-                className="focus:outline-none text-red-600"
+                className="focus:outline-none text-red-600  "
               >
                 Logout
               </button>

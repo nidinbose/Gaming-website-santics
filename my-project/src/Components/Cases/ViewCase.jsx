@@ -38,10 +38,11 @@ const ViewCase = () => {
       const data = {
         productId: product?._id,
         userId,
-        count: count, // Include count here
+        count,
+        productName: product?.name,
+        productPrice: product?.price,
+        productimagelink: product?.imagelink,
       };
-      console.log(userId);
-      
 
       const response = await axios.post("http://localhost:3003/api/add-to-cart", data, config);
 
@@ -116,13 +117,13 @@ const ViewCase = () => {
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 mt-auto">
               <div className="grid grid-cols-2 gap-4">
                 {/* Input for count */}
-                {/* <input
+                <input
                   type="number"
                   value={count}
                   onChange={(e) => setCount(e.target.value)}
                   className="border rounded px-2 py-1 text-black"
                   min="1"
-                /> */}
+                />
 
                 {/* Button to add to cart */}
                 <button

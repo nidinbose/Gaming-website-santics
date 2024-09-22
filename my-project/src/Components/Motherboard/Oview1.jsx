@@ -67,7 +67,7 @@ const Oview1 = () => {
   transition={{ duration: 0.5, delay: 0.7 }} 
 >
   <img
-    src="https://www.androidauthority.com/wp-content/uploads/2020/09/acer-predator-orion-nvidia-gpu.jpg"
+    src="https://d3jbu7vaxvlagf.cloudfront.net/small/v2/category_media/basic_img_16801702183334.jpg?Expires=1735669800&Signature=DsmgF3jadvcNUxBAQGZnYjtEF-9prgImTSOf54cWUt0debzyKkoJgTM9yog6pmazI1d9iNPhpt12LfoTQ8eISv5jQop0hofFRGcVO8jdHts15-9R238kPac8T6YiMj70Te4RN6MuI-SZRUIx2egF~KfZYN5ZClbOSkWGiHme~FP5UUomOtSXPv59pL~UvDflMwdsA~k2IGGjI5M~PG2U77~1~02dvZXfiRE~8ZkcyNipBPTiJu2Vmovzl8hTpeTkBgrAiaXND1UTDmBN1AuNvNWP0vt0GcJJFg76YN~8uUOWd-Q~7vS8dI61LUJzQoDbw0Oa4oKAECrKjwKKB6u8TQ__&Key-Pair-Id=KY0B9P4EZXRDC"
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
@@ -84,7 +84,7 @@ const Oview1 = () => {
           transition={{ duration: 0.5, delay: 0.9 }} 
         >
           <img
-            src="https://img.freepik.com/premium-photo/motherboard-cpu_433905-6842.jpg"
+            src="https://pbs.twimg.com/media/FZ_168XXEAIW8rs.jpg"
             alt="Photo 2"
             className="w-full h-full object-cover"
           />

@@ -6,17 +6,32 @@ const cartSchema = new mongoose.Schema({
         required: true,
         unique: false
     },
-    userId: {
+    productimagelink: {
+        type: String,
+        // required: true,
+        // unique: false
+    },
+    productPrice: {
         type: String,
         required: true,
         unique: false
     },
+    productName: {
+        type: String,
+        required: true,
+        unique: false
+    },
+    userId: {
+        type: String,
+        // required: true,
+        // unique: false
+    },
     count: {
         type: Number,
         required: true,
-        default: 1 // Set a default value if count is not provided
+        default: 1
     }
 });
 
-const Cart = mongoose.model("Cart", cartSchema); // Correctly create the Cart model
-export default Cart; // Export the Cart model
+const Cart = mongoose.model("Cart", cartSchema);
+export default Cart;

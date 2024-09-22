@@ -168,7 +168,7 @@ const Login = () => {
           </Button>
           <Typography variant="small" color="gray" className="mt-4 text-center font-normal">
             Not registered?{" "}
-            <Link to={`/adminregester`} className="font-medium text-gray-900">
+            <Link to={`/signup`} className="font-medium text-gray-900">
               Create an account
             </Link>
           </Typography>

@@ -5,8 +5,9 @@ const Slide8 = () => {
 
   const images = [
    
-    'https://dlcdnwebimgs.asus.com/gain/0B173084-0CAC-4D53-B211-2D2FD8FD20A5/fwebp',
-    'https://storage-asset.msi.com/event/2023/CND/DT-NVIDIA-Landing/images/msi-dt-nvidia-studio-kv.jpg',
+    'https://dlcdnwebimgs.asus.com/gain/5AB0666D-2F33-4CC8-81C0-CA2BB9B0582A/fwebp',
+    'https://cdn.thefpsreview.com/wp-content/uploads/2023/06/evga-supernova-1000g-850g-xc-series-banner-key-image-1024x576.jpg',
+    'https://www.coolaler.com.tw/image/news/22/9/fsp_atx_3.0_1.jpg',
 
   ];
 

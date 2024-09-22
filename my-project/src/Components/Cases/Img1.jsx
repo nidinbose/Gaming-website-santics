@@ -28,7 +28,7 @@ const Img1 = () => {
           transition={{ duration: 0.5, delay: 0.3 }} 
         >
           <img
-            src="https://t3.ftcdn.net/jpg/08/93/91/08/360_F_893910888_yf3mW3X5w7brdeLldhYEU2Kdt46qIjzb.jpg"
+            src="https://dlcdnwebimgs.asus.com/gain/274EB226-5FEE-4C12-9F2B-880F83294342/w1000/h732"
             alt="Photo 1"
             className="w-full h-full object-cover"
           />
@@ -44,7 +44,7 @@ const Img1 = () => {
           transition={{ duration: 0.5, delay: 0.6 }} 
         >
           <img
-            src="https://t4.ftcdn.net/jpg/05/95/59/01/360_F_595590142_gRuKR04qd4KJ1Twel9KD2NIHxgZE5xH0.jpg"
+            src="https://images.acer.com/is/image/acer/Orion_5000_AGW_KSP05?$responsive$"
             alt="Photo 2"
             className="w-full h-full object-cover"
           />
@@ -58,7 +58,7 @@ const Img1 = () => {
           transition={{ duration: 0.5, delay: 0.9 }} 
         >
           <img
-            src="https://t4.ftcdn.net/jpg/05/95/59/01/360_F_595590142_gRuKR04qd4KJ1Twel9KD2NIHxgZE5xH0.jpg"
+            src="https://asset.msi.com/resize/image/global/product/product_16841411857d793d661a57d312ee8625e9db743934.png62405b38c58fe0f07fcef2367d8a9ba1/600.png"
             alt="Photo 2"
             className="w-full h-full object-cover"
           />

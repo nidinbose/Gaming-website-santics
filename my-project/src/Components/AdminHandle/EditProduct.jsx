@@ -26,6 +26,7 @@ const EditProducts = () => {
     bnn1: "",
     bnn2: "",
     bnn3: "",
+    stock:"",
     category: "",
   });
   const [isEditing, setIsEditing] = useState(false);

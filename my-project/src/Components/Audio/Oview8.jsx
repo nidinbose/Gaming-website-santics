@@ -13,7 +13,7 @@ const Oview8 = () => {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        Monitors
+        Gaming Headfones
       </motion.h1>
 
       {/* Grid of Photos */}
@@ -28,7 +28,7 @@ const Oview8 = () => {
   transition={{ duration: 0.5, delay: 0.3 }} 
 >
   <img
-    src="https://dlcdnwebimgs.asus.com/gain/8677ED26-0EA9-4DD8-B20B-D038C17E2A29/w1000/h732"
+    src="https://dlcdnwebimgs.asus.com/gain/4BB18AEF-347E-4DB6-B78C-C0FFE1F20385/w750/h470"
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
@@ -52,7 +52,7 @@ const Oview8 = () => {
   transition={{ duration: 0.5, delay: 0.6 }} 
 >
   <img
-    src="https://storage-asset.msi.com/event/2023/CND/DT-NVIDIA-Landing/images/Aegis-Ti5-13th-1024.png"
+    src="https://dlcdnwebimgs.asus.com/gain/FF40A9C7-020A-4D51-BCD5-8896980F4EDA/w750/h470"
     alt="Photo 2"
     className="w-full xl:h-full object-cover"
   />
@@ -78,7 +78,7 @@ const Oview8 = () => {
   transition={{ duration: 0.5, delay: 0.9 }} 
 >
   <img
-    src="https://storage-asset.msi.com/event/2023/CND/DT-NVIDIA-Landing/images/infinitex2-13f.png"
+    src="https://www.creativehatti.com/wp-content/uploads/2022/11/Best-gaming-headphones-with-banner-template-29-small.jpg"
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />

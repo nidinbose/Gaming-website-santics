@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
+import axios from "axios";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from "chart.js";
 
 // Register Chart.js components
@@ -10,6 +11,8 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 const Admin = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userCount , setUserCount]=useState(null);
+  const [productCount , setProductCount]=useState(null);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("token");
@@ -24,6 +27,31 @@ const Admin = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
+
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        const response = await axios.get("http://localhost:3003/api/usercount");
+        setUserCount(response.data.count);
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+      }
+    };
+
+    const fetchProductrCount = async () => {
+      try {
+        const response = await axios.get("http://localhost:3003/api/productcount");
+        setProductCount(response.data.count);
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+      }
+    };
+    fetchUserCount();
+    fetchProductrCount();
+  }, []);
+
+
+
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -207,7 +235,7 @@ const Admin = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 ">
           <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
             <h2 className="text-xl font-bold text-white ">Total Products</h2>
-            <p className="text-3xl mt-4 text-white">150</p>
+            <h1 className="text-3xl font-bold text-white"> {productCount !== null ? productCount : "Loading..."}</h1>
           </div>
 
           <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
@@ -216,8 +244,8 @@ const Admin = () => {
           </div>
 
           <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold text-white">Revenue</h2>
-            <p className="text-3xl mt-4 text-white">$20,000</p>
+            <h2 className="text-xl font-bold text-white">user count</h2>
+            <h1 className="text-3xl font-bold text-white"> Users: {userCount !== null ? userCount : "Loading..."}</h1>
           </div>
         </div>
 
