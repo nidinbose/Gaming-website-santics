@@ -10,13 +10,15 @@ import Sliding from "./Home/Sliding";
 import About from "./Home/About";
 import Cards from "./Home/Cards";
 import Footer from "./Footer";
+import Bottom from "./Navbar/bottom";
+
 
 
 
 const Home=()=>{
     return (
         <div>
-           
+          <Bottom/>
              {/* <Navbar/> */}
              <Curosals/>
              <Category/>
