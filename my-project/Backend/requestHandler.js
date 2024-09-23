@@ -116,15 +116,13 @@ export async function userRegister(req,res) {
   export async function userLogin(req, res) {
     try {
       const { email, password } = req.body;
-      
-      // Check if email or password is empty
+    
       if (!email || !password) {
         return res.status(400).json({
           msg: "Email or password cannot be empty!"
         });
       }
   
-      // Check if the user exists
       const user = await userSchema.findOne({ email });
       if (!user) {
         return res.status(400).json({
@@ -132,11 +130,9 @@ export async function userRegister(req,res) {
         });
       }
   
-      // Compare provided password with stored password
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
-        // Create a token with user's email and userId
-        const token = pkg.sign(
+               const token = pkg.sign(
           {
             email: user.email,
             userId: user._id
@@ -146,16 +142,14 @@ export async function userRegister(req,res) {
             expiresIn: "48h"
           }
         );
-        
-        // Return the token and userId to the frontend
+       
         return res.status(200).json({
           msg: "Login successful!",
           token,
-          userId: user._id  // Passing the userId to the frontend
+          userId: user._id 
         });
       }
   
-      // If password does not match
       return res.status(400).json({
         msg: "Invalid email or password!"
       });
@@ -226,73 +220,71 @@ export async function userRegister(req,res) {
 
 
   
-  export async function addToCart(req, res) {
-    const { productId } = req.body;
-    const userId = req.user_id; 
+  // export async function addToCart(req, res) {
+  //   const { userId, productId, quantity } = req.body;
+  //   try {
+  //     let user = await userSchema.findById(userId);
+  //     if (!user) return res.status(404).json({ msg: 'User not found' });
   
-    try {
-      const existingCartItem = await Cart.findOne({ productId, userId });
-      const product = await caseSchema.findById(productId);
+  //     // Check if item already exists in cart
+  //     const cartItem = user.cart.find(item => item.productId.toString() === productId);
+  //     if (cartItem) {
+  //       // Update quantity if item already in cart
+  //       cartItem.quantity += quantity;
+  //     } else {
+  //       // Add new item to cart
+  //       user.cart.push({ productId, quantity });
+  //     }
   
-      if (!product) {
-        return res.status(404).json({ msg: 'Product not found.' });
-      }
+  //     await user.save();
+  //     res.status(200).json(user.cart);
+  //   } catch (err) {
+  //     res.status(500).json({ msg: 'Server Error', error: err.message });
+  //   }
+  //   }
   
-      const availableStock = product.stock;
-  
-      if (existingCartItem) {
-        if (existingCartItem.count < availableStock) {
-          existingCartItem.count += 1;
-          await existingCartItem.save();
-          return res.status(200).json({ msg: 'Item added to cart successfully!' });
-        } else {
-          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
-        }
-      } else {
-        if (availableStock > 0) {
-          await Cart.create({ productId, userId, count: 1 }); 
-          return res.status(200).json({ msg: 'Item added to cart successfully!' });
-        } else {
-          return res.status(400).json({ msg: 'Item count exceeds available stock.' });
-        }
-      }
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      return res.status(500).json({ msg: 'Error adding to cart.' });
+
+
+export async function addToCart(req, res) {
+  const { userId, productId, quantity, name, price, imageLink } = req.body;
+  console.log("Request body:", req.body); 
+  try {
+    const user = await userSchema.findById(userId);
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    // Check if item already exists in cart
+    const cartItem = user.cart.find(item => item.productId.toString() === productId);
+    if (cartItem) {
+      // Update quantity if item already in cart
+      cartItem.quantity += quantity;
+    } else {
+      // Add new item to cart
+      user.cart.push({ productId, quantity, name, price, imageLink });
     }
+console.log(user.cart);
+
+    await user.save();
+    res.status(200).json(user.cart);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server Error', error: err.message });
   }
-  
+}
+
   
 
 
 
 export async function getCart(req, res) {
-  const { productId, count } = req.body; // Get productId and count from the request body
+  const { userId } = req.params; // Assuming userId is passed as a URL parameter
 
   try {
-      // Find the user's cart
-      let cart = await Cart.findOne({ userId: req.user.id });
+    const user = await userSchema.findById(userId).select('cart'); // Only select the cart field
+    if (!user) return res.status(404).json({ msg: 'User not found' });
 
-      // If no cart exists for the user, create one
-      if (!cart) {
-          cart = new Cart({ userId: req.user.id, items: [] });
-      }
-
-      // Check if the item already exists in the cart
-      const existingItem = cart.items.find(item => item.productId === productId);
-
-      // If the item exists, update the quantity; otherwise, add a new item
-      if (existingItem) {
-          existingItem.count += count; // Update the existing item count
-      } else {
-          cart.items.push({ productId, count }); // Add new item
-      }
-
-      // Save the cart
-      await cart.save();
-      res.status(200).json(cart); // Return the updated cart
-  } catch (error) {
-      res.status(500).json({ message: error.message }); // Handle errors
+    res.status(200).json(user.cart); // Return the user's cart
+  } catch (err) {
+    console.error("Error fetching cart:", err);
+    res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
 
@@ -461,7 +453,7 @@ export async function adminHome(req, res) {
 const transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
-  secure: false, // Use `true` for port 465, `false` for all other ports
+  secure: false,
   auth: {
     user: "b61b6c0d2da033",
     pass: "eadc5f952d3437",
@@ -473,27 +465,23 @@ export async function adminForget(req, res) {
   console.log("Received email:", email);
 
   try {
-    // Check if the email exists in the database
+  
     const data = await adminSchema.findOne({ email: email });
     if (!data) {
       return res.status(400).send({ msg: "User not found" });
     }
 
-    // Generate a random 6-digit numeric OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log("Generated OTP:", otp);
 
-    // Update the OTP field in the database for the user
     data.otp = otp;
     await data.save();
 
-    // Ensure transporter is defined before trying to send the email
     if (!transporter) {
       console.error("Email transporter is not configured properly.");
       return res.status(500).send({ msg: "Email configuration error" });
     }
 
-    // Send the OTP to the user's email
     const info = await transporter.sendMail({
       from: 'peterspidy5@gmail.com', // Sender's email
       to: data.email, // Receiver's email
@@ -503,13 +491,10 @@ export async function adminForget(req, res) {
     });
 
     console.log("Message sent: %s", info.messageId);
-
-    // Respond with success if OTP is sent
     res.status(200).send({ msg: "OTP sent successfully" });
   } catch (error) {
     console.error("Error in adminForget function:", error.message || error);
 
-    // Handle any other errors
     res.status(500).send({ msg: "An error occurred while processing your request" });
   }
 }
@@ -522,27 +507,22 @@ export async function resetAdminPassword(req, res) {
   console.log("Received reset request:", otp);
 
   try {
-    // Check if the admin exists with the given OTP
-    const admin = await adminSchema.findOne({ otp: otp });
+        const admin = await adminSchema.findOne({ otp: otp });
     if (!admin) {
       return res.status(400).send({ msg: "Invalid OTP or OTP expired" });
     }
 
-    // Hash the new password before saving
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
-    // Update the admin's password and clear the OTP
     admin.password = hashedPassword;
-    admin.otp = null; // Clear the OTP once it's used for security reasons
+    admin.otp = null; 
     await admin.save();
 
-    // Respond with success if the password is reset
-    res.status(200).send({ msg: "Password reset successfully" });
+       res.status(200).send({ msg: "Password reset successfully" });
   } catch (error) {
     console.error("Error in resetAdminPassword function:", error.message || error);
 
-    // Handle any other errors
     res.status(500).send({ msg: "An error occurred while resetting the password" });
   }
 }

@@ -37,7 +37,9 @@ router.route('/productcount').get(request.productCount)
 
 
 router.route("/add-to-cart").post(Auth,request.addToCart);
-router.route("/get-cart").get(Auth,request.getCart);
+// router.route("/get-cart").get(Auth,request.getCart);
+// router.route('get-cart/:userId/cart').get( Auth,request.getCart);
+router.get('/cart/:userId', request.getCart);
 // router.route("/increment-cart").post(request.incrementCart);
 router.route("/decrement-cart").post(request.decrementCart);
 router.route("/delete-cart-item").delete(Auth,request.deleteCartItem);

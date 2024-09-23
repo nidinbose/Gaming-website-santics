@@ -7,7 +7,7 @@ const ViewCase = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [hovered, setHovered] = useState(false);
-  const [count, setCount] = useState(1); // State for count
+  const [count, setCount] = useState(1);
 
   // Fetch product details
   const getCase = async () => {
@@ -38,22 +38,18 @@ const ViewCase = () => {
       const data = {
         productId: product?._id,
         userId,
-        count,
-        productName: product?.name,
-        productPrice: product?.price,
-        productimagelink: product?.imagelink,
+        quantity: count,
+        name: product?.name,
+        price: product?.price,
+        imageLink: product?.linkvf,
       };
-
-      const response = await axios.post("http://localhost:3003/api/add-to-cart", data, config);
-
-      if (response.status === 200) {
-        alert("Successfully added to cart!");
-      } else {
-        alert(response.data.msg || "Error adding to cart.");
-      }
+        console.log(data);
+        
+      await axios.post('http://localhost:3003/api/add-to-cart', data, config);
+      alert("Product added to cart successfully!");
     } catch (error) {
-      console.error("Error adding to cart:", error);
-      alert(error.response?.data?.msg || "Error adding to cart.");
+      console.error("Error adding product to cart:", error);
+      alert("Failed to add product to cart.");
     }
   };
 
@@ -69,7 +65,6 @@ const ViewCase = () => {
     <div className="container mx-auto px-4 py-8 pb-10">
       <div className="bg-black shadow-md overflow-hidden rounded-lg xl:h-full w-full mb-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-          {/* Product Image */}
           <motion.div
             className="relative"
             onMouseEnter={() => setHovered(true)}
@@ -85,7 +80,6 @@ const ViewCase = () => {
             />
           </motion.div>
 
-          {/* Product Details */}
           <motion.div
             className="p-4 sm:p-6 flex flex-col xl:mt-[10vh]"
             initial={{ opacity: 0, x: -50 }}
@@ -116,7 +110,6 @@ const ViewCase = () => {
 
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 mt-auto">
               <div className="grid grid-cols-2 gap-4">
-                {/* Input for count */}
                 <input
                   type="number"
                   value={count}
@@ -125,7 +118,6 @@ const ViewCase = () => {
                   min="1"
                 />
 
-                {/* Button to add to cart */}
                 <button
                   className="inline-flex items-center justify-center text-white bg-gray-900 rounded group w-full sm:w-auto"
                   onClick={handleAddToCart}
@@ -149,7 +141,6 @@ const ViewCase = () => {
                   <span className="pl-4 pr-5 py-2.5">Add to Cart</span>
                 </button>
 
-                {/* Button link */}
                 {product.btnlink && (
                   <Link
                     to={product.btnlink}
@@ -166,15 +157,14 @@ const ViewCase = () => {
         </div>
       </div>
 
-      {/* Image Gallery */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-[70vw] xl:w-[60vw] items-center gap-4 xl:ml-[15vw] xl:mt-[20vh]">
         {[product.link1, product.link2, product.link3, product.link4, product.link5, product.link6]
-          .filter((link) => link) // Only show if the link exists
+          .filter((link) => link)
           .map((link, index) => (
             <motion.div
               key={index}
               className="relative overflow-hidden"
-              whileHover={{ scale: 1.1 }} // Zoom effect on hover
+              whileHover={{ scale: 1.1 }}
             >
               <motion.img
                 src={link}
