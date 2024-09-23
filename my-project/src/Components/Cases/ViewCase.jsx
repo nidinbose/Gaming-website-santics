@@ -42,6 +42,7 @@ const ViewCase = () => {
         name: product?.name,
         price: product?.price,
         imageLink: product?.linkvf,
+      
       };
         console.log(data);
         
@@ -110,13 +111,13 @@ const ViewCase = () => {
 
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 mt-auto">
               <div className="grid grid-cols-2 gap-4">
-                <input
+                {/* <input
                   type="number"
                   value={count}
                   onChange={(e) => setCount(e.target.value)}
                   className="border rounded px-2 py-1 text-black"
                   min="1"
-                />
+                /> */}
 
                 <button
                   className="inline-flex items-center justify-center text-white bg-gray-900 rounded group w-full sm:w-auto"

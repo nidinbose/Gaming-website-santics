@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Relate = () => {
+const Relate2 = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [products, setProducts] = useState([]);
 
@@ -18,9 +18,8 @@ const Relate = () => {
     getCase();
   }, []);
 
-  // Filter products by category 'cases' and stock less than 30
   const filteredProducts = products.filter(
-    (product) => product.category === "cases" && product.stock < 30
+    (product) => product.category === "monitors" && product.stock < 30
   );
 
   return (
@@ -64,4 +63,4 @@ const Relate = () => {
   );
 };
 
-export default Relate;
+export default Relate2;

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
-import { CiCircleMinus } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
-  const token = localStorage.getItem("token"); // Get the token from local storage
-  const userId = localStorage.getItem("userId"); // Get userId from local storage
-  const navigate = useNavigate(); // Initialize navigate for redirection
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   // Fetch cart items from backend
   const getCartItems = async () => {
     try {
       const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Pass the token in the authorization header
+          Authorization: `Bearer ${token}`,
         },
       });
       setCartItems(response.data);
@@ -23,7 +22,6 @@ const Cart = () => {
     } catch (error) {
       console.error("Error fetching cart items:", error);
       if (error.response && error.response.status === 401) {
-        // If unauthorized, navigate to login
         navigate("/login");
       }
     }
@@ -35,80 +33,57 @@ const Cart = () => {
     setTotal(totalAmount);
   };
 
-  // Increase item quantity
-  const incrementQuantity = async (itemId) => {
+  // Function to remove an item from the cart
+  const removeFromCart = async (productId) => {
     try {
-      const updatedItems = cartItems.map((item) =>
-        item._id === itemId ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      setCartItems(updatedItems);
-      calculateTotal(updatedItems);
-      await axios.patch(
-        `http://localhost:3003/api/cart/increment/${userId}/${itemId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Error increasing quantity:", error);
-    }
-  };
-
-  // Decrease item quantity
-  const decrementQuantity = async (itemId) => {
-    try {
-      const updatedItems = cartItems.map((item) =>
-        item._id === itemId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      );
-      setCartItems(updatedItems);
-      calculateTotal(updatedItems);
-      await axios.patch(
-        `http://localhost:3003/api/cart/decrement/${userId}/${itemId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Error decreasing quantity:", error);
-    }
-  };
-
-  // Remove item from cart
-  const removeItem = async (itemId) => {
-    try {
-      const updatedItems = cartItems.filter((item) => item._id !== itemId);
-      setCartItems(updatedItems);
-      calculateTotal(updatedItems);
-      await axios.delete(`http://localhost:3003/api/cart/${userId}/${itemId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.delete(`http://localhost:3003/api/cart/remove/${productId}`, {
+        data: { userId }, // Send userId in the request body
       });
+      console.log(response.data);
+
+      // Update local state to remove the item
+      setCartItems(prevItems => prevItems.filter(item => item._id !== productId));
+      calculateTotal(cartItems.filter(item => item._id !== productId)); // Recalculate total
     } catch (error) {
-      console.error("Error removing item:", error);
+      console.error('Error removing item from cart:', error);
     }
+  };
+
+  // Function to increment item quantity
+  const incrementCartItem = (productId) => {
+    setCartItems(prevItems => {
+      const updatedItems = prevItems.map(item => {
+        if (item._id === productId) {
+          return { ...item, quantity: item.quantity + 1 };
+        }
+        return item;
+      });
+      calculateTotal(updatedItems);
+      return updatedItems;
+    });
+  };
+
+  // Function to decrement item quantity
+  const decrementQuantity = (productId) => {
+    setCartItems(prevItems => {
+      const updatedItems = prevItems.map(item => {
+        if (item._id === productId) {
+          return { ...item, quantity: Math.max(item.quantity - 1, 1) }; // Prevent quantity from going below 1
+        }
+        return item;
+      });
+      calculateTotal(updatedItems);
+      return updatedItems;
+    });
   };
 
   useEffect(() => {
     if (token && userId) {
       getCartItems();
     } else {
-      // Redirect to login if token or userId is missing
       navigate("/login");
     }
   }, [token, userId, navigate]);
-
-  const handleLoginRedirect = () => {
-    navigate("/login");
-  };
 
   if (!token || !userId) {
     return (
@@ -118,7 +93,7 @@ const Cart = () => {
           Please <span className="font-bold">log in</span> to view and manage your cart.
         </p>
         <button
-          onClick={handleLoginRedirect}
+          onClick={() => navigate("/login")}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
         >
           Login
@@ -147,8 +122,8 @@ const Cart = () => {
                   </div>
                   <div className="sm:border-l sm:pl-4 sm:border-gray-300 w-full">
                     <h3 className="text-xl font-bold text-red-500">{item.name}</h3>
-                   <p className="text-white/60">Tax   :   included</p>
-                   <p className="text-white/60">Delevery charges : free</p>
+                    <p className="text-white/60">Tax: included</p>
+                    <p className="text-white/60">Delivery charges: free</p>
 
                     <div className="flex items-center justify-between mt-4">
                       <div className="flex items-center gap-3">
@@ -163,7 +138,7 @@ const Cart = () => {
                         <span className="font-bold text-md text-blue-300">{item.quantity}</span>
                         <button
                           type="button"
-                          onClick={() => incrementQuantity(item._id)}
+                          onClick={() => incrementCartItem(item._id)}
                           className="w-7 h-7 bg-red-600 text-white rounded-full"
                         >
                           +
@@ -172,7 +147,7 @@ const Cart = () => {
                       <h4 className="text-lg font-bold text-blue-300">${item.price * item.quantity}</h4>
                     </div>
                     <button
-                      onClick={() => removeItem(item._id)}
+                      onClick={() => removeFromCart(item._id)}
                       className="text-red-500 text-sm mt-2 underline hover:text-red-700"
                     >
                       Remove

@@ -20,8 +20,11 @@ router.route('/resetadminpassword').post(request.resetAdminPassword)
 router.route('/adminhome').post(Auth,request.adminHome)
 router.route('/home').get(Auth,request.Home)
 
-// router.route("/add-to-cart").post(Auth,product.addToCart);
-// router.route("/get-cart").get(Auth,product.getCart);
+router.get('/cart/:userId', request.getCart);
+router.route("/add-to-cart").post(Auth,request.addToCart);
+router.delete("/remove/:productId", Auth, request.removeFromCart);
+router.route("/decrement-cart").post(request.decrementCart);
+router.route('cart/increment').put(Auth,request.incrementCart)
 
 router.route('/logout').get(Auth,request.Logout)
 router.route('/updatecase/:id').patch(request.updateCase)
@@ -36,12 +39,14 @@ router.route('/productcount').get(request.productCount)
 
 
 
-router.route("/add-to-cart").post(Auth,request.addToCart);
+
 // router.route("/get-cart").get(Auth,request.getCart);
 // router.route('get-cart/:userId/cart').get( Auth,request.getCart);
-router.get('/cart/:userId', request.getCart);
+
+// router.put('/cart/increment', request.incrementCart);
+
 // router.route("/increment-cart").post(request.incrementCart);
-router.route("/decrement-cart").post(request.decrementCart);
-router.route("/delete-cart-item").delete(Auth,request.deleteCartItem);
-router.route("/check-cart/:productId").get(Auth,request .checkCart);
+
+// router.route("/delete-cart-item").delete(Auth,product.deleteCartItem);
+// router.route("/check-cart/:productId").get(Auth,request .checkCart);
 export default router

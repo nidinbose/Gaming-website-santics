@@ -8,6 +8,7 @@ import adminSchema from './models/admin.model.js'
 import nodemailer from 'nodemailer'
 import cartSchema from './models/cart.model.js'
 
+
 // products  CRUD
 export async function addCase(req,res){
     try{
@@ -220,29 +221,6 @@ export async function userRegister(req,res) {
 
 
   
-  // export async function addToCart(req, res) {
-  //   const { userId, productId, quantity } = req.body;
-  //   try {
-  //     let user = await userSchema.findById(userId);
-  //     if (!user) return res.status(404).json({ msg: 'User not found' });
-  
-  //     // Check if item already exists in cart
-  //     const cartItem = user.cart.find(item => item.productId.toString() === productId);
-  //     if (cartItem) {
-  //       // Update quantity if item already in cart
-  //       cartItem.quantity += quantity;
-  //     } else {
-  //       // Add new item to cart
-  //       user.cart.push({ productId, quantity });
-  //     }
-  
-  //     await user.save();
-  //     res.status(200).json(user.cart);
-  //   } catch (err) {
-  //     res.status(500).json({ msg: 'Server Error', error: err.message });
-  //   }
-  //   }
-  
 
 
 export async function addToCart(req, res) {
@@ -252,11 +230,9 @@ export async function addToCart(req, res) {
     const user = await userSchema.findById(userId);
     if (!user) return res.status(404).json({ msg: 'User not found' });
 
-    // Check if item already exists in cart
     const cartItem = user.cart.find(item => item.productId.toString() === productId);
     if (cartItem) {
-      // Update quantity if item already in cart
-      cartItem.quantity += quantity;
+         cartItem.quantity += quantity;
     } else {
       // Add new item to cart
       user.cart.push({ productId, quantity, name, price, imageLink });
@@ -275,19 +251,83 @@ console.log(user.cart);
 
 
 export async function getCart(req, res) {
-  const { userId } = req.params; // Assuming userId is passed as a URL parameter
+  const { userId } = req.params; 
 
   try {
-    const user = await userSchema.findById(userId).select('cart'); // Only select the cart field
+    const user = await userSchema.findById(userId).select('cart'); 
     if (!user) return res.status(404).json({ msg: 'User not found' });
 
-    res.status(200).json(user.cart); // Return the user's cart
+    res.status(200).json(user.cart); 
   } catch (err) {
     console.error("Error fetching cart:", err);
     res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
 
+
+
+
+export async function removeFromCart (req, res){
+  const { productId } = req.params;
+  const userId = req.body.userId; // Extract userId from the request body
+
+  try {
+    // Find the user and update their cart
+    const user = await userSchema.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Filter out the item to be removed
+    user.cart = user.cart.filter(item => item.productId.toString() !== productId);
+
+    // Save the updated user document
+    await user.save();
+
+    return res.status(200).json({ message: "Item removed from cart", cart: user.cart });
+  } catch (error) {
+    console.error("Error removing item from cart:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+export async function incrementCart(req, res) {
+  const { userId, productId } = req.body;
+  console.log("Request body:", req.body);
+  try {
+    // Find the user by userId
+    const user = await userSchema.findById(userId);
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    // Find the item in the user's cart
+    const cartItem = user.cart.find(item => item.productId.toString() === productId);
+    if (cartItem) {
+      // Increment the quantity of the cart item
+      cartItem.quantity += 1;
+    } else {
+      return res.status(404).json({ msg: 'Item not found in cart' });
+    }
+
+    // Save the updated user cart
+    await user.save();
+
+    console.log(user.cart);
+    // Respond with the updated cart
+    res.status(200).json(user.cart);
+  } catch (err) {
+    // Handle server error
+    res.status(500).json({ msg: 'Server Error', error: err.message });
+  }
+}
 
 
 
