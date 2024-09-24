@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import './CSS/Overview.css';
 
@@ -8,23 +8,12 @@ const slideInFromRight = {
 };
 
 const Overview = () => {
-  const [offsetY, setOffsetY] = useState(0);
-
-  const handleScroll = () => {
-    setOffsetY(window.pageYOffset); // Update the background offset based on scroll position
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <div
       className="relative min-h-screen bg-cover bg-center bg-no-repeat pt-2 pb-12"
       style={{
         backgroundImage: "url('/images/bgrog.png')",
-        backgroundPositionY: `${offsetY * 0.5}px`, // Parallax effect on scroll
+        transition: 'background-position 0.1s ease-out' // Optional smooth transition
       }}
     >
       {/* Title */}

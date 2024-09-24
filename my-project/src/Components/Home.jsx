@@ -24,12 +24,14 @@ const Home=()=>{
              <Category/>
              <GameChanger/>
              <Overview/>
-             <Overview3/>
+           
              <Overview2/>
+             <Overview3/>
+             <Sliding/>
              <Cards/>
              <About/>
            
-            <Sliding/>
+            
          
 
             

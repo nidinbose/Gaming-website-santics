@@ -156,7 +156,7 @@ const Navbar = () => {
             </Link>
             {/* Show CartComponent only on hover */}
             <div className="absolute top-full right-0 mt-2 z-50 hidden group-hover:block">
-              {/* <CartComponent /> */}
+              <CartComponent />
             </div>
           </div>
 

@@ -163,6 +163,18 @@ const Cart = () => {
                 <span className="font-bold text-white/60">Taxes</span>
                 <span className="font-bold text-white/60">INR : 18.76</span>
               </div>
+              <div className="flex items-center justify-between text-sm text-gray-800 mb-6">
+                <span className="font-bold text-white/60">GST</span>
+                <span className="font-bold text-white/60">10%</span>
+              </div>
+              <div className="flex items-center justify-between text-sm text-gray-800 mb-6">
+                <span className="font-bold text-white/60">Develary Charges</span>
+                <span className="font-bold text-white/60">Free</span>
+              </div>
+              <div className="flex items-center justify-between text-sm text-gray-800 mb-6">
+                <span className="font-bold text-white/60">Discount</span>
+                <span className="font-bold text-white/60">By banks</span>
+              </div>
               <hr className="border-gray-300 mb-6" />
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold text-white/60">Total</h2>

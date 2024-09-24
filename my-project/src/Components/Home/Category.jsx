@@ -7,9 +7,9 @@ const Category = () => {
     { title: "Cases", imageUrl: "https://dlcdnwebimgs.asus.com/gain/30D1F34B-0C37-4D9D-92E4-487372FD254F/w240/h175", link: "/cases" },
     { title: "Motherboard", imageUrl: "https://dlcdnwebimgs.asus.com/gain/B9B3F542-45F3-4C59-9BC1-25B8A1B7CCB1/w240/h175", link: "/motherboard" },
     { title: "Gaming monitors", imageUrl: "https://dlcdnwebimgs.asus.com/gain/718462E2-0FF1-424B-8070-9EE75A96DC64/w240/h175", link: "/monitors" },
-    { title: "CPU", imageUrl: "https://dlcdnwebimgs.asus.com/gain/21EB1E78-1240-4559-9412-FEF17430103B/w240/h175", link: "/cpu" },
+    { title: "CPU", imageUrl: "https://images.acer.com/is/image/acer/Predator-Orion-7000-Homepage-Photo?$responsive$", link: "/cpu" },
     { title: "Gaming chair", imageUrl: "https://dlcdnwebimgs.asus.com/gain/5AC10F2B-B36C-40D7-8950-78EE7F4E298E/w240/h175", link: "/chair" },
-    { title: "Graphics card", imageUrl: "https://dlcdnwebimgs.asus.com/gain/8D660E23-25B8-4DCB-BF57-015CCEA56176/w300", link: "/gpu" },
+    { title: "Graphics card", imageUrl: "https://images.acer.com/is/image/acer/predator-bifrost-arc-a770-01?$Series-Component-XL$", link: "/gpu" },
     { title: "PSU", imageUrl: "https://dlcdnwebimgs.asus.com/gain/5C0EA6AE-B302-440D-9810-D1A8D5F12882/w300", link: "/psu" },
     { title: "Keyboard", imageUrl: "https://dlcdnwebimgs.asus.com/gain/6B9D6099-C6F6-40E2-968F-CC9D743602DD/w300", link: "/keyboard" },
     { title: "Audio", imageUrl: "https://dlcdnwebimgs.asus.com/gain/AE87E296-D3B4-4286-B174-8A50EB4F642E/w300", link: "/audio" },
@@ -36,7 +36,7 @@ const Category = () => {
 
   return (
     <div className="relative bg-white">
-      <h1 className="text-black text-center text-5xl font-bold py-4 xl:pt-[12vh]">Explore Our Products</h1>
+      <h1 className="text-black text-center text-5xl font-bold py-4 xl:pt-[12vh] font-roboto">EXPLORE OUR PRODUCTS</h1>
       
       {/* Scroll Left Button */}
       <button

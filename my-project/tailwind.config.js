@@ -11,7 +11,7 @@ export default {
         '10': '10',
       },
       fontFamily: {
-        tradegothic: ['"Trade Gothic LT Pro Bold Condensed"', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'], // Define the font here
       },
       keyframes: {
         rotate: {

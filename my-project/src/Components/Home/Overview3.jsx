@@ -1,62 +1,70 @@
-import React from "react";
-import { motion } from "framer-motion";
-// import './CSS/Overview3.css'; // Optional: Import custom CSS for additional styling
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const Overview3 = () => {
+  const [offsetY, setOffsetY] = useState(0);
+
+  const handleScroll = () => {
+    setOffsetY(window.pageYOffset);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="container mx-auto h-screen flex items-center justify-center p-8 "
-    style={{ backgroundImage: "url('/images/bg.png')" }}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Text Column */}
-        <motion.div
-          className="flex flex-col justify-center"
-          initial={{ opacity: 0, x: -100 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-            Perfect Game Orented Build
-          </h1>
-          <p className="text-lg text-gray-700 pb-6">
-            This is a descriptive paragraph that provides more details about the content. The text slides in from the left as you scroll down.
-          </p>
-
-          <motion.button
-  whileHover={{ scale: 1.1 }}
-  whileTap={{ scale: 0.9 }}
-  className="
-    px-4 py-2 
-    sm:px-6 sm:py-3 
-    md:px-8 md:py-4 
-    lg:px-10 lg:py-5 
-    w-[60vw] sm:w-[40vw] md:w-[30vw] lg:w-[20vw] xl:w-[13vw]
-    bg-gradient-to-r from-green-500 via-blue-500 to-red-500
-    text-white text-base sm:text-lg md:text-xl font-semibold
-    rounded-full shadow-lg transform transition-transform duration-300
-  "
->
-  Buy Now
-</motion.button>
-
-        </motion.div>
-
-        {/* Image Column */}
-        <motion.div
-          className="flex items-center justify-center"
-          whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  initial={{ y: -100, opacity: 0 }}  
-  whileInView={{ y: 0, opacity: 1 }}
-  transition={{ duration: 0.5, delay: 0.7 }} 
-        >
-          <motion.img
-            src="https://elitehubs.com/cdn/shop/files/37_1.png?v=1722422334&width=533"
-            alt="Dynamic Image"
-            className="w-full md:w-96 h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
-            whileHover={{ scale: 1.05 }}
+    <div
+      className="min-h-screen bg-cover bg-fixed bg-center xl:pb-20"
+      style={{
+        backgroundImage: "url('https://i.pinimg.com/originals/d2/79/b9/d279b98cf538ab5765696a81ce2ef694.webp')",
+        backgroundPositionY: `${offsetY * 0.5}px`,
+      }}
+    >
+      {/* Title */}
+      <motion.h3
+    className="text-4xl sm:text-5xl font-bold text-white/60 text-center py-10"
+    style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)" }}
+    initial={{ opacity: 0, y: -50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1.2 }}
+  >
+    REWARD WITH SANTICS GAMING
+  </motion.h3>
+      {/* Grid Layout */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* 3 Column Grid strt */}
+          <img
+            src="https://dlcdnrog.asus.com/rog/media/1704496493441.webp"
+            alt="Placeholder 1"
+            className="w-full h-full object-cover rounded-lg"
           />
-        </motion.div>
+          <img
+            src="https://static-ecapac.acer.com/media/catalog/product/c/o/comgysfgmcp3eapb_2_nh.qnxsi.003.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=320&width=320&canvas=320:320"
+            alt="Placeholder 2"
+            className="w-full h-auto object-cover rounded-lg"
+          />
+          <img
+            src="https://thetechrevolutionist.com/wp-content/uploads/2020/08/ASUS-ROG-Swift-360Hz-Campaign-Challenge-Announcement.jpg"
+            alt="Placeholder 3"
+            className="w-full h-auto object-cover rounded-lg"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* 2 Column Grid with Responsive Images */}
+          <img
+            src="https://i.ytimg.com/vi/AVKfB1bPx3U/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA3jiprSzG1KAel9msR5fIsI1zAEA"
+            alt="Placeholder 4"
+            className="w-full h-80 object-cover"
+          />
+          <img
+            src="https://i.pinimg.com/originals/73/4a/20/734a2036818764b57c21777996789d13.jpg"
+            alt="Placeholder 5"
+            className="w-full h-80 object-cover"
+          />
+        </div>
       </div>
     </div>
   );
