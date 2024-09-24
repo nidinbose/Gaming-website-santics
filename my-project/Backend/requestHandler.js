@@ -247,26 +247,10 @@ export async function userRegister(req,res) {
     }
 }
 
-  
 
-
-
-// export async function getCart(req, res) {
-//   const { userId } = req.params; 
-
-//   try {
-//     const user = await userSchema.findById(userId).select('cart'); 
-//     if (!user) return res.status(404).json({ msg: 'User not found' });
-
-//     res.status(200).json(user.cart); 
-//   } catch (err) {
-//     console.error("Error fetching cart:", err);
-//     res.status(500).json({ msg: 'Server Error', error: err.message });
-//   }
-// }
 
 export async function getCart(req, res) {
-  const { userId } = req.params; // Assume userId is passed as a URL parameter
+  const { userId } = req.params; 
   console.log("Fetching cart for user:", userId); 
 
   try {
@@ -285,7 +269,7 @@ export async function removeFromCart(req, res) {
   const { userId, productId } = req.body;
 
   try {
-    const cart = await cartSchema.findOne({ userId }); // Find the cart by userId
+    const cart = await cartSchema.findOne({ userId });
     if (!cart) {
       return res.status(404).json({ msg: 'Cart not found for this user' });
     }
@@ -295,8 +279,8 @@ export async function removeFromCart(req, res) {
       return res.status(404).json({ msg: 'Item not found in the cart' });
     }
 
-    cart.items.splice(itemIndex, 1); // Remove the item from the cart
-    await cart.save(); // Save the updated cart
+    cart.items.splice(itemIndex, 1);
+    await cart.save();
     res.status(200).json({ msg: 'Item removed', cart: cart.items });
   } catch (err) {
     res.status(500).json({ msg: 'Server Error', error: err.message });
@@ -307,7 +291,7 @@ export async function removeFromCart(req, res) {
 
 
 
-// Function to increment item quantity in the cart
+
 export async function incrementCart(req, res) {
   const { userId, productId } = req.body;
 
@@ -322,15 +306,15 @@ export async function incrementCart(req, res) {
           return res.status(404).json({ msg: 'Item not found in the cart' });
       }
 
-      item.quantity += 1; // Increment quantity
-      await cart.save(); // Save the updated cart
+      item.quantity += 1;
+      await cart.save();
       res.status(200).json({ msg: 'Item quantity incremented', cart: cart.items });
   } catch (err) {
       res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
 
-// Function to decrement item quantity in the cart
+
 export async function decrementCart(req, res) {
   const { userId, productId } = req.body;
 
@@ -346,75 +330,18 @@ export async function decrementCart(req, res) {
       }
 
       if (item.quantity > 1) {
-          item.quantity -= 1; // Decrement quantity if greater than 1
+          item.quantity -= 1;
       } else {
-          // Optionally remove the item if quantity is 1 and decremented
-          const itemIndex = cart.items.indexOf(item);
-          cart.items.splice(itemIndex, 1); // Remove the item from cart
+                 const itemIndex = cart.items.indexOf(item);
+          cart.items.splice(itemIndex, 1);
       }
 
-      await cart.save(); // Save the updated cart
+      await cart.save(); 
       res.status(200).json({ msg: 'Item quantity decremented', cart: cart.items });
   } catch (err) {
       res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-export async function deleteCartItem(req, res) {
-  const { productId, userId } = req.body;
-
-  try {
-    const cartItem = await cartSchema.findOne({ productId, userId });
-
-    if (!cartItem) {
-      return res.status(404).json({ msg: 'Cart item not found.' });
-    }
-
-    await cartSchema.deleteOne({ productId, userId });
-
-    res.status(200).json({ msg: 'Cart item deleted successfully.' });
-  } catch (error) {
-    console.error('Error deleting cart item:', error);
-    res.status(500).json({ msg: 'Error deleting cart item.' });
-  }
-}
-
-
-export async function checkCart(req, res) {
-  const { productId } = req.params;
-  const userId = req.user.id;
-
-  try {
-    const cartItem = await cartSchema.findOne({ productId, userId });
-
-    const isAddedToCart = Boolean(cartItem);
-
-    res.status(200).json({ isAddedToCart });
-  } catch (error) {
-    console.error('Error checking if added to cart:', error);
-    res.status(500).json({ msg: 'Error checking if added to cart.' });
-  }
-}
-
-
-
-
-  
-
-
-
-
-
 
 
 

@@ -45,7 +45,7 @@ const Cart = () => {
         { userId, productId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      updateCartItems(); // Refresh cart items after removal
+      updateCartItems();
     } catch (err) {
       console.error("Error removing item:", err);
     }
@@ -56,7 +56,7 @@ const Cart = () => {
       await axios.post('http://localhost:3003/api/increment-cart-item', { userId, productId }, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      updateCartItems(); // Refresh cart items after increment
+      updateCartItems();
     } catch (err) {
       console.error("Error incrementing item:", err);
     }
@@ -67,7 +67,7 @@ const Cart = () => {
       await axios.post('http://localhost:3003/api/decrement-cart-item', { userId, productId }, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      updateCartItems(); // Refresh cart items after decrement
+      updateCartItems();
     } catch (err) {
       console.error("Error decrementing item:", err);
     }
