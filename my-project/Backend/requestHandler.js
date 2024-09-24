@@ -223,67 +223,86 @@ export async function userRegister(req,res) {
   
 
 
-export async function addToCart(req, res) {
-  const { userId, productId, quantity, name, price, imageLink } = req.body;
-  console.log("Request body:", req.body); 
-  try {
-    const user = await userSchema.findById(userId);
-    if (!user) return res.status(404).json({ msg: 'User not found' });
+  export async function addToCart(req, res) {
+    const { userId, productId, quantity, name, price, imageLink } = req.body;
+    console.log("Request body:", req.body); 
 
-    const cartItem = user.cart.find(item => item.productId.toString() === productId);
-    if (cartItem) {
-         cartItem.quantity += quantity;
-    } else {
-         user.cart.push({ productId, quantity, name, price, imageLink });
+    try {
+        let cart = await cartSchema.findOne({ userId });
+        if (!cart) {
+            cart = new Cart({ userId, items: [] });
+        }
+
+        const existingItem = cart.items.find(item => item.productId === productId);
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.items.push({ productId, quantity, name, price, imageLink });
+        }
+
+        await cart.save();
+        res.status(200).json(cart);
+    } catch (err) {
+        res.status(500).json({ msg: 'Server Error', error: err.message });
     }
-console.log(user.cart);
-
-    await user.save();
-    res.status(200).json(user.cart);
-  } catch (err) {
-    res.status(500).json({ msg: 'Server Error', error: err.message });
-  }
 }
 
   
 
 
 
+// export async function getCart(req, res) {
+//   const { userId } = req.params; 
+
+//   try {
+//     const user = await userSchema.findById(userId).select('cart'); 
+//     if (!user) return res.status(404).json({ msg: 'User not found' });
+
+//     res.status(200).json(user.cart); 
+//   } catch (err) {
+//     console.error("Error fetching cart:", err);
+//     res.status(500).json({ msg: 'Server Error', error: err.message });
+//   }
+// }
+
 export async function getCart(req, res) {
-  const { userId } = req.params; 
+  const { userId } = req.params; // Assume userId is passed as a URL parameter
+  console.log("Fetching cart for user:", userId); 
 
   try {
-    const user = await userSchema.findById(userId).select('cart'); 
-    if (!user) return res.status(404).json({ msg: 'User not found' });
+      const cart = await cartSchema.findOne({ userId });
+      if (!cart) {
+          return res.status(404).json({ msg: 'Cart not found for this user' });
+      }
 
-    res.status(200).json(user.cart); 
+      res.status(200).json(cart);
   } catch (err) {
-    console.error("Error fetching cart:", err);
-    res.status(500).json({ msg: 'Server Error', error: err.message });
+      res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
-
 
 export async function removeFromCart(req, res) {
   const { userId, productId } = req.body;
 
   try {
-      const user = await userSchema.findById(userId);
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
+    const cart = await cartSchema.findOne({ userId }); // Find the cart by userId
+    if (!cart) {
+      return res.status(404).json({ msg: 'Cart not found for this user' });
     }
-    const itemIndex = user.cart.findIndex(item => item.productId.toString() === productId);
 
+    const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
     if (itemIndex === -1) {
       return res.status(404).json({ msg: 'Item not found in the cart' });
     }
-    user.cart.splice(itemIndex, 1);
-    await user.save();
-    res.status(200).json({ msg: 'Item removed', cart: user.cart });
+
+    cart.items.splice(itemIndex, 1); // Remove the item from the cart
+    await cart.save(); // Save the updated cart
+    res.status(200).json({ msg: 'Item removed', cart: cart.items });
   } catch (err) {
     res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
+
 
 
 

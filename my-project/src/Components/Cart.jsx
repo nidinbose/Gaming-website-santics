@@ -9,7 +9,6 @@ const Cart = () => {
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
- 
   const getCartItems = async () => {
     try {
       const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
@@ -17,8 +16,8 @@ const Cart = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setCartItems(response.data);
-      calculateTotal(response.data);
+      setCartItems(response.data.items); // Adjust based on your API response structure
+      calculateTotal(response.data.items);
     } catch (error) {
       console.error("Error fetching cart items:", error);
       if (error.response && error.response.status === 401) {
@@ -43,10 +42,10 @@ const Cart = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
-              setCartItems((prevItems) => prevItems.filter((item) => item.productId !== productId));
-        calculateTotal(cartItems);
+        setCartItems((prevItems) => prevItems.filter((item) => item.productId !== productId));
+        calculateTotal(cartItems.filter((item) => item.productId !== productId));
       }
     } catch (err) {
       console.error("Error removing item:", err);
@@ -56,7 +55,7 @@ const Cart = () => {
   const incrementCartItem = (productId) => {
     setCartItems((prevItems) => {
       const updatedItems = prevItems.map((item) => {
-        if (item._id === productId) {
+        if (item.productId === productId) {
           return { ...item, quantity: item.quantity + 1 };
         }
         return item;
@@ -66,11 +65,10 @@ const Cart = () => {
     });
   };
 
-
   const decrementQuantity = (productId) => {
     setCartItems((prevItems) => {
       const updatedItems = prevItems.map((item) => {
-        if (item._id === productId) {
+        if (item.productId === productId) {
           return { ...item, quantity: Math.max(item.quantity - 1, 1) };
         }
         return item;
@@ -118,7 +116,7 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
-              <div key={item._id} className="p-6 bg-white/10 shadow-md rounded-md">
+              <div key={item.productId} className="p-6 bg-white/10 shadow-md rounded-md">
                 <div className="flex items-center max-sm:flex-col gap-4">
                   <div className="w-52 shrink-0">
                     <img src={item.imageLink} alt={item.name} className="w-full h-full object-contain" />
@@ -133,7 +131,7 @@ const Cart = () => {
                         <h4 className="text-sm font-bold text-gray-800">Qty:</h4>
                         <button
                           type="button"
-                          onClick={() => decrementQuantity(item._id)}
+                          onClick={() => decrementQuantity(item.productId)}
                           className="w-7 h-7 bg-red-600 text-white rounded-full"
                         >
                           -
@@ -141,7 +139,7 @@ const Cart = () => {
                         <span className="font-bold text-md text-blue-300">{item.quantity}</span>
                         <button
                           type="button"
-                          onClick={() => incrementCartItem(item._id)}
+                          onClick={() => incrementCartItem(item.productId)}
                           className="w-7 h-7 bg-red-600 text-white rounded-full"
                         >
                           +
@@ -150,7 +148,7 @@ const Cart = () => {
                       <h4 className="text-lg font-bold text-blue-300">${item.price * item.quantity}</h4>
                     </div>
                     <button
-                      onClick={() => removeFromCart(item._id)}
+                      onClick={() => removeFromCart(item.productId)}
                       className="text-red-500 text-sm mt-2 underline hover:text-red-700"
                     >
                       Remove
@@ -160,9 +158,6 @@ const Cart = () => {
               </div>
             ))}
           </div>
-
-          {/*
-
 
           {/* Order Summary */}
           <div className="w-full lg:w-[22rem]">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import './CSS/Overview.css';
 
@@ -8,10 +8,24 @@ const slideInFromRight = {
 };
 
 const Overview = () => {
+  const [offsetY, setOffsetY] = useState(0);
+
+  const handleScroll = () => {
+    setOffsetY(window.pageYOffset); // Update the background offset based on scroll position
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div
       className="relative min-h-screen bg-cover bg-center bg-no-repeat pt-2 pb-12"
-      style={{ backgroundImage: "url('/images/bgrog.png')" }}
+      style={{
+        backgroundImage: "url('/images/bgrog.png')",
+        backgroundPositionY: `${offsetY * 0.5}px`, // Parallax effect on scroll
+      }}
     >
       {/* Title */}
       <motion.h3
@@ -52,7 +66,6 @@ const Overview = () => {
               transition={{ duration: 1, ease: "easeOut" }}
             >
               ROG (Republic of Gamers) is a gaming brand developed by ASUS, focused on creating high-performance hardware and gear specifically for gamers and PC enthusiasts...
-              {/* Shortened content for better readability */}
             </motion.p>
           </motion.div>
 

@@ -4,7 +4,7 @@ import React from 'react'
 const Cards = () => {
   return (
     <div className='w-full bg-white/95 py-8 xl:p-20'
-    style={{ backgroundImage: "url('https://storage-asset.msi.com/global/picture/wallpaper/QD-OLED-3840x2160_MAG.jpg')" }}>
+    style={{ backgroundImage: "url('/images/asd.mp4')" }}>
       <div className=''>
         <h1 className='text-center text-5xl font-bold mb-5 text-white '>HOT PRODUCTS</h1>
         <p className='text-center text-md font-semibold mt-7 mb-2 xl:mb-[15vh] text-red-500'>View All Motherboards</p>

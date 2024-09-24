@@ -4,6 +4,7 @@ import axios from "axios";
 import CartComponent from "./Navbar/Cartdrop";
 import { MdShoppingCart } from 'react-icons/md';
 import { SlUserFollow } from 'react-icons/sl';
+import { PiUserFocusThin } from "react-icons/pi";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -155,7 +156,7 @@ const Navbar = () => {
             </Link>
             {/* Show CartComponent only on hover */}
             <div className="absolute top-full right-0 mt-2 z-50 hidden group-hover:block">
-              <CartComponent />
+              {/* <CartComponent /> */}
             </div>
           </div>
 

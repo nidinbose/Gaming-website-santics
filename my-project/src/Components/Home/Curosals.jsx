@@ -23,7 +23,7 @@ const Curosal = () => {
 
   return (
     <section
-      className="relative w-full min-h-[82vh] bg-cover bg-center py-24 px-4 flex items-center justify-center transition-all duration-500 ease-in-out"
+      className="relative w-full h-[80vh] bg-cover bg-center py-24 px-4 flex items-center justify-center"
       style={{ backgroundImage: `url(${images[currentImageIndex]})` }} 
     >
     
