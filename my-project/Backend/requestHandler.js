@@ -307,61 +307,66 @@ export async function removeFromCart(req, res) {
 
 
 
-
-
-
-
-
-
-
+// Function to increment item quantity in the cart
 export async function incrementCart(req, res) {
   const { userId, productId } = req.body;
-  console.log("Request body:", req.body);
+
   try {
-    const user = await userSchema.findById(userId);
-    if (!user) return res.status(404).json({ msg: 'User not found' });
+      const cart = await cartSchema.findOne({ userId });
+      if (!cart) {
+          return res.status(404).json({ msg: 'Cart not found for this user' });
+      }
 
-    const cartItem = user.cart.find(item => item.productId.toString() === productId);
-    if (cartItem) {
-      cartItem.quantity += 1;
-    } else {
-      return res.status(404).json({ msg: 'Item not found in cart' });
-    }
-    await user.save();
+      const item = cart.items.find(item => item.productId.toString() === productId);
+      if (!item) {
+          return res.status(404).json({ msg: 'Item not found in the cart' });
+      }
 
-    console.log(user.cart);
-      res.status(200).json(user.cart);
+      item.quantity += 1; // Increment quantity
+      await cart.save(); // Save the updated cart
+      res.status(200).json({ msg: 'Item quantity incremented', cart: cart.items });
   } catch (err) {
-    res.status(500).json({ msg: 'Server Error', error: err.message });
+      res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
 
-
-
+// Function to decrement item quantity in the cart
 export async function decrementCart(req, res) {
-  const { productId, userId } = req.body;
-  console.log(req.body);
+  const { userId, productId } = req.body;
+
   try {
-    let cartItem = await cartSchema.findOne({ productId, userId });
+      const cart = await cartSchema.findOne({ userId });
+      if (!cart) {
+          return res.status(404).json({ msg: 'Cart not found for this user' });
+      }
 
-    if (!cartItem) {
-      return res.status(404).json({ msg: 'Cart item not found' });
-    }
+      const item = cart.items.find(item => item.productId.toString() === productId);
+      if (!item) {
+          return res.status(404).json({ msg: 'Item not found in the cart' });
+      }
 
+      if (item.quantity > 1) {
+          item.quantity -= 1; // Decrement quantity if greater than 1
+      } else {
+          // Optionally remove the item if quantity is 1 and decremented
+          const itemIndex = cart.items.indexOf(item);
+          cart.items.splice(itemIndex, 1); // Remove the item from cart
+      }
 
-    if (cartItem.count > 1) {
-      cartItem.count -= 1;
-      await cartItem.save();
-
-      res.status(200).json({ msg: 'Cart item count decremented successfully!' });
-    } else {
-      res.status(400).json({ msg: 'Cannot decrement count below 1' });
-    }
-  } catch (error) {
-    console.error('Error decrementing cart item count:', error);
-    res.status(500).json({ msg: 'Error decrementing cart item count.' });
+      await cart.save(); // Save the updated cart
+      res.status(200).json({ msg: 'Item quantity decremented', cart: cart.items });
+  } catch (err) {
+      res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }
+
+
+
+
+
+
+
+
 
 
 

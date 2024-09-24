@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { MdDeleteSweep } from "react-icons/md";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -12,11 +13,9 @@ const Cart = () => {
   const getCartItems = async () => {
     try {
       const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setCartItems(response.data.items); // Adjust based on your API response structure
+      setCartItems(response.data.items);
       calculateTotal(response.data.items);
     } catch (error) {
       console.error("Error fetching cart items:", error);
@@ -31,51 +30,47 @@ const Cart = () => {
     setTotal(totalAmount);
   };
 
+  const updateCartItems = async () => {
+    const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setCartItems(response.data.items);
+    calculateTotal(response.data.items);
+  };
+
   const removeFromCart = async (productId) => {
     try {
-      const response = await axios.post(
+      await axios.post(
         'http://localhost:3003/api/remove-from-cart',
         { userId, productId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      if (response.status === 200) {
-        setCartItems((prevItems) => prevItems.filter((item) => item.productId !== productId));
-        calculateTotal(cartItems.filter((item) => item.productId !== productId));
-      }
+      updateCartItems(); // Refresh cart items after removal
     } catch (err) {
       console.error("Error removing item:", err);
     }
   };
 
-  const incrementCartItem = (productId) => {
-    setCartItems((prevItems) => {
-      const updatedItems = prevItems.map((item) => {
-        if (item.productId === productId) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
+  const incrementCartItem = async (productId) => {
+    try {
+      await axios.post('http://localhost:3003/api/increment-cart-item', { userId, productId }, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      calculateTotal(updatedItems);
-      return updatedItems;
-    });
+      updateCartItems(); // Refresh cart items after increment
+    } catch (err) {
+      console.error("Error incrementing item:", err);
+    }
   };
 
-  const decrementQuantity = (productId) => {
-    setCartItems((prevItems) => {
-      const updatedItems = prevItems.map((item) => {
-        if (item.productId === productId) {
-          return { ...item, quantity: Math.max(item.quantity - 1, 1) };
-        }
-        return item;
+  const decrementQuantity = async (productId) => {
+    try {
+      await axios.post('http://localhost:3003/api/decrement-cart-item', { userId, productId }, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      calculateTotal(updatedItems);
-      return updatedItems;
-    });
+      updateCartItems(); // Refresh cart items after decrement
+    } catch (err) {
+      console.error("Error decrementing item:", err);
+    }
   };
 
   useEffect(() => {
@@ -110,10 +105,8 @@ const Cart = () => {
   return (
     <div className="font-sans bg-black via-gray-100 to-gray-50">
       <div className="max-w-7xl max-lg:max-w-4xl mx-auto p-6">
-        <h2 className="text-2xl font-extrabold text-gray-800">Shopping Cart</h2>
-
+        <h2 className="text-3xl font-extrabold text-red-600">Shopping Cart</h2>
         <div className="grid lg:grid-cols-3 gap-4 relative mt-8">
-          {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
               <div key={item.productId} className="p-6 bg-white/10 shadow-md rounded-md">
@@ -125,7 +118,6 @@ const Cart = () => {
                     <h3 className="text-xl font-bold text-red-500">{item.name}</h3>
                     <p className="text-white/60">Tax: included</p>
                     <p className="text-white/60">Delivery charges: free</p>
-
                     <div className="flex items-center justify-between mt-4">
                       <div className="flex items-center gap-3">
                         <h4 className="text-sm font-bold text-gray-800">Qty:</h4>
@@ -145,13 +137,13 @@ const Cart = () => {
                           +
                         </button>
                       </div>
-                      <h4 className="text-lg font-bold text-blue-300">${item.price * item.quantity}</h4>
+                      <h4 className="text-lg font-bold text-blue-300">INR : {(item.price * item.quantity).toFixed(2)}</h4>
                     </div>
                     <button
                       onClick={() => removeFromCart(item.productId)}
-                      className="text-red-500 text-sm mt-2 underline hover:text-red-700"
+                      className="text-white/50 text-sm mt-2 underline hover:text-red-500"
                     >
-                      Remove
+                      <MdDeleteSweep size={34}/>
                     </button>
                   </div>
                 </div>
@@ -161,22 +153,22 @@ const Cart = () => {
 
           {/* Order Summary */}
           <div className="w-full lg:w-[22rem]">
-            <div className="p-6 bg-white shadow-md rounded-md">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">Order Summary</h2>
+            <div className="p-6 bg-white/10 shadow-md rounded-md">
+              <h2 className="text-xl font-bold text-red-500 mb-6">Order Summary</h2>
               <div className="flex items-center justify-between text-sm text-gray-800 mb-4">
-                <span className="font-bold">Subtotal</span>
-                <span className="font-bold">${total.toFixed(2)}</span>
+                <span className="font-bold text-white/60">Subtotal</span>
+                <span className="font-bold text-white/60">INR : {total.toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between text-sm text-gray-800 mb-6">
-                <span>Taxes</span>
-                <span>$18.76</span>
+                <span className="font-bold text-white/60">Taxes</span>
+                <span className="font-bold text-white/60">INR : 18.76</span>
               </div>
               <hr className="border-gray-300 mb-6" />
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold text-gray-800">Total</h2>
-                <span className="font-bold text-lg text-gray-800">${(total + 18.76).toFixed(2)}</span>
+                <h2 className="text-lg font-bold text-white/60">Total</h2>
+                <span className="font-bold text-lg text-red-500">INR : {(total + 18.76).toFixed(2)}</span>
               </div>
-              <button className="w-full py-3 bg-blue-600 text-white font-bold rounded-md">
+              <button className="w-full py-3 bg-red-600 text-white font-bold rounded-md">
                 Continue to checkout
               </button>
             </div>

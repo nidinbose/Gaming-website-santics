@@ -24,8 +24,8 @@ router.get('/cart/:userId', request.getCart);
 router.route("/add-to-cart").post(Auth,request.addToCart);
 // router.delete("/remove/:productId", Auth, request.removeFromCart);
 router.post('/remove-from-cart', request.removeFromCart);
-router.route("/decrement-cart").post(request.decrementCart);
-router.route('cart/increment').put(Auth,request.incrementCart)
+router.post('/increment-cart-item', request.incrementCart);
+router.post('/decrement-cart-item', request.decrementCart);
 
 router.route('/logout').get(Auth,request.Logout)
 router.route('/updatecase/:id').patch(request.updateCase)
