@@ -14,7 +14,6 @@ const Navbar = () => {
   });
   const navigate = useNavigate();
 
-  // Fetch user data if token is present
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -26,7 +25,7 @@ const Navbar = () => {
           const { username } = response.data.user;
           const userData = { username };
           setUser(userData);
-          localStorage.setItem("user", JSON.stringify(userData)); // Store user data in localStorage
+          localStorage.setItem("user", JSON.stringify(userData));
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -34,10 +33,10 @@ const Navbar = () => {
       }
     };
 
-    if (!user) fetchUserData(); // Fetch user only if not already set
+    if (!user) fetchUserData();
   }, [user]);
 
-  // Handle Logout
+
   const handleLogout = async () => {
     try {
       await axios.get("/api/logout");
@@ -110,9 +109,9 @@ const Navbar = () => {
     <nav className="bg-black text-white shadow-md pb-1 pt-2">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         {/* Logo */}
-        <div className="flex items-center">
-          <img src="/path-to-your-logo.png" alt="Logo" className="h-8 w-auto" />
-        </div>
+      <Link to={`/`}>  <div className="flex items-center">
+          <img src={`/images/Santics.png`} alt="Logo" className="h-12 w-auto" />
+        </div></Link>
 
         {/* Desktop Nav Links */}
         <div className="hidden md:flex space-x-12">

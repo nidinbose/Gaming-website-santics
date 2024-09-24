@@ -16,7 +16,7 @@ const Oview9 = () => {
         Monitors
       </motion.h1>
 
-      {/* Grid of Photos */}
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
         {/* Photo 1 */}
         <motion.div

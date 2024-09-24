@@ -30,7 +30,7 @@ const Home=()=>{
              <About/>
            
             <Sliding/>
-            <Footer/>
+         
 
             
         </div>

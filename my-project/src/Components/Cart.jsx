@@ -9,7 +9,7 @@ const Cart = () => {
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
-  // Fetch cart items from backend
+ 
   const getCartItems = async () => {
     try {
       const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
@@ -27,32 +27,35 @@ const Cart = () => {
     }
   };
 
-  // Calculate total cost of the cart
   const calculateTotal = (items) => {
     const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     setTotal(totalAmount);
   };
 
-  // Function to remove an item from the cart
   const removeFromCart = async (productId) => {
     try {
-      const response = await axios.delete(`http://localhost:3003/api/cart/remove/${productId}`, {
-        data: { userId }, // Send userId in the request body
-      });
-      console.log(response.data);
-
-      // Update local state to remove the item
-      setCartItems(prevItems => prevItems.filter(item => item._id !== productId));
-      calculateTotal(cartItems.filter(item => item._id !== productId)); // Recalculate total
-    } catch (error) {
-      console.error('Error removing item from cart:', error);
+      const response = await axios.post(
+        'http://localhost:3003/api/remove-from-cart',
+        { userId, productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+              setCartItems((prevItems) => prevItems.filter((item) => item.productId !== productId));
+        calculateTotal(cartItems);
+      }
+    } catch (err) {
+      console.error("Error removing item:", err);
     }
   };
 
-  // Function to increment item quantity
   const incrementCartItem = (productId) => {
-    setCartItems(prevItems => {
-      const updatedItems = prevItems.map(item => {
+    setCartItems((prevItems) => {
+      const updatedItems = prevItems.map((item) => {
         if (item._id === productId) {
           return { ...item, quantity: item.quantity + 1 };
         }
@@ -63,12 +66,12 @@ const Cart = () => {
     });
   };
 
-  // Function to decrement item quantity
+
   const decrementQuantity = (productId) => {
-    setCartItems(prevItems => {
-      const updatedItems = prevItems.map(item => {
+    setCartItems((prevItems) => {
+      const updatedItems = prevItems.map((item) => {
         if (item._id === productId) {
-          return { ...item, quantity: Math.max(item.quantity - 1, 1) }; // Prevent quantity from going below 1
+          return { ...item, quantity: Math.max(item.quantity - 1, 1) };
         }
         return item;
       });
@@ -109,7 +112,7 @@ const Cart = () => {
   return (
     <div className="font-sans bg-black via-gray-100 to-gray-50">
       <div className="max-w-7xl max-lg:max-w-4xl mx-auto p-6">
-        <h2 className="text-2xl font-extrabold text-gray-800">Shopping cart</h2>
+        <h2 className="text-2xl font-extrabold text-gray-800">Shopping Cart</h2>
 
         <div className="grid lg:grid-cols-3 gap-4 relative mt-8">
           {/* Cart Items */}
@@ -157,6 +160,9 @@ const Cart = () => {
               </div>
             ))}
           </div>
+
+          {/*
+
 
           {/* Order Summary */}
           <div className="w-full lg:w-[22rem]">

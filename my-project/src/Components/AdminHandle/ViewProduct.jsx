@@ -9,7 +9,6 @@ const ViewProducts = () => {
   const [hovered, setHovered] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch product details
   const getCase = async () => {
     try {
       const res = await axios.get(`http://localhost:3003/api/getcaseedit/${id}`);
@@ -23,7 +22,7 @@ const ViewProducts = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:3003/api/deletecase/${id}`);
-      navigate('/productslist'); // Navigate to the student list page
+      navigate('/productslist');
     } catch (error) {
       console.error("Error deleting student:", error);
     }

@@ -234,8 +234,7 @@ export async function addToCart(req, res) {
     if (cartItem) {
          cartItem.quantity += quantity;
     } else {
-      // Add new item to cart
-      user.cart.push({ productId, quantity, name, price, imageLink });
+         user.cart.push({ productId, quantity, name, price, imageLink });
     }
 console.log(user.cart);
 
@@ -265,31 +264,27 @@ export async function getCart(req, res) {
 }
 
 
-
-
-export async function removeFromCart (req, res){
-  const { productId } = req.params;
-  const userId = req.body.userId; // Extract userId from the request body
+export async function removeFromCart(req, res) {
+  const { userId, productId } = req.body;
 
   try {
-    // Find the user and update their cart
-    const user = await userSchema.findById(userId);
+      const user = await userSchema.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ msg: 'User not found' });
     }
+    const itemIndex = user.cart.findIndex(item => item.productId.toString() === productId);
 
-    // Filter out the item to be removed
-    user.cart = user.cart.filter(item => item.productId.toString() !== productId);
-
-    // Save the updated user document
+    if (itemIndex === -1) {
+      return res.status(404).json({ msg: 'Item not found in the cart' });
+    }
+    user.cart.splice(itemIndex, 1);
     await user.save();
-
-    return res.status(200).json({ message: "Item removed from cart", cart: user.cart });
-  } catch (error) {
-    console.error("Error removing item from cart:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(200).json({ msg: 'Item removed', cart: user.cart });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server Error', error: err.message });
   }
-};
+}
+
 
 
 
@@ -304,27 +299,20 @@ export async function incrementCart(req, res) {
   const { userId, productId } = req.body;
   console.log("Request body:", req.body);
   try {
-    // Find the user by userId
     const user = await userSchema.findById(userId);
     if (!user) return res.status(404).json({ msg: 'User not found' });
 
-    // Find the item in the user's cart
     const cartItem = user.cart.find(item => item.productId.toString() === productId);
     if (cartItem) {
-      // Increment the quantity of the cart item
       cartItem.quantity += 1;
     } else {
       return res.status(404).json({ msg: 'Item not found in cart' });
     }
-
-    // Save the updated user cart
     await user.save();
 
     console.log(user.cart);
-    // Respond with the updated cart
-    res.status(200).json(user.cart);
+      res.status(200).json(user.cart);
   } catch (err) {
-    // Handle server error
     res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 }

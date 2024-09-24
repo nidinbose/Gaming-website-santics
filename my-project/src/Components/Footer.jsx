@@ -5,9 +5,11 @@ const Footer = () => {
     <footer className="bg-white dark:bg-black">
       <div className="mx-auto w-full">
         <img src="" alt="" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-4 xl:h-96" 
-         style={{ backgroundImage: "url('https://dlcdnwebimgs.asus.com/files/media/32AC71C1-A967-4B4A-A81C-23AB82184698/v3/images/large/1x/01__kv_rog_flow_x16.jpg')" }}>
-          
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-5 xl:h-96" 
+      >
+          <div>
+            <img src={`/images/Santics.png`} alt="" className='h-46 w-46'/>
+          </div>
           {/* Company Section */}
           <details className="xl:ml-20">
             <summary className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white cursor-pointer">Company</summary>
@@ -48,7 +50,7 @@ const Footer = () => {
 
           {/* Legal Section */}
           <details>
-            <summary className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white cursor-pointer">Legal</summary>
+            <summary className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white cursor-pointer">Home</summary>
             <ul className="text-gray-500 dark:text-gray-400 font-medium">
               <li className="mb-4">
                 <a href="#" className="hover:underline">Privacy Policy</a>

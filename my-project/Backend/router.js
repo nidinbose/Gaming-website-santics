@@ -22,7 +22,8 @@ router.route('/home').get(Auth,request.Home)
 
 router.get('/cart/:userId', request.getCart);
 router.route("/add-to-cart").post(Auth,request.addToCart);
-router.delete("/remove/:productId", Auth, request.removeFromCart);
+// router.delete("/remove/:productId", Auth, request.removeFromCart);
+router.post('/remove-from-cart', request.removeFromCart);
 router.route("/decrement-cart").post(request.decrementCart);
 router.route('cart/increment').put(Auth,request.incrementCart)
 
@@ -40,13 +41,5 @@ router.route('/productcount').get(request.productCount)
 
 
 
-// router.route("/get-cart").get(Auth,request.getCart);
-// router.route('get-cart/:userId/cart').get( Auth,request.getCart);
 
-// router.put('/cart/increment', request.incrementCart);
-
-// router.route("/increment-cart").post(request.incrementCart);
-
-// router.route("/delete-cart-item").delete(Auth,product.deleteCartItem);
-// router.route("/check-cart/:productId").get(Auth,request .checkCart);
 export default router
