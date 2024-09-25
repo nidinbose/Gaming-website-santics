@@ -9,7 +9,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // for redirecting
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,12 +38,15 @@ const ForgotPassword = () => {
     setSuccessMessage("");
 
     try {
-      const response = await axios.post("http://localhost:3003/api/admin/sendotp", {
+      const response = await axios.post("http://localhost:3003/api/userforgot", {
         email: formData.email,
       });
 
       setEmailSent(true);
       setSuccessMessage("OTP has been sent to your email.");
+
+    
+      navigate(`/userresetpassword`);
     } catch (error) {
       setErrors({ submit: error.response?.data?.error || "Something went wrong." });
     } finally {
@@ -55,7 +58,7 @@ const ForgotPassword = () => {
     <section className="grid h-screen place-items-center p-8 bg-white">
       <div className="max-w-[24rem] mx-auto">
         <Typography variant="h3" color="blue-gray" className="mb-2 text-center font-semibold">
-          Admin Forgot Password
+          Forgot Password
         </Typography>
         <Typography className="mb-16 text-center text-gray-600 font-normal text-[18px]">
           Enter your email to receive an OTP for resetting your password.
@@ -105,4 +108,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-

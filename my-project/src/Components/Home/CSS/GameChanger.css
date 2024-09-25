@@ -1,4 +1,4 @@
-.body {
+body {
   margin: 0;
   padding: 0;
   background-color: black;
@@ -15,6 +15,9 @@ section {
 section .scroll {
   width: 100%;
   display: flex;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(20deg); 
 }
 
 section .scroll div {
@@ -23,7 +26,7 @@ section .scroll div {
   white-space: nowrap;
   font-weight: 900;
   text-transform: uppercase;
-  animation: animate 20s linear 20s infinite;
+  animation: animate 20s linear infinite;
   -webkit-text-stroke: 0.3vw rgb(249, 70, 118);
 }
 
@@ -36,12 +39,64 @@ section .scroll div {
   }
 }
 
-section .scroll.text1 {
-  transform: rotate(20deg) translateY(200px) translateX(-200px);
-  color: transparent;
-  -webkit-text-stroke: 0.3vw rgb(249, 70, 118);
+section .scroll2 {
+  width: 100%;
+  display: flex;
+  position: absolute;
+  top: 60%; 
+  transform: translateY(-50%) rotate(20deg); 
+  animation: animate-reverse 20s linear infinite;
 }
 
+@keyframes animate-reverse {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Modifying .sp1 for opposite direction scroll */
 .sp1 {
-  -webkit-text-stroke: 0.3vw rgb(121, 239, 101);
+  width: 100%;
+  display: flex;
+  position: absolute;
+  top: 70%;
+  transform: translateX(-50%) rotate(18deg);
+  white-space: nowrap;
+  font-size: 2rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  background-color: rgb(252, 252, 9); /* Yellow background */
+  color: transparent;
+  -webkit-text-stroke: 0.3vw black;
+  animation: animate-reverse 20s linear infinite; 
+  animation-play-state: paused; /* Paused initially */
+}
+
+.sp1:hover {
+  animation-play-state: running; /* Starts animation when hovering */
+}
+
+/* Set sp2 for parallel scroll but opposite direction */
+.sp2 {
+  width: 100%;
+  display: flex;
+  position: absolute;
+  top: 80%; /* Adjust as needed */
+  transform: translateX(50%) rotate(18deg); /* Reverse translation */
+  white-space: nowrap;
+  font-size: 7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  background-color: rgb(252, 248, 6); /* Yellow background */
+  color: transparent; 
+  -webkit-text-stroke: 0.3vw rgb(70, 130, 180); /* Blue stroke for contrast */
+  animation: animate 20s linear infinite; /* Parallel scroll with same direction as .scroll */
+  animation-play-state: paused;
+}
+
+.sp2:hover {
+  animation-play-state: running;
 }

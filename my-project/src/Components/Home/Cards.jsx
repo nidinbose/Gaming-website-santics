@@ -72,7 +72,7 @@ const Cards = () => {
           </div>
           <div className="bg-white/10 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
-              src="https://dlcdnwebimgs.asus.com/gain/671F4AAE-3667-4578-B3AD-04847C7C8F56/w300"
+              src="https://www.predatorstorage.com/u_file/fileUpload/2023-06/01/0.png"
               alt="Product 3"
               className="w-full h-64 object-cover"
             />
@@ -90,7 +90,7 @@ const Cards = () => {
           </div>
           <div className="bg-white/10 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
-              src="https://dlcdnwebimgs.asus.com/gain/671F4AAE-3667-4578-B3AD-04847C7C8F56/w300"
+              src="https://dlcdnwebimgs.asus.com/gain/93A45483-9989-49EE-84B1-DA1566F31354/w382"
               alt="Product 4"
               className="w-full h-64 object-cover"
             />

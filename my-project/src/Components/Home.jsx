@@ -22,10 +22,11 @@ const Home=()=>{
              {/* <Navbar/> */}
              <Curosals/>
              <Category/>
-             <GameChanger/>
+          
              <Overview/>
-           
+             <GameChanger/>
              <Overview2/>
+
              <Overview3/>
              <Sliding/>
              <Cards/>

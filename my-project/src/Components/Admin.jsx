@@ -112,25 +112,25 @@ const Admin = () => {
           </Link>
           <nav className="mt-10">
             <Link
-              to="/addproducts"
+              to="/admin/addproducts"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#A0CE4E] mt-2"
             >
               Add Product
             </Link>
             <Link
-              to="/productslist"
+              to="/admin/productslist"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-white text-[#A0CE4E] mt-2"
             >
               Products List
             </Link>
             <Link
-              to="/viewproducts"
+              to="/admin/viewproducts"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
             >
               View Products
             </Link>
             <Link
-              to="/viewproducts"
+              to="/admin/viewproducts"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
             >
               View Products

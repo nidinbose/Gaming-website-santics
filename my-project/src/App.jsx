@@ -32,6 +32,9 @@ import AdminForgotPassword from './Components/Adminlogin/ForgotAdmin/AdminForgot
 import AdminResetPassword from './Components/Adminlogin/ForgotAdmin/AdminResetPassword'
 import UserView from './Components/Navbar/UserView'
 import Footer from './Components/Footer'
+import ForgotPassword from './Components/Loginpage/ForgotPassword'
+import UserResetPassword from './Components/Loginpage/ResetPassword'
+import Address from './Components/PaymentGateway/Address'
 
 
 function App() {
@@ -43,15 +46,33 @@ function App() {
       <BrowserRouter>
       <Navbar/>
       <Routes>
+
+
+      <Route path="/adminregester" Component={AdminRegester}/>
+      <Route path="/adminlogin" Component={AdminLogin}/>
+        <Route path="/adminforgotpassword" Component={AdminForgotPassword}/>
+        <Route path="/adminresetpassword" Component={AdminResetPassword}/>
+        <Route path="/admin" Component={Admin}/>
+        <Route path="/admin/addproducts" Component={AddProducts}/>
+        <Route path="/admin/viewproducts/:id" Component={ViewProducts}/>
+        <Route path="/admin/productslist" Component={ProductList}/>
+        <Route path="/admin/editproducts/:id" Component={EditProducts}/>
+   
         
+       
         <Route path="/" Component={Home}/>
         <Route path="/signup" Component={Signup}/>
         <Route path="/login" Component={Login}/>
-        <Route path="/cart" Component={Cart}/>
+        <Route path="/home" Component={UserView}/>
+        <Route path="/forgotpassword" Component={ForgotPassword}/>
+        <Route path="/resetpassword" Component={ResetPassword}/>
+        <Route path="/userresetpassword" Component={UserResetPassword}/>
+     
+       
 
 
         
-        <Route path="/home" Component={UserView}/>
+        <Route path="/cart" Component={Cart}/>
         <Route path="/cases" Component={Cases}/>
         <Route path="/motherboard" Component={MotherBoard}/>
         <Route path="/monitors" Component={Monitors}/>
@@ -62,27 +83,22 @@ function App() {
         <Route path="/keyboard" Component={Keyboard}/>
         <Route path="/audio" Component={Audio1}/>
         <Route path="/accs" Component={Accs}/>
-
         <Route path="/viewcase" Component={ViewCase}/>
-
-        <Route path="/adminregester" Component={AdminRegester}/>
-        <Route path="/adminforgotpassword" Component={AdminForgotPassword}/>
-        <Route path="/adminresetpassword" Component={AdminResetPassword}/>
-        
-        <Route path="/adminlogin" Component={AdminLogin}/>
-
-         
-        <Route path="/admin" Component={Admin}/>
         <Route path="/viewcase/:id" Component={ViewCase}/>
-        <Route path="/addproducts" Component={AddProducts}/>
-        <Route path="/viewproducts/:id" Component={ViewProducts}/>
-        <Route path="/productslist" Component={ProductList}/>
-        <Route path="/editproducts/:id" Component={EditProducts}/>
+        <Route path="/address" Component={Address}/>
+        
+      
+         
+   
+        
+     
            
 
       
 
-        <Route path="/resetpassword" Component={ResetPassword}/>
+
+        
+
 
 
 

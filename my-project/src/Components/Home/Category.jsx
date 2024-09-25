@@ -4,7 +4,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const Category = () => {
   const categories = [
-    { title: "Cases", imageUrl: "https://dlcdnwebimgs.asus.com/gain/30D1F34B-0C37-4D9D-92E4-487372FD254F/w240/h175", link: "/cases" },
+    { title: "Cases", imageUrl: "https://i0.wp.com/www.geekboz.in/wp-content/uploads/2021/06/Webp.net-resizeimage-16-removebg-preview.png?resize=300%2C300&ssl=1", link: "/cases" },
     { title: "Motherboard", imageUrl: "https://dlcdnwebimgs.asus.com/gain/B9B3F542-45F3-4C59-9BC1-25B8A1B7CCB1/w240/h175", link: "/motherboard" },
     { title: "Gaming monitors", imageUrl: "https://dlcdnwebimgs.asus.com/gain/718462E2-0FF1-424B-8070-9EE75A96DC64/w240/h175", link: "/monitors" },
     { title: "CPU", imageUrl: "https://images.acer.com/is/image/acer/Predator-Orion-7000-Homepage-Photo?$responsive$", link: "/cpu" },
@@ -12,7 +12,7 @@ const Category = () => {
     { title: "Graphics card", imageUrl: "https://images.acer.com/is/image/acer/predator-bifrost-arc-a770-01?$Series-Component-XL$", link: "/gpu" },
     { title: "PSU", imageUrl: "https://dlcdnwebimgs.asus.com/gain/5C0EA6AE-B302-440D-9810-D1A8D5F12882/w300", link: "/psu" },
     { title: "Keyboard", imageUrl: "https://dlcdnwebimgs.asus.com/gain/6B9D6099-C6F6-40E2-968F-CC9D743602DD/w300", link: "/keyboard" },
-    { title: "Audio", imageUrl: "https://dlcdnwebimgs.asus.com/gain/AE87E296-D3B4-4286-B174-8A50EB4F642E/w300", link: "/audio" },
+    { title: "Audio", imageUrl: "https://i0.wp.com/www.geekboz.in/wp-content/uploads/2021/06/h2-1-removebg-preview.png?resize=300%2C300&ssl=1", link: "/audio" },
     { title: "Accessories", imageUrl: "https://dlcdnwebimgs.asus.com/gain/A70F5883-E53A-4DC9-9FA0-3A3F47A2EB12/w240/h175", link: "/accs" },
   ];
 

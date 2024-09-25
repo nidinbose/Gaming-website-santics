@@ -204,7 +204,72 @@ export async function userRegister(req,res) {
   }
     
   
+
+  export async function userForget(req, res) {
+    const { email } = req.body;
+    console.log("Received email:", email);
   
+    try {
+    
+      const data = await userSchema.findOne({ email: email });
+      if (!data) {
+        return res.status(400).send({ msg: "User not found" });
+      }
+  
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      console.log("Generated OTP:", otp);
+  
+      data.otp = otp;
+      await data.save();
+  
+      if (!transporter) {
+        console.error("Email transporter is not configured properly.");
+        return res.status(500).send({ msg: "Email configuration error" });
+      }
+  // console.log(transporter);
+  
+      const info = await transporter.sendMail({
+        from: 'peterspidy5@gmail.com',
+        to: data.email,
+        subject: "OTP Verification", 
+        text: `Your OTP is ${otp}`, 
+        html: `<b>Your OTP is ${otp}</b>`,
+      });
+  
+      console.log("Message sent: %s", info.messageId);
+      res.status(200).send({ msg: "OTP sent successfully" });
+    } catch (error) {
+      console.error("Error in adminForget function:", error.message || error);
+  
+      res.status(500).send({ msg: "An error occurred while processing your request" });
+    }
+  }
+  
+  
+  export async function resetUserPassword(req, res) {
+    const { otp, newPassword } = req.body;
+    console.log("Received reset request:", otp);
+  
+    try {
+          const user = await userSchema.findOne({ otp: otp });
+      if (!user) {
+        return res.status(400).send({ msg: "Invalid OTP or OTP expired" });
+      }
+  
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  
+      user.password = hashedPassword;
+      user.otp = null; 
+      await user.save();
+  
+         res.status(200).send({ msg: "Password reset successfully" });
+    } catch (error) {
+      console.error("Error in resetuserPassword function:", error.message || error);
+  
+      res.status(500).send({ msg: "An error occurred while resetting the password" });
+    }
+  }
 
 
   export async function Logout(req, res) {
@@ -462,11 +527,11 @@ export async function adminForget(req, res) {
     }
 
     const info = await transporter.sendMail({
-      from: 'peterspidy5@gmail.com', // Sender's email
-      to: data.email, // Receiver's email
-      subject: "OTP Verification", // Email subject
-      text: `Your OTP is ${otp}`, // Plain text body
-      html: `<b>Your OTP is ${otp}</b>`, // HTML body
+      from: 'peterspidy5@gmail.com',
+      to: data.email,
+      subject: "OTP Verification", 
+      text: `Your OTP is ${otp}`, 
+      html: `<b>Your OTP is ${otp}</b>`,
     });
 
     console.log("Message sent: %s", info.messageId);

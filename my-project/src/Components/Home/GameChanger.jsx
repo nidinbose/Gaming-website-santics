@@ -3,20 +3,20 @@ import './CSS/GameChanger.css'; // Import the CSS file
 
 const GameChanger = () => {
   return (
-    <div className="h-96 w-full flex justify-center items-center overflow-hidden bg-black">
-      
-      <section>
-      <div className="scroll text1" >
-        <div>
-           BE THE GAME CHANGER - <span className="sp1">GAMING STORE</span> - <span>GAMING ACCESORIES</span> - <span>MONITORS</span> - <span>MOTHERBOARDS</span> 
-           - <span>MOTHERBOARDS</span>  - <span>MOTHERBOARDS</span>  - <span>MOTHERBOARDS</span>  - <span>MOTHERBOARDS</span>  - <span>MOTHERBOARDS</span>  - <span>MOTHERBOARDS</span> 
-        </div>
-      </div>
-    </section>
-      
-      {/* </div> */}
+    <section>
+    <div class="scroll">
+      <div>Scrolling Text 1</div>
     </div>
-
+    <div class="scroll2">
+      <div>Scrolling Text 2</div>
+    </div>
+    <div class="sp1">
+      <div>Hover to Start Scroll 1</div>
+    </div>
+    <div class="sp2">
+      <div>Hover to Start Scroll 2</div>
+    </div>
+  </section>
    
   );
 };

@@ -60,7 +60,7 @@ const Overview3 = () => {
             className="w-full h-80 object-cover"
           />
           <img
-            src="https://i.pinimg.com/originals/73/4a/20/734a2036818764b57c21777996789d13.jpg"
+            src="https://i0.wp.com/www.geekboz.in/wp-content/uploads/2024/01/photo_2024-01-19-21.40.36.jpeg?fit=852%2C490&ssl=1"
             alt="Placeholder 5"
             className="w-full h-80 object-cover"
           />

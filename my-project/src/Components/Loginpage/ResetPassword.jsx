@@ -4,7 +4,7 @@ import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import axios from "axios"; // Import Axios
 
-const ResetPassword = () => {
+const UserResetPassword = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     otp: "",
@@ -53,14 +53,14 @@ const ResetPassword = () => {
     setErrors({});
 
     try {
-      const response = await axios.post("http://localhost:3003/api/resetpassword", {
+      const response = await axios.post("http://localhost:3003/api/resetuserpassword", {
         otp: formData.otp, // OTP is included here
         newPassword: formData.newPassword,
         confirmPassword: formData.confirmPassword,
       });
 
       // If password reset is successful, redirect to login page
-      navigate("/adminlogin");
+      navigate("/login");
     } catch (error) {
       setErrors({ submit: error.response?.data?.error || "Something went wrong" });
     } finally {
@@ -177,4 +177,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default UserResetPassword;

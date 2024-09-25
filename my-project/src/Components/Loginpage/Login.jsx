@@ -147,7 +147,7 @@ const Login = () => {
             {loading ? "Signing in..." : "Sign in"}
           </Button>
           <div className="mt-4 flex justify-end">
-            <Link to={`/adminforgotpassword`}>
+            <Link to={`/forgotpassword`}>
               <Typography as="a" color="blue-gray" variant="small" className="font-medium">
                 Forgot password?
               </Typography>
