@@ -30,7 +30,7 @@ const Home=()=>{
              <Overview3/>
              <Sliding/>
              <Cards/>
-             <About/>
+             {/* <About/> */}
            
             
          

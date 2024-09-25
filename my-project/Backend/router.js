@@ -38,6 +38,9 @@ router.post('/remove-from-cart', request.removeFromCart);
 router.post('/increment-cart-item', request.incrementCart);
 router.post('/decrement-cart-item', request.decrementCart);
 
+router.route('/addaddress').post(request.addAddress)
+router.route('/getaddress').get(request.getAddress)
+
 
 
 

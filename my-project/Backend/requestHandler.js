@@ -7,6 +7,7 @@ import Cart from './models/cart.model.js'
 import adminSchema from './models/admin.model.js'
 import nodemailer from 'nodemailer'
 import cartSchema from './models/cart.model.js'
+import addressSchema from './models/address.model.js'
 
 
 // products  CRUD
@@ -608,5 +609,40 @@ export async function productCount(req, res) {
   } catch (error) {
     console.error('Error fetching student count:', error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+
+
+// CHECKOUT
+
+export async function addAddress(req,res){
+  try{
+      console.log(req.body);
+      const {...addresses} = req.body;
+                
+      await addressSchema
+      .create({...addresses})
+          .then(()=>{
+              res.status(200).send({msg:"sucessfully created"})
+          })
+        
+          .catch((error)=>{
+              res.status(400).send({error:error})
+          });
+  }catch(error){
+      res.status(500).send(error)
+  }
+}
+
+
+export async function getAddress(req,res){
+  try{
+
+      const data=await addressSchema.find();
+      res.status(200).send(data)
+      console.log(data);
+  }catch (error){
+      res.status(500).send(error)
   }
 }

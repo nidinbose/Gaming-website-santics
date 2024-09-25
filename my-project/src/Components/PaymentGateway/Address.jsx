@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Address = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -14,7 +15,7 @@ const Address = () => {
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const addressResponse = await axios.get("/api/addresses", {
+        const addressResponse = await axios.get("http://localhost:3003/api/getaddress", {
           headers: {
             Authorization: `Bearer ${token}`, // Pass token in headers
           },
@@ -22,6 +23,9 @@ const Address = () => {
         setAddresses(addressResponse.data);
       } catch (error) {
         console.error("Error fetching addresses:", error);
+        if (error.response && error.response.status === 401) {
+          navigate("/login");
+        }
       }
     };
 
@@ -54,20 +58,20 @@ const Address = () => {
   // Handle adding a new address
   const handleAddAddress = async (event) => {
     event.preventDefault();
-  
+
     const newAddress = {
-      userId: localStorage.getItem("userId"), // Include userId
+      userId,
       name: event.target.name.value,
-      Lastname: event.target.Lastname.value,
+      lastName: event.target.lastName.value,
       addressLine: event.target.addressLine.value,
       city: event.target.city.value,
       state: event.target.state.value,
       zipCode: event.target.zipCode.value,
       phone: event.target.phone.value,
     };
-  
+
     try {
-      const response = await axios.post("/api/addresses", newAddress, {
+      const response = await axios.post("http://localhost:3003/api/addaddress", newAddress, {
         headers: {
           Authorization: `Bearer ${token}`, // Add token for secure request
         },
@@ -77,7 +81,7 @@ const Address = () => {
       console.error("Error adding address", error);
     }
   };
-  
+
   return (
     <div className="font-[sans-serif] bg-black">
       <div className="flex max-sm:flex-col gap-12 max-lg:gap-4 h-full">
@@ -143,7 +147,7 @@ const Address = () => {
           <div className="mt-8">
             <h3 className="text-base text-gray-300 mb-4">Saved Addresses</h3>
             <div className="grid md:grid-cols-2 gap-4">
-              {/* {addresses.map((address) => (
+              {addresses.map((address) => (
                 <div
                   key={address.id}
                   className={`p-4 border rounded-md cursor-pointer ${
@@ -153,15 +157,15 @@ const Address = () => {
                   }`}
                   onClick={() => handleAddressSelection(address.id)}
                 >
-                  <h4 className="font-bold text-gray-800">{address.name}</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="font-bold text-red-500">{address.name}</h4>
+                  <p className="text-sm text-white/60">
                     {address.addressLine}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-white/60">
                     {address.city}, {address.state} {address.zipCode}
                   </p>
                 </div>
-              ))} */}
+              ))}
             </div>
           </div>
 
@@ -176,10 +180,9 @@ const Address = () => {
                   placeholder="Name"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
-
-<input
+                <input
                   type="text"
-                  name="Lastname"
+                  name="lastName"
                   placeholder="Last Name"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
@@ -207,28 +210,28 @@ const Address = () => {
                   placeholder="Zip Code"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
-
-<input
+                <input
                   type="text"
                   name="phone"
-                  placeholder="phone number"
-                  className="px-4 py-3 bg-white/10 focus:bg-transparent text-gray-100 w-full text-sm rounded-md focus:outline-red-600"
+                  placeholder="Phone number"
+                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
 
-              <div className="flex gap-4 max-md:flex-col mt-8">
-                <button
-                  type="button"
-                  className="rounded-md px-6 py-3 w-full text-sm tracking-wide bg-transparent hover:bg-gray-100 border border-gray-300 text-gray-800 max-md:order-1"
-                >
-                  Cancel
-                </button>
+              <div className="flex gap-4 max-md:flex-col justify-end mt-8">
                 <button
                   type="submit"
-                  className="rounded-md px-6 py-3 w-full text-sm tracking-wide bg-red-600 hover:bg-red-700 text-white"
+                  className="block max-w-[300px] w-full ml-auto px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold text-center rounded-full"
                 >
                   Add Address
                 </button>
+               <Link> <button
+                
+                
+                className="block max-w-[300px] w-full ml-auto px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold text-center rounded-full"
+              >
+                Checkout
+              </button></Link>
               </div>
             </div>
           </form>
