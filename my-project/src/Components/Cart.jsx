@@ -100,7 +100,32 @@ const Cart = () => {
   }
 
   if (cartItems.length === 0) {
-    return <div className="container mx-auto px-4 py-8">Your cart is empty.</div>;
+    return<div className="container mx-auto px-4 py-8 text-center text-white xl:mb-20 xl:mt-20">
+    {/* Illustration or icon */}
+    <div className="flex justify-center mb-6">
+      <img
+      src={`https://www.shutterstock.com/shutterstock/videos/1059212528/thumb/9.jpg?ip=x480`}
+        alt="Empty Cart"
+        className="w-60 h-40"
+      />
+    </div>
+
+    {/* Main empty cart message */}
+    <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
+    <p className="text-lg mb-6">
+      Looks like you haven't added anything to your cart yet.
+    </p>
+
+   
+    <button
+      className="bg-white/30 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out"
+      onClick={() => {
+               window.location.href = "/";
+      }}
+    >
+      Start Shopping
+    </button>
+  </div>
   }
 
   return (
