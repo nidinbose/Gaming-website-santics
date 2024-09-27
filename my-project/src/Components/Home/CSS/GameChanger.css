@@ -12,6 +12,7 @@ section {
   overflow: hidden;
 }
 
+/* First Scrolling Line */
 section .scroll {
   width: 100%;
   display: flex;
@@ -27,9 +28,10 @@ section .scroll div {
   font-weight: 900;
   text-transform: uppercase;
   animation: animate 20s linear infinite;
-  -webkit-text-stroke: 0.3vw rgb(249, 70, 118);
+  -webkit-text-stroke: 0.3vw rgb(249, 70, 118); /* Pink stroke */
 }
 
+/* Scrolls from right to left */
 @keyframes animate {
   0% {
     transform: translateX(100%);
@@ -39,6 +41,7 @@ section .scroll div {
   }
 }
 
+/* Second Scrolling Line in Reverse Direction */
 section .scroll2 {
   width: 100%;
   display: flex;
@@ -48,6 +51,7 @@ section .scroll2 {
   animation: animate-reverse 20s linear infinite;
 }
 
+/* Scrolls from left to right */
 @keyframes animate-reverse {
   0% {
     transform: translateX(-100%);
@@ -57,7 +61,7 @@ section .scroll2 {
   }
 }
 
-/* Modifying .sp1 for opposite direction scroll */
+/* Third Scrolling Line with Pause on Hover */
 .sp1 {
   width: 100%;
   display: flex;
@@ -70,33 +74,35 @@ section .scroll2 {
   text-transform: uppercase;
   background-color: rgb(252, 252, 9); /* Yellow background */
   color: transparent;
-  -webkit-text-stroke: 0.3vw black;
-  animation: animate-reverse 20s linear infinite; 
+  -webkit-text-stroke: 0.3vw black; /* Black stroke */
+  animation: animate-reverse 20s linear infinite;
   animation-play-state: paused; /* Paused initially */
 }
 
+/* Animation resumes on hover */
 .sp1:hover {
-  animation-play-state: running; /* Starts animation when hovering */
+  animation-play-state: running; 
 }
 
-/* Set sp2 for parallel scroll but opposite direction */
+/* Fourth Scrolling Line with Hover Effect */
 .sp2 {
   width: 100%;
   display: flex;
   position: absolute;
-  top: 80%; /* Adjust as needed */
-  transform: translateX(50%) rotate(18deg); /* Reverse translation */
+  top: 80%;
+  transform: translateX(50%) rotate(18deg);
   white-space: nowrap;
   font-size: 7rem;
   font-weight: 900;
   text-transform: uppercase;
   background-color: rgb(252, 248, 6); /* Yellow background */
-  color: transparent; 
-  -webkit-text-stroke: 0.3vw rgb(70, 130, 180); /* Blue stroke for contrast */
-  animation: animate 20s linear infinite; /* Parallel scroll with same direction as .scroll */
-  animation-play-state: paused;
+  color: transparent;
+  -webkit-text-stroke: 0.3vw rgb(70, 130, 180); /* Blue stroke */
+  animation: animate 20s linear infinite;
+  animation-play-state: paused; /* Paused initially */
 }
 
+/* Animation resumes on hover */
 .sp2:hover {
   animation-play-state: running;
 }

@@ -10,7 +10,7 @@ const slideInFromRight = {
 const Overview = () => {
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center bg-no-repeat pt-2 pb-12"
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat xl:pt-20 pb-12"
       style={{
         backgroundImage: "url('/images/bgrog.png')",
         transition: 'background-position 0.1s ease-out' // Optional smooth transition
@@ -48,7 +48,7 @@ const Overview = () => {
             </motion.h1>
 
             <motion.p
-              className="text-base md:text-lg text-white/80"
+              className="text-base md:text-lg text-white/40"
               variants={slideInFromRight}
               initial="hidden"
               animate="visible"

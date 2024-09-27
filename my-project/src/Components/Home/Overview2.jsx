@@ -48,7 +48,7 @@ const Overview2 = () => {
             </motion.h1>
 
             <motion.p
-              className="text-base md:text-lg text-white/80"
+              className="text-base md:text-lg text-white/40"
               variants={slideInFromRight}
               initial="hidden"
               animate="visible"

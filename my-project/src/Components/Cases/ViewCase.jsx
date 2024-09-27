@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useViewportScroll, useTransform } from "framer-motion";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 
@@ -8,6 +8,15 @@ const ViewCase = () => {
   const [product, setProduct] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [count, setCount] = useState(1);
+
+  // Get the scroll position
+  const { scrollY } = useViewportScroll();
+
+  // Parallax effects for video and images
+  const videoY = useTransform(scrollY, [0, 300], [0, -100]);
+  const image1Y = useTransform(scrollY, [0, 600], [0, -200]);
+  const image2Y = useTransform(scrollY, [0, 800], [0, -250]);
+  const image3Y = useTransform(scrollY, [0, 1000], [0, -300]);
 
   // Fetch product details
   const getCase = async () => {
@@ -19,6 +28,7 @@ const ViewCase = () => {
     }
   };
 
+  // Add to cart functionality
   const handleAddToCart = async () => {
     try {
       const userId = localStorage.getItem("userId");
@@ -42,10 +52,8 @@ const ViewCase = () => {
         name: product?.name,
         price: product?.price,
         imageLink: product?.linkvf,
-      
       };
-        console.log(data);
-        
+
       await axios.post('http://localhost:3003/api/add-to-cart', data, config);
       alert("Product added to cart successfully!");
     } catch (error) {
@@ -59,7 +67,7 @@ const ViewCase = () => {
   }, [id]);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div className="text-center text-white">Loading...</div>;
   }
 
   return (
@@ -96,9 +104,9 @@ const ViewCase = () => {
             {product.keyUses && (
               <ul className="list-disc list-inside mb-4 overflow-y-auto h-[25vh]">
                 {product.keyUses.split(",").map((use, index) => (
-                  <p key={index} className="text-gray-400 mb-2">
+                  <li key={index} className="text-gray-400 mb-2">
                     {use.trim()}
-                  </p>
+                  </li>
                 ))}
               </ul>
             )}
@@ -110,54 +118,45 @@ const ViewCase = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-12 mt-auto">
-              <div className="grid grid-cols-2 gap-4">
-                {/* <input
-                  type="number"
-                  value={count}
-                  onChange={(e) => setCount(e.target.value)}
-                  className="border rounded px-2 py-1 text-black"
-                  min="1"
-                /> */}
-
-                <button
-                  className="inline-flex items-center justify-center text-white bg-gray-900 rounded group w-full sm:w-auto"
-                  onClick={handleAddToCart}
-                >
-                  <span className="px-3.5 py-2 text-white bg-red-500 group-hover:bg-green-300 flex items-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span className="pl-4 pr-5 py-2.5">Add to Cart</span>
-                </button>
-
-                {product.btnlink && (
-                  <Link
-                    to={product.btnlink}
-                    className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group w-full sm:w-auto"
+              <button
+                className="inline-flex items-center justify-center text-white bg-gray-900 rounded group w-full sm:w-auto"
+                onClick={handleAddToCart}
+              >
+                <span className="px-3.5 py-2 text-white bg-red-500 group-hover:bg-green-300 flex items-center">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gray-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
-                    <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
-                    <span className="relative text-md">See more</span>
-                  </Link>
-                )}
-              </div>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    ></path>
+                  </svg>
+                </span>
+                <span className="pl-4 pr-5 py-2.5">Add to Cart</span>
+              </button>
+
+              {product.btnlink && (
+                <Link
+                  to={product.btnlink}
+                  className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group w-full sm:w-auto"
+                >
+                  <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-gray-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
+                  <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
+                  <span className="relative text-md">See more</span>
+                </Link>
+              )}
             </div>
           </motion.div>
         </div>
       </div>
 
+      {/* Product Images */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-[70vw] xl:w-[60vw] items-center gap-4 xl:ml-[15vw] xl:mt-[20vh]">
         {[product.link1, product.link2, product.link3, product.link4, product.link5, product.link6]
           .filter((link) => link)
@@ -165,15 +164,65 @@ const ViewCase = () => {
             <motion.div
               key={index}
               className="relative overflow-hidden"
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.05 }} // Slightly reduce the scale for a smoother effect
             >
               <motion.img
                 src={link}
-                alt={`product-${index}`}
-                className="object-cover w-full h-full transition-transform duration-500 ease-in-out hover:scale-150"
+                alt={`Product Image ${index + 1}`}
+                className="object-cover w-full h-full transition-transform duration-500 ease-in-out hover:scale-110"
               />
             </motion.div>
           ))}
+      </div>
+
+      {/* Parallax Scrolling Sections */}
+      <div className="min-h-screen flex flex-col space-y-20 bg-transparent xl:mt-[30vh] mt-20">
+        {/* Video Section */}
+        <motion.div
+          style={{ y: videoY }}
+          className="relative h-screen flex justify-center items-center bg-black"
+        >
+          <video
+            src={product.video} // Ensure this link is correct
+            autoPlay
+            muted
+            loop
+            className="object-cover w-full h-full"
+          />
+        </motion.div>
+
+        {/* Image 1 */}
+        <motion.div style={{ y: image1Y }} className="h-screen bg-transparent">
+          <div className="flex justify-center items-center h-full">
+            <img
+              src={product.bnn1} // Ensure product.bnn1 exists
+              alt="Image 1"
+              className="w-full h-auto rounded-xl shadow-lg"
+            />
+          </div>
+        </motion.div>
+
+        {/* Image 2 */}
+        <motion.div style={{ y: image2Y }} className="h-screen bg-transparent">
+          <div className="flex justify-center items-center h-full">
+            <img
+              src={product.bnn2} // Ensure product.bnn2 exists
+              alt="Image 2"
+              className="w-full h-auto rounded-xl shadow-lg"
+            />
+          </div>
+        </motion.div>
+
+        {/* Image 3 */}
+        <motion.div style={{ y: image3Y }} className="h-screen bg-transparent">
+          <div className="flex justify-center items-center h-full">
+            <img
+              src={product.bnn3} // Ensure product.bnn3 exists
+              alt="Image 3"
+              className="w-full h-auto rounded-xl shadow-lg"
+            />
+          </div>
+        </motion.div>
       </div>
     </div>
   );

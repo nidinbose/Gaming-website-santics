@@ -5,16 +5,16 @@ const GameChanger = () => {
   return (
     <section>
     <div class="scroll">
-      <div>Scrolling Text 1</div>
+      <div>SANTICS GAMING - <span>COMPLETE GAME CHANGER</span> - <span>BEST RATE EVER</span>  - <span>EASY RETURNS ASSURED</span> - <span> BRANDED PRODUCTS</span> </div>
     </div>
     <div class="scroll2">
-      <div>Scrolling Text 2</div>
+      <div>-COMPLETE GAME CHANGER</div>
     </div>
     <div class="sp1">
-      <div>Hover to Start Scroll 1</div>
+      <div>- BEST RATE EVER</div>
     </div>
     <div class="sp2">
-      <div>Hover to Start Scroll 2</div>
+      <div>- EASY RETURNS ASSURED</div>
     </div>
   </section>
    
