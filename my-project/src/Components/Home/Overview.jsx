@@ -13,7 +13,7 @@ const Overview = () => {
       className="relative min-h-screen bg-cover bg-center bg-no-repeat xl:pt-20 pb-12"
       style={{
         backgroundImage: "url('/images/bgrog.png')",
-        transition: 'background-position 0.1s ease-out' // Optional smooth transition
+        transition: 'background-position 0.1s ease-out'
       }}
     >
       {/* Title */}

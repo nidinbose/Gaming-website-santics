@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: black;
+  background-color:transparent;
   background-size: cover;
 }
 
@@ -23,7 +23,7 @@ section .scroll {
 
 section .scroll div {
   font-size: 7rem;
-  background: black;
+  background:transparent;
   white-space: nowrap;
   font-weight: 900;
   text-transform: uppercase;
@@ -74,7 +74,7 @@ section .scroll2 {
   text-transform: uppercase;
   background-color: rgb(252, 252, 9); /* Yellow background */
   color: transparent;
-  -webkit-text-stroke: 0.3vw black; /* Black stroke */
+  
   animation: animate-reverse 20s linear infinite;
   animation-play-state: paused; /* Paused initially */
 }
@@ -106,3 +106,22 @@ section .scroll2 {
 .sp2:hover {
   animation-play-state: running;
 }
+
+
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scroll, .scroll2, .sp1, .sp2 {
+    font-size: 4vw; /* Increase font size on smaller screens */
+    padding: 0.5rem; /* Adjust padding for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll, .scroll2, .sp1, .sp2 {
+    font-size: 5vw; /* Further increase the font size for very small screens */
+    padding: 0.3rem; /* Further reduce padding */
+  }
+}
+ 
