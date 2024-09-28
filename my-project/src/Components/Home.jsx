@@ -24,12 +24,13 @@ const Home=()=>{
              <Category/>
           
              <Overview/>
-             <GameChanger/>
+          
              <Overview2/>
 
              <Overview3/>
              <Sliding/>
              <Cards/>
+             <GameChanger/>
              {/* <About/> */}
            
             

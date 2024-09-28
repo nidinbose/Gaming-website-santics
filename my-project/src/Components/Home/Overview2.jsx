@@ -10,7 +10,7 @@ const slideInFromRight = {
 const Overview2 = () => {
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center bg-no-repeat pt-2 pb-12"
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat pt-2 "
       style={{
         backgroundImage: "url('/images/bgacer.png')",
         transition: 'background-position 0.1s ease-out' // Optional smooth transition

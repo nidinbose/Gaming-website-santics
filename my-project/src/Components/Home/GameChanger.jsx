@@ -10,8 +10,8 @@ const GameChanger = () => {
         backgroundSize: 'cover',  // Make the background cover the entire section
         backgroundPosition: 'center',  // Center the background image
         backgroundRepeat: 'no-repeat',  // Prevent the background from repeating
-        width: '100vw',  // Full viewport width
-        height: '100vh',  // Full viewport height
+   
+        height: '60vh',  // Full viewport height
         transition: 'background-position 0.1s ease-out',
       }}
     >

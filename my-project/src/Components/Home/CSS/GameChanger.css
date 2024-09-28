@@ -28,7 +28,7 @@ section .scroll div {
   font-weight: 900;
   text-transform: uppercase;
   animation: animate 20s linear infinite;
-  -webkit-text-stroke: 0.3vw rgb(249, 70, 118); /* Pink stroke */
+  -webkit-text-stroke: 0.3vw rgb(231, 12, 136); /* Pink stroke */
 }
 
 /* Scrolls from right to left */

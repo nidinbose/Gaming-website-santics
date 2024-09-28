@@ -10,7 +10,7 @@ const slideInFromRight = {
 const Overview = () => {
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center bg-no-repeat xl:pt-20 pb-12"
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat xl:pt-20"
       style={{
         backgroundImage: "url('/images/bgrog.png')",
         transition: 'background-position 0.1s ease-out'
@@ -54,7 +54,16 @@ const Overview = () => {
               animate="visible"
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              ROG (Republic of Gamers) is a gaming brand developed by ASUS, focused on creating high-performance hardware and gear specifically for gamers and PC enthusiasts...
+              ROG (Republic of Gamers) is a gaming brand developed by ASUS, focused on creating high-performance hardware and 
+              gear specifically for gamers and PC enthusiasts... <br />
+              It takes courage to play at this level. <br /> A bad slam gets inside your head. You <br />
+
+              doubt yourself. I’m hitting big gaps,<br />
+               big rails. Mentally... On set that can feel like…this…heat.
+The lights… The cameras…
+…feel the fear in my chest every time I get on stage, but… 
+\
+
             </motion.p>
           </motion.div>
 

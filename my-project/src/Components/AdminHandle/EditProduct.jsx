@@ -62,7 +62,7 @@ const EditProducts = () => {
       const res = await axios.patch(`http://localhost:3003/api/updatecase/${id}`, data);
       if (res.status === 201) {
         alert("Product updated successfully!");
-        navigate("/productslist"); 
+        navigate("/admin/productslist"); 
       }
     } catch (error) {
       console.error("Error updating product:", error);

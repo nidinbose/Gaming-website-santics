@@ -197,7 +197,7 @@ const ViewCase = () => {
             <img
               src={product.bnn1} // Ensure product.bnn1 exists
               alt="Image 1"
-              className="w-full h-auto rounded-xl shadow-lg"
+              className="w-full h-auto mb-10 shadow-lg"
             />
           </div>
         </motion.div>
