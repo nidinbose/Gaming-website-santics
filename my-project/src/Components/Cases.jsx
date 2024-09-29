@@ -6,12 +6,12 @@ import Relate from './Cases/Relate';
 
 const Cases = () => {
   return (
-    <>
+    <div className='h-full'>
       <Slider2 />
       <Img1 />
       <Product/>
       <Relate/>
-    </>
+    </div>
   );
 };
 

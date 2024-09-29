@@ -38,7 +38,7 @@ const Overview = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-6"
+              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-6 h-auto p-5"
               variants={slideInFromRight}
               initial="hidden"
               animate="visible"

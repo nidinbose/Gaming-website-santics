@@ -4,7 +4,7 @@ import './Css/img1.css';
 
 const Img1 = () => {
   return (
-    <div className="container mx-auto p-4" 
+    <div className="container mx-auto p-4 h-auto w-auto" 
     style={{ backgroundImage: "url('/images/bgrog.pn')" }}>
       {/* Heading */}
       <motion.h1

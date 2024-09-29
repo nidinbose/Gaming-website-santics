@@ -24,7 +24,7 @@ const Relate = () => {
   );
 
   return (
-    <div className="w-full bg-white/95 py-8 xl:p-20">
+    <div className="w-full bg-white/95 py-8 xl:p-20 h-auto">
       <div className="">
         <h1 className="text-center text-5xl font-bold mb-5">HOT PRODUCTS</h1>
         <p className="text-center text-md font-semibold mt-7 mb-2 xl:mb-[8vh] text-red-500">
@@ -40,11 +40,14 @@ const Relate = () => {
                 <img
                   src={product.imagelink}
                   alt={product.name}
+                  
                   className="w-full h-64 object-cover"
                 />
+                
                 <div className="p-4 text-center">
-                  <p className="text-black text-2xl mb-5 mt-5 font-bold">
+                  <p className="text-black text-2xl mb-5 mt-5 font-bold relative group inline-block">
                     {product.name}
+                    <span className="absolute left-0 bottom-0 h-[1px] bg-red-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out w-full"></span>
                   </p>
                   <h2 className="text-sm medium">
                     {product.specifications}
