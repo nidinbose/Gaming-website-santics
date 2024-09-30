@@ -82,11 +82,11 @@ const Product2 = () => {
                 onMouseLeave={() => setHoveredProduct(null)}
               />
               <div className="flex flex-col flex-grow p-4">
-                <h2 className="text-lg font-bold mb-2 text-white/50 relative group inline-block">
+                <h2 className="text-lg font-bold mb-2 text-white/50 relative group inline-block font-mono">
                   {product.name}
                   <span className="absolute left-0 bottom-0 h-[1px] bg-gray-300 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out w-full"></span>
                 </h2>
-                <p className="text-sm text-blue-200 mb-2 h-14 overflow-y-auto">
+                <p className="text-sm text-blue-200 mb-2 h-14 overflow-y-auto font-mono">
                   {product.specifications}
                 </p>
                 <div className="flex-grow" />
@@ -95,7 +95,7 @@ const Product2 = () => {
               <div className="flex items-center justify-between p-4 bg-black/60 border-t border-gray-900">
                 <p className="text-xl font-semibold bg-clip-text text-transparent bg-gray-400">
                   INR: {product.price} <br />
-                  <span className="text-xs text-blue-200">(included all taxes)</span>
+                  <span className="text-xs text-blue-200 font-mono">(included all taxes)</span>
                 </p>
                 
                 <button
@@ -116,7 +116,7 @@ const Product2 = () => {
                   <span className="absolute flex items-center justify-center w-full h-full text-gray-400 transition-all duration-300 transform group-hover:translate-x-full ease">
                     Add to cart
                   </span>
-                  <span className="relative invisible">Add to cart</span>
+                  <span className="relative invisible font-mono">Add to cart</span>
                 </button>
               </div>
             </motion.div>

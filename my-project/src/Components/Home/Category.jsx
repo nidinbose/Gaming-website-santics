@@ -36,7 +36,7 @@ const Category = () => {
 
   return (
     <div className="relative bg-white">
-      <h1 className="text-black text-center text-5xl font-bold py-4 xl:pt-[12vh] font-roboto">EXPLORE OUR PRODUCTS</h1>
+      <h1 className="text-black text-center text-5xl font-bold py-4 xl:pt-[12vh] font-mono">EXPLORE OUR PRODUCTS</h1>
       
       {/* Scroll Left Button */}
       <button

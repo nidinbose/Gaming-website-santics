@@ -40,15 +40,15 @@ const Cards = () => {
               className="w-full h-64 object-cover"
             />
             <div className="p-4 text-center">
-              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold">
+              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">
 ROG Maximus Z790
 Dark Hero</p>
-              <h2 className="text-sm medium text-gray-200">
+              <h2 className="text-xs medium text-gray-200 font-mono">
               The ROG Maximus Z790 Dark Hero boasts robust cooling, WiFi 7 and ample PCIe 5.0 slot for unmatched 
               performance, and it offers full compatibility with 14th Gen Intel® Core™ processors. Meanwhile, its 
               stealthy design is accentuated by new Polymo lighting, which illuminates the I/O shroud with a
                microstructural array of dual-layer RGB and adds a personalized touch of style to your gaming setup.
-                This platform delivers the power and connectivity that advanced AI PC applications demand.
+                
               </h2>
             </div>
           </div>
@@ -60,8 +60,8 @@ Dark Hero</p>
               className="w-full h-64 object-cover"
             />
             <div className="p-4 text-center">
-              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold">PREDATOR ORION 5000</p>
-              <h2 className="text-sm medium text-gray-200">
+              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">PREDATOR ORION 5000</p>
+              <h2 className="text-xs medium text-gray-200 font-mono">
               Keep frames high and temps low with the new ARGB-infused Predator FrostBlade™ 2.0 fans. Each of the fans includes 
               eight ARGB LEDS and utilize a static pressure design to optimize airflow while reducing vibration and noise via
                sealed rifle bearings and a new arc-shaped design along the ends of the fins.
@@ -75,8 +75,8 @@ Dark Hero</p>
               className="w-full h-64 object-cover"
             />
             <div className="p-4 text-center">
-              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold">6.2GHZ1 TURBO!</p>
-              <h2 className="text-sm medium text-gray-200">
+              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">6.2GHZ1 TURBO!</p>
+              <h2 className="text-xs medium text-gray-200 font-mono">
               NVIDIA® GeForce RTX™ 40 Series GPUs are beyond fast for gamers and creators.
                They're powered by the ultra-efficient NVIDIA Ada Lovelace architecture which
                delivers a quantum leap in both performance and AI-powered graphics. Experience 
@@ -92,8 +92,8 @@ Dark Hero</p>
               className="w-full h-64 object-cover"
             />
             <div className="p-4 text-center ">
-              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold">ROG Chariot X Core</p>
-              <h2 className="text-sm medium text-gray-200">
+              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">ROG Chariot X Core</p>
+              <h2 className="text-xs medium text-gray-200 font-mono">
               ROG Chariot X Core gaming chair in racing-car style, featuring an adjustable high-density foam headrest, memory-foam lumbar support, 4D armrests, tilt mechanism, durable class 4 gas lift, and durable premium PU leather for a premium gaming experience.
               </h2>
             </div>

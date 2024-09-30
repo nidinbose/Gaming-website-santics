@@ -13,6 +13,10 @@ export default {
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'], // Define the font here
       },
+      fontFamily:{
+        'mono': ['"jetBrains Mono"','monospace'],
+  
+      },
       keyframes: {
         rotate: {
           "0%": { transform: "rotate(0deg) scale(10)" },

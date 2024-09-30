@@ -119,7 +119,7 @@ const Navbar = () => {
           {navItems.map((item, index) => (
             <div key={index} className="relative">
               <button
-                className="inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-20 after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 hover:text-red-500"
+                className="inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-20 after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 hover:text-red-500 font-mono"
                 onClick={() => toggleDropdown(index)}
               >
                 {item.name}

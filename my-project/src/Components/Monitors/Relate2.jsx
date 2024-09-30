@@ -25,7 +25,7 @@ const Relate2 = () => {
   return (
     <div className="w-full bg-white/95 py-8 xl:p-20">
       <div className="">
-        <h1 className="text-center text-5xl font-bold mb-5">HOT PRODUCTS</h1>
+        <h1 className="text-center text-5xl font-bold mb-5 font-mono">HOT PRODUCTS</h1>
         <p className="text-center text-md font-semibold mt-7 mb-2 xl:mb-[8vh] text-red-500">
           View All Cases
         </p>
@@ -42,10 +42,10 @@ const Relate2 = () => {
                   className="w-full h-64 object-cover"
                 />
                 <div className="p-4 text-center">
-                  <p className="text-black text-2xl mb-5 mt-5 font-bold">
+                  <p className="text-black text-2xl mb-5 mt-5 font-bold font-mono">
                     {product.name}
                   </p>
-                  <h2 className="text-sm medium">
+                  <h2 className="text-xs medium font-mono">
                     {product.specifications}
                   </h2>
                   <p className="text-red-500 font-bold mt-4">

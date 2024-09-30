@@ -95,16 +95,16 @@ const ViewCase = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 lg:mb-5">
+            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 lg:mb-5 font-mono">
               {product.name}
             </h2>
-            <p className="text-md sm:text-lg text-blue-300 mb-2">{product.specifications}</p>
+            <p className="text-md sm:text-lg text-blue-300 mb-2 font-mono">{product.specifications}</p>
             <p className="text-sm sm:text-base md:text-lg text-gray-400 mb-5">{product.description}</p>
 
             {product.keyUses && (
               <ul className="list-disc list-inside mb-4 overflow-y-auto h-[25vh]">
                 {product.keyUses.split(",").map((use, index) => (
-                  <li key={index} className="text-gray-400 mb-2">
+                  <li key={index} className="text-gray-400 mb-2 font-mono">
                     {use.trim()}
                   </li>
                 ))}

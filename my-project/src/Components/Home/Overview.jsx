@@ -18,7 +18,7 @@ const Overview = () => {
     >
       {/* Title */}
       <motion.h3
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-blue-500 to-red-900 mb-4"
+        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-blue-500 to-red-900 mb-4 font-mono"
         initial={{ opacity: 0, x: -100 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 1.2 }}
@@ -38,7 +38,7 @@ const Overview = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-6 h-auto p-5"
+              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-mono font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-6 h-auto p-5"
               variants={slideInFromRight}
               initial="hidden"
               animate="visible"
@@ -48,7 +48,7 @@ const Overview = () => {
             </motion.h1>
 
             <motion.p
-              className="text-base md:text-lg text-white/40"
+              className="text-base md:text-lg text-white/40 font-mono sm:text-xs"
               variants={slideInFromRight}
               initial="hidden"
               animate="visible"
