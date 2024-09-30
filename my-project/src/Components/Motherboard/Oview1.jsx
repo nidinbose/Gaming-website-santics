@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const Oview1 = () => {
   return (
     <div className="container mx-auto p-4" 
-    style={{ backgroundImage: "url('/images/bgrog.png')" }}>
+    style={{ backgroundImage: "url('/images/bgog.png')" }}>
       {/* Heading */}
       <motion.h1
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-white xl:mb-[20vh] xl:mt-[10vh]"

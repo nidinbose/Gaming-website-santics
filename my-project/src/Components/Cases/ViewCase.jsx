@@ -157,73 +157,74 @@ const ViewCase = () => {
       </div>
 
       {/* Product Images */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-[70vw] xl:w-[60vw] items-center gap-4 xl:ml-[15vw] xl:mt-[20vh]">
-        {[product.link1, product.link2, product.link3, product.link4, product.link5, product.link6]
-          .filter((link) => link)
-          .map((link, index) => (
-            <motion.div
-              key={index}
-              className="relative overflow-hidden"
-              whileHover={{ scale: 1.05 }} // Slightly reduce the scale for a smoother effect
-            >
-              <motion.img
-                src={link}
-                alt={`Product Image ${index + 1}`}
-                className="object-cover w-full h-full transition-transform duration-500 ease-in-out hover:scale-110"
-              />
-            </motion.div>
-          ))}
-      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-[70vw] xl:w-[60vw] items-center gap-7 xl:ml-[15vw] xl:mt-[20vh]">
+  {[product.link1, product.link2, product.link3, product.link4, product.link5, product.link6]
+    .filter((link) => link)
+    .map((link, index) => (
+      <motion.div
+        key={index}
+        className="relative overflow-hidden border border-white/20 "
+        whileHover={{ scale: 1.05 }} 
+      >
+        <motion.img
+          src={link}
+          alt={`Product Image ${index + 1}`}
+          className="object-cover w-full h-full transition-transform duration-500 ease-in-out hover:scale-110 rounded-lg"
+        />
+      </motion.div>
+    ))}
+</div>
+
 
       {/* Parallax Scrolling Sections */}
       <div className="min-h-screen flex flex-col space-y-20 bg-transparent xl:mt-[30vh] mt-20">
-        {/* Video Section */}
-        <motion.div
-          style={{ y: videoY }}
-          className="relative h-screen flex justify-center items-center bg-black"
-        >
-          <video
-            src={product.video} // Ensure this link is correct
-            autoPlay
-            muted
-            loop
-            className="object-cover w-full h-full"
-          />
-        </motion.div>
+  {/* Video Section */}
+  <motion.div
 
-        {/* Image 1 */}
-        <motion.div style={{ y: image1Y }} className="h-screen bg-transparent">
-          <div className="flex justify-center items-center h-full">
-            <img
-              src={product.bnn1} // Ensure product.bnn1 exists
-              alt="Image 1"
-              className="w-full h-auto mb-10 shadow-lg"
-            />
-          </div>
-        </motion.div>
+    className="relative flex justify-center items-center bg-black h-[80vh]" 
+  >
+    <video
+      src={product.video} 
+      autoPlay
+      muted
+      loop
+      className="object-cover w-full h-full"
+    />
+  </motion.div>
 
-        {/* Image 2 */}
-        <motion.div style={{ y: image2Y }} className="h-screen bg-transparent">
-          <div className="flex justify-center items-center h-full">
-            <img
-              src={product.bnn2} // Ensure product.bnn2 exists
-              alt="Image 2"
-              className="w-full h-auto rounded-xl shadow-lg"
-            />
-          </div>
-        </motion.div>
+  {/* Image 1 */}
+  <motion.div className="bg-transparent">
+    <div className="flex justify-center items-center py-20">
+      <img
+        src={product.bnn1} 
+        alt="Image 1"
+        className="w-full h-auto mb-10 shadow-lg"
+      />
+    </div>
+  </motion.div>
 
-        {/* Image 3 */}
-        <motion.div style={{ y: image3Y }} className="h-screen bg-transparent">
-          <div className="flex justify-center items-center h-full">
-            <img
-              src={product.bnn3} // Ensure product.bnn3 exists
-              alt="Image 3"
-              className="w-full h-auto rounded-xl shadow-lg"
-            />
-          </div>
-        </motion.div>
-      </div>
+  {/* Image 2 */}
+  <motion.div className="bg-transparent">
+    <div className="flex justify-center items-center py-20">
+      <img
+        src={product.bnn2} 
+        alt="Image 2"
+        className="w-full h-auto rounded-xl shadow-lg"
+      />
+    </div>
+  </motion.div>
+
+  {/* Image 3 */}
+  <motion.div className="bg-transparent">
+    <div className="flex justify-center items-center py-20">
+      <img
+        src={product.bnn3}
+        alt="Image 3"
+        className="w-full h-auto rounded-xl shadow-lg"
+      />
+    </div>
+  </motion.div>
+</div>
     </div>
   );
 };
