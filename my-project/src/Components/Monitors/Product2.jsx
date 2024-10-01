@@ -86,7 +86,7 @@ const Product2 = () => {
                   {product.name}
                   <span className="absolute left-0 bottom-0 h-[1px] bg-gray-300 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out w-full"></span>
                 </h2>
-                <p className="text-sm text-blue-200 mb-2 h-14 overflow-y-auto font-mono">
+                <p className="text-sm text-blue-200 mb-2 h-14 overflow-y-auto font-roboto">
                   {product.specifications}
                 </p>
                 <div className="flex-grow" />

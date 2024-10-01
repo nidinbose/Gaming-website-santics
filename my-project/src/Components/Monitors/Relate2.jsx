@@ -42,10 +42,10 @@ const Relate2 = () => {
                   className="w-full h-64 object-cover"
                 />
                 <div className="p-4 text-center">
-                  <p className="text-black text-2xl mb-5 mt-5 font-bold font-mono">
+                  <p className="text-black text-2xl mb-5 mt-5 font-bold font-roboto">
                     {product.name}
                   </p>
-                  <h2 className="text-xs medium font-mono">
+                  <h2 className="text-xs medium font-roboto">
                     {product.specifications}
                   </h2>
                   <p className="text-red-500 font-bold mt-4">

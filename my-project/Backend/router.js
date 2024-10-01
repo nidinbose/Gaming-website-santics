@@ -39,7 +39,7 @@ router.post('/increment-cart-item', request.incrementCart);
 router.post('/decrement-cart-item', request.decrementCart);
 
 router.route('/addaddress').post(request.addAddress)
-router.route('/getaddress').get(request.getAddress)
+router.route('/getaddress/:userId').get(request.getAddress)
 
 
 

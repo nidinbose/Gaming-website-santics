@@ -25,7 +25,7 @@ const Oview3 = () => {
   whileTap={{ scale: 0.95 }}
   initial={{ y: -100, opacity: 0 }}  
   whileInView={{ y: 0, opacity: 1 }}
-  transition={{ duration: 0.5, delay: 0.3 }} 
+  transition={{ duration: 0.8, delay: 0.3 }} 
 >
   <img
     src="https://dlcdnwebimgs.asus.com/gain/8677ED26-0EA9-4DD8-B20B-D038C17E2A29/w1000/h732"

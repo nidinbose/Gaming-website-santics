@@ -636,13 +636,22 @@ export async function addAddress(req,res){
 }
 
 
-export async function getAddress(req,res){
-  try{
+export async function getAddress(req, res) {
+  try {
+    
+    const userId = req.user?.userId || req.params.userId;
 
-      const data=await addressSchema.find();
-      res.status(200).send(data)
-      console.log(data);
-  }catch (error){
-      res.status(500).send(error)
+  
+    const data = await addressSchema.findOne({ userId: userId });
+
+    if (data) {
+      return res.status(200).send(data);
+    } else {
+      return res.status(404).send({ message: "Address not found" });
+    }
+
+  } catch (error) {
+       console.error(error);
+    return res.status(500).send({ message: "Server error", error });
   }
 }
