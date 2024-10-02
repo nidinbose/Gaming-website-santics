@@ -100,8 +100,8 @@ const Navbar = () => {
     {
       name: "Service",
       links: [
-        { name: "Service 1", path: "/service1" },
-        { name: "Service 2", path: "/service2" },
+        { name: "Orderes", path: "/orderes" },
+        
       ],
     },
   ];

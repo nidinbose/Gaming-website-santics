@@ -36,6 +36,7 @@ import ForgotPassword from './Components/Loginpage/ForgotPassword'
 import UserResetPassword from './Components/Loginpage/ResetPassword'
 import Address from './Components/PaymentGateway/Address'
 import CardPayment from './Components/PaymentGateway/CardPayment'
+import Orderes from './Components/PaymentGateway/Orderes'
 
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
 
         <Route path="/address/:userId" Component={Address}/>
         <Route path="/cardpayment" Component={CardPayment}/>
+        <Route path="/orderes" Component={Orderes}/>
         
         
       

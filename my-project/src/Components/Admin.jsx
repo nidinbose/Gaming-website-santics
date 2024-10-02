@@ -4,8 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
 import axios from "axios";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from "chart.js";
+import { MdProductionQuantityLimits } from "react-icons/md";
+import { BiPackage } from "react-icons/bi";
+import { LuPackageOpen } from "react-icons/lu";
+import { FaCircleUser } from "react-icons/fa6";
 
-// Register Chart.js components
+
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
 const Admin = () => {
@@ -89,8 +93,8 @@ const Admin = () => {
       {
         label: "Sales",
         data: [30, 45, 50, 60, 70, 90, 100], // Example data
-        backgroundColor: "pink-500",
-        borderColor: "#6F9A2E",
+        backgroundColor: "#EF0107",
+        borderColor: "#EF0107",
         borderWidth: 1,
       },
     ],
@@ -107,82 +111,39 @@ const Admin = () => {
       >
         <div className="p-6 bg-white/10">
           <Link to="/admin" className="flex items-center space-x-2">
-            <img src="/images/pl.png" alt="Logo" className="h-12" />
+            <img src="/images/Santics.png" alt="Logo" className="h-12 mr-3" />
             <span className="text-white text-2xl font-bold">Admin</span>
           </Link>
           <nav className="mt-10">
             <Link
               to="/admin/addproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#A0CE4E] mt-2"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 "
             >
-              Add Product
+              <MdProductionQuantityLimits className="text-center h-6 w-7" />
+              <p>Add Product</p>
             </Link>
             <Link
               to="/admin/productslist"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-white text-[#A0CE4E] mt-2"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 mt-2"
             >
-              Products List
+              <BiPackage className="text-center h-6 w-7" />
+             <p> Products List</p>
             </Link>
             <Link
               to="/admin/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 mt-2"
             >
-              View Products
+            <LuPackageOpen className="text-center h-6 w-7" />
+              Order List's
             </Link>
             <Link
               to="/admin/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 mt-2"
             >
-              View Products
+              <FaCircleUser className="text-center h-6 w-7" />
+              User Lists
             </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
-            <Link
-              to="/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#A0CE4E] hover:text-white text-[#A0CE4E] mt-2"
-            >
-              View Products
-            </Link>
+       
           </nav>
         </div>
 
@@ -248,11 +209,10 @@ const Admin = () => {
             <h1 className="text-3xl font-bold text-white"> Users: {userCount !== null ? userCount : "Loading..."}</h1>
           </div>
         </div>
-
-        {/* Charts Section */}
-        <div className="mt-8 space-y-8 mt-5">
-          <div className="flex flex-col md:flex-row md:space-x-8">
-          <div className="flex-1 p-6">
+{/* Charts Section */}
+<div className="mt-8 space-y-8">
+  <div className="flex flex-col md:flex-row md:space-x-8">
+    <div className="flex-1 p-6">
       {/* Statistics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Card 1 */}
@@ -293,16 +253,17 @@ const Admin = () => {
       </div>
     </div>
 
-            <div className="bg-white/10 p-6 rounded-lg shadow-lg flex-1 text-white">
-              <h2 className="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-blue-400 to-red-900">
-                Monthly Sales
-              </h2>
-              <div className="w-full h-64 md:h-80 bg-white/10">
-                <Bar data={barData} />
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="bg-white/10 p-6 rounded-lg shadow-lg flex-1 text-white block">
+      <h2 className="text-2xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-blue-400 to-red-900">
+        Monthly Sales
+      </h2>
+      <div className="w-full h-64 md:h-80 bg-white/10 block">
+        <Bar data={barData} />
+      </div>
+    </div>
+  </div>
+</div>
+
       </div>
       
 
