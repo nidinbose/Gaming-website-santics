@@ -54,7 +54,12 @@ const Overview2 = () => {
               animate="visible"
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              ROG (Republic of Gamers) is a gaming brand developed by ASUS, focused on creating high-performance hardware and gear specifically for gamers and PC enthusiasts...
+             The only set up you’ll ever need. Choose from the all-in-one approach or pick up a frame and outfit it yourself. <br />
+             Watch the latest Acer keynote stream, and check out the archive of special event announcements for our products and services. <br />
+             <br />
+             ACCELERATE GROWTH WITH THE POWER OF ACER'S BUSINESS DEVICES
+             Get a business monitor, wireless keyboard and mouse at just Rs 1999 with purchase of a TravelMate 
+             <br />business laptop. The perfect combination to expand your views and productivity.
             </motion.p>
           </motion.div>
 
