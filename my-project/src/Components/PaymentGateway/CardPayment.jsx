@@ -2,204 +2,159 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const CardPayment = ({ userId, token }) => {
+const CardPayment = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [addresses, setAddresses] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
-  // Fetch addresses and cart items from API
+  // Retrieve userId and token from localStorage
+  const userId = localStorage.getItem('userId'); // Ensure 'userId' is set during login
+  const token = localStorage.getItem('token'); // Ensure 'token' is set during login
+
+  const getCartItems = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const items = response.data.items;
+      setCartItems(items);
+      calculateTotal(items);
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+      if (error.response && error.response.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+
+  const calculateTotal = (items) => {
+    const total = items.reduce((sum, item) => sum + item.price, 0);
+    setTotalPrice(total);
+  };
+
   useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const addressResponse = await axios.get(`http://localhost:3003/api/getaddress/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setAddresses(Array.isArray(addressResponse.data) ? addressResponse.data : [addressResponse.data]);
-      } catch (error) {
-        console.error("Error fetching addresses:", error);
-        if (error.response && error.response.status === 401) {
-          navigate("/login");
-        }
-      }
-    };
-
-    const fetchCartItems = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCartItems(response.data.items);
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-        if (error.response && error.response.status === 401) {
-          navigate("/login");
-        }
-      }
-    };
-
-    fetchAddresses();
-    fetchCartItems();
-  }, [token, userId, navigate]);
-
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-  const handleRemoveItem = (index) => {
-    // Logic for removing an item from the cart
-  };
-
-  const handleQuantityChange = (index, change) => {
-    // Logic for updating the quantity of an item in the cart
-  };
-
-  const handleCheckout = () => {
-    // Logic for handling checkout
-  };
-
+    if (userId && token) {
+      getCartItems();
+    } else {
+      navigate("/login");
+    }
+  }, [userId, token, navigate]);
   return (
-    <div className="h-screen flex items-start justify-center bg-gray-100">
-      <section className="w-full max-w-4xl">
-        <div className="bg-white rounded-lg shadow-lg">
-          <div className="p-8">
-            <div className="lg:flex">
-              {/* Left side (Product List) */}
-              <div className="lg:w-7/12 px-5 py-4">
-                <h3 className="text-3xl text-center font-bold uppercase mb-5">
-                  Your Products
-                </h3>
-                {cartItems.map((item, index) => (
-                  <div key={index} className="flex items-center mb-5">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.name}
-                      className="w-36"
-                    />
-                    <div className="flex-grow ml-4">
-                      <button
-                        className="float-right text-black"
-                        onClick={() => handleRemoveItem(index)}
-                      >
-                        &times;
-                      </button>
-                      <h5 className="text-primary text-xl">{item.name}</h5>
-                      <p className="text-gray-600">Color: {item.color}</p>
-                      <div className="flex items-center mt-2">
-                        <p className="font-bold mr-5">${item.price}</p>
-                        <div className="flex items-center border rounded-lg">
-                          <button
-                            className="px-2"
-                            onClick={() => handleQuantityChange(index, -1)}
-                          >
-                            -
-                          </button>
-                          <input
-                            type="number"
-                            className="w-12 text-center outline-none"
-                            min="1"
-                            value={item.quantity}
-                            readOnly
-                          />
-                          <button
-                            className="px-2"
-                            onClick={() => handleQuantityChange(index, 1)}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                <hr className="border-t-2 border-blue-500 my-4" />
-                <div className="flex justify-between">
-                  <p className="font-bold">Discount:</p>
-                  <p className="font-bold">$95</p>
+    <div className="font-[sans-serif] bg-white/10 p-4 lg:max-w-7xl max-w-xl mx-auto">
+      <div className="grid lg:grid-cols-3 gap-10">
+        {/* Left Section */}
+        <div className="lg:col-span-2 max-lg:order-1">
+          <div className="flex items-start">
+            <div className="w-full">
+              <div className="flex items-center w-full">
+                <div className="w-8 h-8 shrink-0 mx-[-1px] bg-emerald-500 p-1.5 flex items-center justify-center rounded-full">
+                  <span className="text-sm text-white font-bold">1</span>
                 </div>
-                <div className="flex justify-between p-2 mt-2 bg-blue-100">
-                  <h5 className="font-bold">Total:</h5>
-                  <h5 className="font-bold">${totalPrice}</h5>
-                </div>
+                <div className="w-full h-[3px] mx-4 rounded-lg bg-emerald-500"></div>
               </div>
-
-              {/* Right side (Address Summary) */}
-              <div className="lg:w-5/12 px-5 py-4">
-                <h3 className="text-3xl text-center font-bold uppercase mb-5">
-                  Saved Addresses
-                </h3>
-                {addresses.length > 0 ? (
-                  addresses.map((addr, index) => (
-                    <div key={index} className="p-4 border rounded-md border-gray-300 mb-2">
-                      <h4 className="font-bold text-red-500">{addr.name} {addr.lastName}</h4>
-                      <p className="text-sm text-gray-600">{addr.addressLine}</p>
-                      <p className="text-sm text-gray-600">{addr.city}, {addr.state} {addr.zipCode}</p>
-                      <p className="text-sm text-gray-600">Phone: {addr.phone}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-600">No addresses found. Please add one.</p>
-                )}
+              <div className="mt-2 mr-4">
+                <h6 className="text-sm font-bold text-white/40">Shipping</h6>
               </div>
             </div>
 
-            {/* Payment Section */}
-            <div className="mt-8">
-              <h3 className="text-3xl text-center font-bold uppercase mb-5">Payment</h3>
-              <form className="mb-5">
-                <div className="mb-5">
-                  <label className="block mb-2">Card Number</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2 border rounded-lg"
-                    defaultValue="1234 5678 9012 3457"
-                  />
+            <div className="w-full">
+              <div className="flex items-center w-full">
+                <div className="w-8 h-8 shrink-0 mx-[-1px] bg-gray-600 p-1.5 flex items-center justify-center rounded-full">
+                  <span className="text-sm text-white font-bold">2</span>
                 </div>
+                <div className="w-full h-[3px] mx-4 rounded-lg bg-red-600"></div>
+              </div>
+              <div className="mt-2 mr-4">
+                <h6 className="text-sm font-bold text-white/40">Billing</h6>
+              </div>
+            </div>
 
-                <div className="mb-5">
-                  <label className="block mb-2">Name on Card</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2 border rounded-lg"
-                    defaultValue="John Smith"
-                  />
+            <div>
+              <div className="flex items-center">
+                <div className="w-8 h-8 shrink-0 mx-[-1px] bg-red-600 p-1.5 flex items-center justify-center rounded-full">
+                  <span className="text-sm text-white font-bold">3</span>
                 </div>
-
-                <div className="flex gap-5">
-                  <div className="w-1/2">
-                    <label className="block mb-2">Expiration</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-2 border rounded-lg"
-                      defaultValue="01/22"
-                      placeholder="MM/YYYY"
-                    />
-                  </div>
-                  <div className="w-1/2">
-                    <label className="block mb-2">CVV</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-2 border rounded-lg"
-                      placeholder="&#9679;&#9679;&#9679;"
-                      defaultValue="&#9679;&#9679;&#9679;"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  className="w-full py-2 mt-5 bg-blue-500 text-white font-bold rounded-lg"
-                  onClick={handleCheckout}
-                  type="button"
-                >
-                  Buy now
-                </button>
-              </form>
+              </div>
+              <div className="mt-2">
+                <h6 className="text-sm font-bold text-white/40">Confirm</h6>
+              </div>
             </div>
           </div>
+
+          <form className="mt-16 max-w-lg">
+            <h2 className="text-2xl font-extrabold text-red-600">Payment method</h2>
+
+            <div className="grid gap-4 sm:grid-cols-2 mt-8">
+              <div className="flex items-center">
+                <input type="radio" className="w-5 h-5 cursor-pointer bg-red-600" id="card" defaultChecked />
+                <label htmlFor="card" className="ml-4 flex gap-2 cursor-pointer bg-red">
+                  <img src="https://readymadeui.com/images/visa.webp" className="w-12" alt="Visa Card" />
+                  <img src="https://readymadeui.com/images/american-express.webp" className="w-12" alt="Amex Card" />
+                  <img src="https://readymadeui.com/images/master.webp" className="w-12" alt="MasterCard" />
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input type="radio" className="w-5 h-5 cursor-pointer" id="paypal" />
+                <label htmlFor="paypal" className="ml-4 flex gap-2 cursor-pointer">
+                  <img src="https://readymadeui.com/images/paypal.webp" className="w-20" alt="PayPal" />
+                </label>
+              </div>
+            </div>
+
+            <div className="grid gap-4 mt-8">
+              <input type="text" placeholder="Cardholder's Name"
+                className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b-2 focus:border-gray-800 outline-none" />
+
+              <div className="flex bg-white border-b-2 focus-within:border-gray-800 overflow-hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-12 ml-3" viewBox="0 0 291.764 291.764">
+                  <path fill="#2394bc" d="..."></path>
+                  <path fill="#efc75e" d="..."></path>
+                </svg>
+                <input type="number" placeholder="Card Number"
+                  className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm outline-none" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <input type="date" placeholder="EXP."
+                  className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b-2 focus:border-gray-800 outline-none" />
+                <input type="number" placeholder="CVV"
+                  className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b-2 focus:border-gray-800 outline-none" />
+              </div>
+
+              <div className="flex items-center">
+                <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 shrink-0 text-red-600 focus:ring-red-600 border-gray-300 rounded bg-red" />
+                <label htmlFor="remember-me" className="ml-3 block text-sm text-white/40 ">
+                  I accept the <a href="javascript:void(0);" className="text-red-600 font-semibold hover:underline ml-1">Terms and Conditions</a>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-4 mt-8">
+              <button type="button" className="min-w-[150px] px-6 py-3.5 text-sm bg-white/60 text-gray-800 rounded-md hover:bg-red-600">Back</button>
+              <button type="button" className="min-w-[150px] px-6 py-3.5 text-sm bg-gray-800 text-white rounded-md hover:bg-[#111]">Pay $750</button>
+            </div>
+          </form>
         </div>
-      </section>
+
+        {/* Right Section */}
+        <div className="bg-white/10 p-6 rounded-md">
+          <h2 className="text-4xl font-extrabold text-red-600">INR : {totalPrice}</h2>
+          <ul className="text-white/50 mt-8 space-y-4">
+            {cartItems.map((item) => (
+              <li key={item.id} className="flex flex-wrap gap-4 text-sm">
+                {item.name} <span className="ml-auto font-bold">INR : {item.price}</span>
+              </li>
+            ))}
+            <li className="flex flex-wrap gap-4 text-sm font-bold border-t-2 pt-4">
+              Total <span className="ml-auto text-red-600">INR : {totalPrice.toFixed(2)}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default CardPayment;
+

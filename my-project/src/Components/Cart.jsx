@@ -187,7 +187,7 @@ const Cart = () => {
               </div>
               <div className="flex items-center justify-between text-sm text-gray-800 mb-6">
                 <span className="font-bold text-white/60">Taxes</span>
-                <span className="font-bold text-white/60">INR : 18.76</span>
+                <span className="font-bold text-white/60">INR : included rate</span>
               </div>
               <div className="flex items-center justify-between text-sm text-gray-800 mb-6">
                 <span className="font-bold text-white/60">GST</span>
@@ -204,7 +204,7 @@ const Cart = () => {
               <hr className="border-gray-300 mb-6" />
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold text-white/60">Total</h2>
-                <span className="font-bold text-lg text-red-500">INR : {(total + 18.76).toFixed(2)}</span>
+                <span className="font-bold text-lg text-red-500">INR : {(total + 0).toFixed(2)}</span>
               </div>
             <Link to={`/address/${userId}`}>  <button className="w-full py-3 bg-red-600 text-white font-bold rounded-md">
                 Continue to checkout

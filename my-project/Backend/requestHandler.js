@@ -641,7 +641,7 @@ export async function getAddress(req, res) {
     const userId = req.user?.userId || req.params.userId;
 
   
-    const data = await addressSchema.findOne({ userId: userId });
+    const data = await addressSchema.find({ userId: userId });
 
     if (data) {
       return res.status(200).send(data);
@@ -654,3 +654,6 @@ export async function getAddress(req, res) {
     return res.status(500).send({ message: "Server error", error });
   }
 }
+
+
+
