@@ -618,19 +618,18 @@ export async function productCount(req, res) {
 
 export async function addAddress(req,res){
   try{
-      console.log(req.body);
-      const {...addresses} = req.body;
-                
-      await addressSchema
-      .create({...addresses})
-          .then(()=>{
-              res.status(200).send({msg:"sucessfully created"})
-          })
+     const {userId,name,lastname,addressLine,city,state,zipCode,phone}=req.body
+       console.log(req.body);
+       
+     if(!(userId,name,lastname,addressLine,city,state,zipCode,phone))
+      return res.status(400).send("form error")
+
+     const data= await addressSchema.create({userId,name,lastname,addressLine,city,state,zipCode,phone}).then((data)=>{
+      return res.status(201)
+     }).send("created successfully",data)
+        console.log(data);
         
-          .catch((error)=>{
-              res.status(400).send({error:error})
-          });
-  }catch(error){
+    }catch(error){
       res.status(500).send(error)
   }
 }

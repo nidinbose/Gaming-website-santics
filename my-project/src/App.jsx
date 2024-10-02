@@ -35,6 +35,7 @@ import Footer from './Components/Footer'
 import ForgotPassword from './Components/Loginpage/ForgotPassword'
 import UserResetPassword from './Components/Loginpage/ResetPassword'
 import Address from './Components/PaymentGateway/Address'
+import CardPayment from './Components/PaymentGateway/CardPayment'
 
 
 function App() {
@@ -85,7 +86,11 @@ function App() {
         <Route path="/accs" Component={Accs}/>
         <Route path="/viewcase" Component={ViewCase}/>
         <Route path="/viewcase/:id" Component={ViewCase}/>
-        <Route path="/address" Component={Address}/>
+
+
+        <Route path="/address/:userId" Component={Address}/>
+        <Route path="/cardpayment" Component={CardPayment}/>
+        
         
       
          

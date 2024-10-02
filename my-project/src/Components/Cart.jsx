@@ -206,7 +206,7 @@ const Cart = () => {
                 <h2 className="text-lg font-bold text-white/60">Total</h2>
                 <span className="font-bold text-lg text-red-500">INR : {(total + 18.76).toFixed(2)}</span>
               </div>
-            <Link to={`/address`}>  <button className="w-full py-3 bg-red-600 text-white font-bold rounded-md">
+            <Link to={`/address/${userId}`}>  <button className="w-full py-3 bg-red-600 text-white font-bold rounded-md">
                 Continue to checkout
               </button></Link>
             </div>

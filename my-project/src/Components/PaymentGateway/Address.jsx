@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const Address = () => {
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [addresses, setAddresses] = useState([]);
+  const [addresses, setAddresses] = useState([]); // Updated to hold an array of addresses
   const [cartItems, setCartItems] = useState([]);
-  const token = localStorage.getItem("token"); // Assume token is stored in localStorage
-  const userId = localStorage.getItem("userId"); // Assume userId is stored in localStorage after login
-  const navigate = useNavigate(); // Add navigate for redirection
+  const token = localStorage.getItem("token");
+  const location = useLocation();
+  const userId = location.state?.userId || localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   // Fetch addresses and cart items from API
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const addressResponse = await axios.get("http://localhost:3003/api/getaddress", {
+        const addressResponse = await axios.get(`http://localhost:3003/api/getaddress/${userId}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Pass token in headers
+            Authorization: `Bearer ${token}`,
           },
         });
-        setAddresses(addressResponse.data);
+
+        // Set the fetched addresses directly
+        setAddresses(Array.isArray(addressResponse.data) ? addressResponse.data : [addressResponse.data]);
       } catch (error) {
         console.error("Error fetching addresses:", error);
         if (error.response && error.response.status === 401) {
@@ -31,12 +32,9 @@ const Address = () => {
 
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3003/api/cart/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setCartItems(response.data.items);
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -49,11 +47,6 @@ const Address = () => {
     fetchAddresses();
     fetchCartItems();
   }, [token, userId, navigate]);
-
-  // Handle address selection
-  const handleAddressSelection = (id) => {
-    setSelectedAddress(id);
-  };
 
   // Handle adding a new address
   const handleAddAddress = async (event) => {
@@ -73,10 +66,12 @@ const Address = () => {
     try {
       const response = await axios.post("http://localhost:3003/api/addaddress", newAddress, {
         headers: {
-          Authorization: `Bearer ${token}`, // Add token for secure request
+          Authorization: `Bearer ${token}`,
         },
       });
-      setAddresses([...addresses, response.data]); // Update addresses with the new one
+
+      // Update the addresses state with the new address
+      setAddresses((prevAddresses) => [...prevAddresses, response.data]);
     } catch (error) {
       console.error("Error adding address", error);
     }
@@ -107,14 +102,10 @@ const Address = () => {
                           Price <span className="float-right">{item.price}</span>
                         </li>
                         <li>
-                          Quantity{" "}
-                          <span className="float-right">{item.quantity}</span>
+                          Quantity <span className="float-right">{item.quantity}</span>
                         </li>
                         <li>
-                          Total Price{" "}
-                          <span className="float-right text-red-500">
-                            INR : {item.price * item.quantity}
-                          </span>
+                          Total Price <span className="float-right text-red-500">INR : {item.price * item.quantity}</span>
                         </li>
                       </ul>
                     </div>
@@ -126,11 +117,7 @@ const Address = () => {
               <h4 className="flex flex-wrap gap-4 text-base text-white">
                 Total{" "}
                 <span className="ml-auto">
-                  $
-                  {cartItems.reduce(
-                    (total, item) => total + item.price * item.quantity,
-                    0
-                  )}
+                  ${cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
                 </span>
               </h4>
             </div>
@@ -139,35 +126,24 @@ const Address = () => {
 
         {/* Address and form section */}
         <div className="max-w-4xl w-full h-max rounded-md px-4 py-8 sticky top-0 bg-white/20">
-          <h2 className="text-2xl font-bold text-red-500">
-            Complete your order
-          </h2>
+          <h2 className="text-2xl font-bold text-red-500">Complete your order</h2>
 
-          {/* Saved addresses */}
-          <div className="mt-8">
-            <h3 className="text-base text-gray-300 mb-4">Saved Addresses</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              {addresses.map((address) => (
-                <div
-                  key={address.id}
-                  className={`p-4 border rounded-md cursor-pointer ${
-                    selectedAddress === address.id
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-300"
-                  }`}
-                  onClick={() => handleAddressSelection(address.id)}
-                >
-                  <h4 className="font-bold text-red-500">{address.name}</h4>
-                  <p className="text-sm text-white/60">
-                    {address.addressLine}
-                  </p>
-                  <p className="text-sm text-white/60">
-                    {address.city}, {address.state} {address.zipCode}
-                  </p>
+          {/* Display the fetched addresses */}
+          {addresses.length > 0 ? (
+            <div className="mt-4 xl:w-96 w-auto">
+              <h3 className="text-base text-gray-300 mb-4">Saved Addresses</h3>
+              {addresses.map((addr, index) => (
+                <div key={index} className="p-4 border rounded-md border-gray-300 mb-2">
+                  <h4 className="font-bold text-red-500">{addr.name} {addr.lastName}</h4>
+                  <p className="text-sm text-white/60">{addr.addressLine}</p>
+                  <p className="text-sm text-white/60">{addr.city}, {addr.state} {addr.zipCode}</p>
+                  <p className="text-sm text-white/60">Phone: {addr.phone}</p>
                 </div>
               ))}
             </div>
-          </div>
+          ) : (
+            <p className="text-gray-300">No addresses found.</p>
+          )}
 
           {/* Add new address form */}
           <form className="mt-8" onSubmit={handleAddAddress}>
@@ -179,42 +155,49 @@ const Address = () => {
                   name="name"
                   placeholder="Name"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  required
                 />
                 <input
                   type="text"
                   name="lastName"
                   placeholder="Last Name"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  required
                 />
                 <input
                   type="text"
                   name="addressLine"
                   placeholder="Address Line"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  required
                 />
                 <input
                   type="text"
                   name="city"
                   placeholder="City"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  required
                 />
                 <input
                   type="text"
                   name="state"
                   placeholder="State"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  required
                 />
                 <input
                   type="number"
                   name="zipCode"
                   placeholder="Zip Code"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  required
                 />
                 <input
                   type="text"
                   name="phone"
                   placeholder="Phone number"
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  required
                 />
               </div>
 
@@ -225,13 +208,14 @@ const Address = () => {
                 >
                   Add Address
                 </button>
-               <Link> <button
-                
-                
-                className="block max-w-[300px] w-full ml-auto px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold text-center rounded-full"
-              >
-                Checkout
-              </button></Link>
+                <Link to="/cardpayment">
+                  <button
+                    type="button" // Change to button to prevent form submission
+                    className="block max-w-[300px] w-full ml-auto px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold text-center rounded-full"
+                  >
+                    Checkout 
+                  </button>
+                </Link>
               </div>
             </div>
           </form>
