@@ -18,7 +18,7 @@ const CartComponent = () => {
     } catch (error) {
       console.error("Error fetching cart items:", error);
       if (error.response && error.response.status === 401) {
-        navigate("/login");
+        navigate("/login");z
       }
     }
   };
