@@ -86,7 +86,7 @@ const Navbar = () => {
     {
       name: "Download",
       links: [
-        { name: "Download 1", path: "/download1" },
+        { name: "Wallpapers", path: "/download" },
         { name: "Download 2", path: "/download2" },
       ],
     },
