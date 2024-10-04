@@ -98,9 +98,10 @@ const Navbar = () => {
       ],
     },
     {
-      name: "Service",
+      name: "Orderes",
       links: [
-        { name: "Orderes", path: "/orderes" },
+        { name: "Current orderes", path: "/orderes" },
+        { name: "Orderes History", path: "/orderes" },
         
       ],
     },
