@@ -17,7 +17,7 @@ const Cards = () => {
     <div
       className="w-full h-full py-8 xl:p-20"
       style={{
-        backgroundImage: "url('https://i.etsystatic.com/41031696/r/il/d9cf45/5321081475/il_fullxfull.5321081475_apn6.jpg')", 
+        backgroundImage: "url('https://wallpapers.com/images/hd/purple-gaming-nepi2tnxp6g0mvz9.jpg')", 
         backgroundSize: 'cover', 
         backgroundPosition: 'center', 
         backgroundAttachment: 'fixed',
@@ -33,7 +33,7 @@ const Cards = () => {
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
           {/* Card 1 */}
-          <div className="bg-white/10 overflow-hidden p-10 rounded-lg shadow-lg"> 
+          <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg"> 
             <img
               src="https://dlcdnwebimgs.asus.com/gain/3290BA3F-4B88-4C55-AF07-90C96EABA774/w1000/h732"
               alt="Product 1"
@@ -53,7 +53,7 @@ Dark Hero</p>
             </div>
           </div>
           {/* Repeat similar cards for Card 2, 3, and 4 */}
-          <div className="bg-white/10 overflow-hidden p-10 rounded-lg shadow-lg">
+          <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
               src="https://images.acer.com/is/image/acer/Predator-Orion-7000-Homepage-Photo?$responsive$"
               alt="Product 2"
@@ -68,7 +68,7 @@ Dark Hero</p>
               </h2>
             </div>
           </div>
-          <div className="bg-white/10 overflow-hidden p-10 rounded-lg shadow-lg">
+          <div className="bg-white/10  hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
               src="https://www.predatorstorage.com/u_file/fileUpload/2023-06/01/0.png"
               alt="Product 3"
@@ -85,7 +85,7 @@ Dark Hero</p>
               </h2>
             </div>
           </div>
-          <div className="bg-white/10 overflow-hidden p-10 rounded-lg shadow-lg">
+          <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
               src="https://dlcdnwebimgs.asus.com/gain/93A45483-9989-49EE-84B1-DA1566F31354/w382"
               alt="Product 4"
