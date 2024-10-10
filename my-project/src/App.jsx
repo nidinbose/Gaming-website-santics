@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Home from './Components/Home'
 import Navbar from './Components/Navbar'
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import {BrowserRouter,Routes,Route,useLocation} from 'react-router-dom'
 import Cases from './Components/Cases'
 import MotherBoard from './Components/MotherBoard'
 import Monitors from './Components/Monitors'
@@ -40,85 +40,78 @@ import Orderes from './Components/PaymentGateway/Orderes'
 import Download from './Components/Navbar/Downlord'
 
 
-function App() {
-  const [count, setCount] = useState(0)
+
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+
+  const adminRoutes = [
+    '/adminregester',
+    '/adminlogin',
+    '/adminforgotpassword',
+    '/adminresetpassword',
+    '/admin',
+    '/admin/addproducts',
+    '/admin/viewproducts/:id',
+    '/admin/productslist',
+    '/admin/editproducts/:id',
+  ];
+
+  const isAdminRoute = adminRoutes.some((route) => location.pathname.startsWith(route));
 
   return (
     <>
   
-      <BrowserRouter>
-      <Navbar/>
+      {!isAdminRoute && <Navbar />}
       <Routes>
+        <Route path="/adminregester" Component={AdminRegester} />
+        <Route path="/adminlogin" Component={AdminLogin} />
+        <Route path="/adminforgotpassword" Component={AdminForgotPassword} />
+        <Route path="/adminresetpassword" Component={AdminResetPassword} />
+        <Route path="/admin" Component={Admin} />
+        <Route path="/admin/addproducts" Component={AddProducts} />
+        <Route path="/admin/viewproducts/:id" Component={ViewProducts} />
+        <Route path="/admin/productslist" Component={ProductList} />
+        <Route path="/admin/editproducts/:id" Component={EditProducts} />
 
+        <Route path="/" Component={Home} />
+        <Route path="/signup" Component={Signup} />
+        <Route path="/login" Component={Login} />
+        <Route path="/home" Component={UserView} />
+        <Route path="/forgotpassword" Component={ForgotPassword} />
+        <Route path="/resetpassword" Component={ResetPassword} />
+        <Route path="/userresetpassword" Component={UserResetPassword} />
 
-      <Route path="/adminregester" Component={AdminRegester}/>
-      <Route path="/adminlogin" Component={AdminLogin}/>
-        <Route path="/adminforgotpassword" Component={AdminForgotPassword}/>
-        <Route path="/adminresetpassword" Component={AdminResetPassword}/>
-        <Route path="/admin" Component={Admin}/>
-        <Route path="/admin/addproducts" Component={AddProducts}/>
-        <Route path="/admin/viewproducts/:id" Component={ViewProducts}/>
-        <Route path="/admin/productslist" Component={ProductList}/>
-        <Route path="/admin/editproducts/:id" Component={EditProducts}/>
-   
-        
-       
-        <Route path="/" Component={Home}/>
-        <Route path="/signup" Component={Signup}/>
-        <Route path="/login" Component={Login}/>
-        <Route path="/home" Component={UserView}/>
-        <Route path="/forgotpassword" Component={ForgotPassword}/>
-        <Route path="/resetpassword" Component={ResetPassword}/>
-        <Route path="/userresetpassword" Component={UserResetPassword}/>
-     
-       
+        <Route path="/cart" Component={Cart} />
+        <Route path="/cases" Component={Cases} />
+        <Route path="/motherboard" Component={MotherBoard} />
+        <Route path="/monitors" Component={Monitors} />
+        <Route path="/cpu" Component={Cpu} />
+        <Route path="/chair" Component={Chair} />
+        <Route path="/gpu" Component={Gpu} />
+        <Route path="/psu" Component={Psu} />
+        <Route path="/keyboard" Component={Keyboard} />
+        <Route path="/audio" Component={Audio1} />
+        <Route path="/accs" Component={Accs} />
+        <Route path="/viewcase" Component={ViewCase} />
+        <Route path="/viewcase/:id" Component={ViewCase} />
 
-
-        
-        <Route path="/cart" Component={Cart}/>
-        <Route path="/cases" Component={Cases}/>
-        <Route path="/motherboard" Component={MotherBoard}/>
-        <Route path="/monitors" Component={Monitors}/>
-        <Route path="/cpu" Component={Cpu}/>
-        <Route path="/chair" Component={Chair}/>
-        <Route path="/gpu" Component={Gpu}/>
-        <Route path="/psu" Component={Psu}/>
-        <Route path="/keyboard" Component={Keyboard}/>
-        <Route path="/audio" Component={Audio1}/>
-        <Route path="/accs" Component={Accs}/>
-        <Route path="/viewcase" Component={ViewCase}/>
-        <Route path="/viewcase/:id" Component={ViewCase}/>
-
-
-        <Route path="/address/:userId" Component={Address}/>
-        <Route path="/cardpayment" Component={CardPayment}/>
-        <Route path="/orderes" Component={Orderes}/>
-        <Route path="/download" Component={Download}/>
-
-        
-        
-      
-         
-   
-        
-     
-           
-
-      
-
-
-        
-
-
-
-
-        
+        <Route path="/address/:userId" Component={Address} />
+        <Route path="/cardpayment" Component={CardPayment} />
+        <Route path="/orderes" Component={Orderes} />
+        <Route path="/download" Component={Download} />
       </Routes>
-      <Footer/>
-      </BrowserRouter>
-   
+      {!isAdminRoute && <Footer />}
     </>
-  )
+  ) 
 }
 
 export default App
