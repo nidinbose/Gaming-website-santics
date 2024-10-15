@@ -115,7 +115,7 @@ const Navbar = () => {
           <img src={`/images/Santics.png`} alt="Logo" className="h-12 w-auto" />
         </div></Link>
 
-        {/* Desktop Nav Links */}
+        
         <div className="hidden md:flex space-x-12">
           {navItems.map((item, index) => (
             <div key={index} className="relative">
