@@ -40,6 +40,7 @@ const Product = () => {
         name: product.name,
         price: product.price, 
         imageLink: product.imagelink,
+        stock:product.stock
       };
 
       console.log(data);

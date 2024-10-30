@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,Suspense} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartComponent from "./Navbar/Cartdrop";
@@ -50,12 +50,10 @@ const Navbar = () => {
     }
   };
 
-  // Toggle mobile menu
-  const toggleMobileMenu = () => {
+    const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Toggle dropdown for desktop menu
   const toggleDropdown = (index) => {
     setIsDropdownOpen(isDropdownOpen === index ? null : index);
   };
@@ -106,6 +104,7 @@ const Navbar = () => {
       ],
     },
   ];
+  const SlUserFollow = React.lazy(() => import("react-icons/sl").then(module => ({ default: module.SlUserFollow })));
 
   return (
     <nav className="bg-black text-white shadow-md pb-1 pt-2">
@@ -127,23 +126,25 @@ const Navbar = () => {
               </button>
               {/* Dropdown */}
               <div
-                className={`absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 border-b-2 border-gray-200 z-50 transition-all ease-in-out duration-200 ${
-                  isDropdownOpen === index ? "block" : "hidden"
-                }`}
-              >
-                {item.links.map((link, i) => (
-                 <Link
-                 key={i}
-                 to={link.path}
-                 className="block px-4 py-2 text-sm text-gray-700 relative hover:text-red-500"
-               >
-                 <span className="inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-36 after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 ">
-                   {link.name}
-                 </span>
-               </Link>
-               
-                ))}
-              </div>
+  className={`absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 border-b-2 border-gray-200 z-50 transition-all ease-in-out duration-200 ${
+    isDropdownOpen === index ? "block" : "hidden"
+  }`}
+  onMouseEnter={() => setIsDropdownOpen(index)}
+  onMouseLeave={() => setIsDropdownOpen(null)}
+>
+  {item.links.map((link, i) => (
+    <Link
+      key={i}
+      to={link.path}
+      className="block px-4 py-2 text-sm text-gray-700 relative hover:text-red-500"
+    >
+      <span className="inline-block relative after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+        {link.name}
+      </span>
+    </Link>
+  ))}
+</div>
+
             </div>
           ))}
         </div>
@@ -163,24 +164,26 @@ const Navbar = () => {
 
           {/* User Login/Logout */}
           {user ? (
-            <div className="flex items-center space-x-2">
-              <span className="text-red-600">{user.username}</span>
-              <button
-                onClick={handleLogout}
-                className="focus:outline-none text-red-600  "
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link to="/login">
-              <button className="focus:outline-none bg-black flex items-center">
-                <h1 className="text-red bg-black text-lg pl-3 font-semibold  hover:text-red-500">
-                <SlUserFollow/>
-                </h1>
-              </button>
-            </Link>
-          )}
+        <div className="flex items-center space-x-2">
+          <Link to={`/account`}><span className="text-red-600">{user.username}</span></Link>
+          <button
+            onClick={handleLogout}
+            className="focus:outline-none text-red-600"
+          >
+            Logout
+          </button>
+        </div>
+      ) : (
+        <Link to="/login">
+          <button className="focus:outline-none bg-black flex items-center">
+            <Suspense fallback={<span>Loading...</span>}>
+              <h1 className="text-red bg-black text-lg pl-3 font-semibold hover:text-red-500">
+                <SlUserFollow />
+              </h1>
+            </Suspense>
+          </button>
+        </Link>
+      )}
         </div>
 
         {/* Mobile Menu Button */}

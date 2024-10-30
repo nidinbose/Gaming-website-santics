@@ -7,9 +7,9 @@ const CardPayment = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
-  // Retrieve userId and token from localStorage
-  const userId = localStorage.getItem('userId'); // Ensure 'userId' is set during login
-  const token = localStorage.getItem('token'); // Ensure 'token' is set during login
+
+  const userId = localStorage.getItem('userId'); 
+  const token = localStorage.getItem('token');
 
   const getCartItems = async () => {
     try {
@@ -26,7 +26,56 @@ const CardPayment = () => {
       }
     }
   };
+  const handlePayment = async () => {
+    try {
+      const response = await axios.post(`http://localhost:3003/api/payment/create-order`, {
+        amount: totalPrice * 100, // Razorpay expects amount in paise
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
+      const { orderId, currency } = response.data;
+
+      const options = {
+        key: "YOUR_RAZORPAY_KEY_ID",
+        amount: totalPrice * 100,
+        currency,
+        name: "Your Store",
+        description: "Thank you for your purchase",
+        order_id: orderId,
+        handler: async (paymentResponse) => {
+          try {
+            // Verify payment on the server
+            const verifyRes = await axios.post(`http://localhost:3003/api/payment/verify`, {
+              paymentResponse,
+            }, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (verifyRes.data.success) {
+              alert("Payment successful!");
+              navigate("/order-confirmation");
+            }
+          } catch (error) {
+            console.error("Verification error:", error);
+          }
+        },
+        prefill: {
+          name: "Your Customer's Name",
+          email: "customer@example.com",
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#F37254",
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Error in payment initiation:", error);
+    }
+  };
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.price, 0);
     setTotalPrice(total);
@@ -132,7 +181,7 @@ const CardPayment = () => {
 
             <div className="flex flex-wrap gap-4 mt-8">
               <button type="button" className="min-w-[150px] px-6 py-3.5 text-sm bg-white/60 text-gray-800 rounded-md hover:bg-red-600">Back</button>
-              <button type="button" className="min-w-[150px] px-6 py-3.5 text-sm bg-gray-800 text-white rounded-md hover:bg-[#111]">Pay $750</button>
+              <button type="button" onClick={handlePayment} className="min-w-[150px] px-6 py-3.5 text-sm bg-gray-800 text-white rounded-md hover:bg-[#111]">Pay INR {totalPrice}</button>
             </div>
           </form>
         </div>

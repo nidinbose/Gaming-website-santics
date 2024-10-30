@@ -54,10 +54,10 @@ const Login = () => {
         password: formData.password,
       });
 
-      // Ensure your backend responds with a token and userId
+    
       const { token, userId } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId); // Store userId here
+      localStorage.setItem("userId", userId);
 
       navigate("/");
     } catch (error) {

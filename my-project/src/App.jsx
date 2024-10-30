@@ -38,6 +38,7 @@ import Address from './Components/PaymentGateway/Address'
 import CardPayment from './Components/PaymentGateway/CardPayment'
 import Orderes from './Components/PaymentGateway/Orderes'
 import Download from './Components/Navbar/Downlord'
+import AccountView from './Components/Navbar/AccountView'
 
 
 
@@ -108,6 +109,8 @@ function AppContent() {
         <Route path="/cardpayment" Component={CardPayment} />
         <Route path="/orderes" Component={Orderes} />
         <Route path="/download" Component={Download} />
+        <Route path="/account" Component={AccountView} />
+
       </Routes>
       {!isAdminRoute && <Footer />}
     </>
