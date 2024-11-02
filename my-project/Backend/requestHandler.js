@@ -733,14 +733,13 @@ const instance = new Razorpay({
 });
 
 export async function razorpayPayment(req, res) {
-  const { amount, currency } = req.body; // Get amount and currency from request
+  const { amount, currency } = req.body; 
 
-  // Create an order
   const options = {
-    amount: amount * 100, // amount in paise
+    amount: amount * 100,
     currency: currency,
     receipt: `receipt_order_${Math.random()}`,
-    payment_capture: 1, // Auto capture
+    payment_capture: 1, 
   };
 
   try {
@@ -751,7 +750,7 @@ export async function razorpayPayment(req, res) {
   }
 }
 
-// Endpoint to verify payment
+
 export async function verifyPayment(req, res) {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
@@ -760,7 +759,6 @@ export async function verifyPayment(req, res) {
     .digest('hex');
 
   if (generated_signature === razorpay_signature) {
-    // Payment is verified
     res.json({ status: 'success' });
   } else {
     res.status(400).json({ status: 'failure' });
