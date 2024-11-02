@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaTrashAlt } from "react-icons/fa";
 
 const Address = () => {
-  const [addresses, setAddresses] = useState([]); // Updated to hold an array of addresses
+  const [addresses, setAddresses] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [editAddressData, setEditAddressData] = useState(null);
   const token = localStorage.getItem("token");
   const location = useLocation();
   const userId = location.state?.userId || localStorage.getItem("userId");
   const navigate = useNavigate();
+  const [showForm, setShowForm] = useState(false);
 
-  // Fetch addresses and cart items from API
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const addressResponse = await axios.get(`http://localhost:3003/api/getaddress/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        // Set the fetched addresses directly
+        const addressResponse = await axios.get(
+          `http://localhost:3003/api/getaddress/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setAddresses(Array.isArray(addressResponse.data) ? addressResponse.data : [addressResponse.data]);
       } catch (error) {
         console.error("Error fetching addresses:", error);
@@ -32,9 +33,11 @@ const Address = () => {
 
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `http://localhost:3003/api/cart/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setCartItems(response.data.items);
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -48,10 +51,8 @@ const Address = () => {
     fetchCartItems();
   }, [token, userId, navigate]);
 
-  // Handle adding a new address
   const handleAddAddress = async (event) => {
     event.preventDefault();
-
     const newAddress = {
       userId,
       name: event.target.name.value,
@@ -64,17 +65,66 @@ const Address = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:3003/api/addaddress", newAddress, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // Update the addresses state with the new address
+      const response = await axios.post(
+        "http://localhost:3003/api/addaddress",
+        newAddress,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setAddresses((prevAddresses) => [...prevAddresses, response.data]);
+      setShowForm(false); // Hide form after adding
     } catch (error) {
       console.error("Error adding address", error);
     }
+  };
+
+  const handleEditAddress = async (event) => {
+    event.preventDefault();
+    const updatedAddress = {
+      name: event.target.name.value,
+          addressLine: event.target.addressLine.value,
+      city: event.target.city.value,
+      state: event.target.state.value,
+      zipCode: event.target.zipCode.value,
+      phone: event.target.phone.value,
+    };
+
+    try {
+      const response = await axios.patch(
+        `http://localhost:3003/api/updateaddress/${editAddressData._id}`,
+        updatedAddress,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setAddresses((prevAddresses) =>
+        prevAddresses.map((addr) => (addr._id === editAddressData._id ? response.data : addr))
+      );
+      setEditAddressData(null); // Clear the editing state
+      setShowForm(false); // Hide form after updating
+    } catch (error) {
+      console.error("Error updating address", error);
+    }
+  };
+
+  const handleDeleteAddress = async (addressId) => {
+    try {
+      await axios.delete(`http://localhost:3003/api/deleteaddress/${addressId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAddresses(addresses.filter((address) => address._id !== addressId));
+      if (selectedAddress === addressId) {
+        setSelectedAddress(null);
+      }
+    } catch (error) {
+      console.error("Error deleting address", error);
+    }
+  };
+
+  const handleSelectAddress = (address) => {
+    setSelectedAddress(address._id);
+    setEditAddressData(address); // Set address data for editing
+  };
+
+  const handleProceedToPayment = () => {
+    navigate("/cardpayment", { state: { selectedAddress, cartItems } });
   };
 
   return (
@@ -85,28 +135,17 @@ const Address = () => {
           <div className="relative h-full">
             <div className="px-4 py-8 sm:overflow-auto sm:h-[calc(100vh-60px)]">
               <div className="space-y-4">
-                {/* List of products */}
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex items-start gap-4">
                     <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-white/20 rounded-md">
-                      <img
-                        src={item.imageLink}
-                        className="w-full object-contain"
-                        alt={item.name}
-                      />
+                      <img src={item.imageLink} className="w-full object-contain" alt={item.name} />
                     </div>
                     <div className="w-full">
                       <h3 className="text-base text-red-500">{item.name}</h3>
                       <ul className="text-xs text-gray-300 space-y-2 mt-2">
-                        <li>
-                          Price <span className="float-right">{item.price}</span>
-                        </li>
-                        <li>
-                          Quantity <span className="float-right">{item.quantity}</span>
-                        </li>
-                        <li>
-                          Total Price <span className="float-right text-red-500">INR : {item.price * item.quantity}</span>
-                        </li>
+                        <li>Price <span className="float-right">{item.price}</span></li>
+                        <li>Quantity <span className="float-right">{item.quantity}</span></li>
+                        <li>Total Price <span className="float-right text-red-500">INR : {item.price * item.quantity}</span></li>
                       </ul>
                     </div>
                   </div>
@@ -115,7 +154,7 @@ const Address = () => {
             </div>
             <div className="md:absolute md:left-0 md:bottom-0 bg-gray-800 w-full p-4">
               <h4 className="flex flex-wrap gap-4 text-base text-white">
-                Total{" "}
+                Total
                 <span className="ml-auto">
                   ${cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
                 </span>
@@ -128,16 +167,29 @@ const Address = () => {
         <div className="max-w-4xl w-full h-max rounded-md px-4 py-8 sticky top-0 bg-white/20">
           <h2 className="text-2xl font-bold text-red-500">Complete your order</h2>
 
-          {/* Display the fetched addresses */}
           {addresses.length > 0 ? (
             <div className="mt-4 xl:w-96 w-auto">
               <h3 className="text-base text-gray-300 mb-4">Saved Addresses</h3>
-              {addresses.map((addr, index) => (
-                <div key={index} className="p-4 border rounded-md border-gray-300 mb-2">
-                  <h4 className="font-bold text-red-500">{addr.name} {addr.lastName}</h4>
-                  <p className="text-sm text-white/60">{addr.addressLine}</p>
-                  <p className="text-sm text-white/60">{addr.city}, {addr.state} {addr.zipCode}</p>
-                  <p className="text-sm text-white/60">Phone: {addr.phone}</p>
+              {addresses.map((addr) => (
+                <div
+                  key={addr._id}
+                  onClick={() => handleSelectAddress(addr)}
+                  className={`p-4 border rounded-md mb-2 cursor-pointer ${selectedAddress === addr._id ? "border-red-500" : "border-gray-300"}`}
+                >
+                  <div className="flex justify-between">
+                    <div>
+                      <h4 className="font-bold text-red-500">{addr.name}</h4>
+                      <p className="text-sm text-white/60">{addr.addressLine}</p>
+                      <p className="text-sm text-white/60">{addr.city}, {addr.state} {addr.zipCode}</p>
+                      <p className="text-sm text-white/60">Phone: {addr.phone}</p>
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleDeleteAddress(addr._id); }}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <FaTrashAlt />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -145,80 +197,84 @@ const Address = () => {
             <p className="text-gray-300">No addresses found.</p>
           )}
 
-          {/* Add new address form */}
-          <form className="mt-8" onSubmit={handleAddAddress}>
-            <div>
-              <h3 className="text-base text-gray-300 mb-4">Add New Address</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+          {/* Add or Edit address form */}
+          <div className="mt-8">
+            <button
+              onClick={() => setShowForm((prevShowForm) => !prevShowForm)}
+              className="px-4 py-3 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600"
+            >
+              {showForm ? "Hide Form" : editAddressData ? "Edit Address" : "Add Address"}
+            </button>
+
+            {showForm && (
+              <form onSubmit={editAddressData ? handleEditAddress : handleAddAddress} className="mt-4 space-y-4">
                 <input
                   type="text"
                   name="name"
-                  placeholder="Name"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  defaultValue={editAddressData ? editAddressData.name : ""}
+                  placeholder="First Name"
                   required
+                  className="border rounded-md p-2 w-full"
                 />
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
-                  required
-                />
+             
                 <input
                   type="text"
                   name="addressLine"
+                  defaultValue={editAddressData ? editAddressData.addressLine : ""}
                   placeholder="Address Line"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                   required
+                  className="border rounded-md p-2 w-full"
                 />
                 <input
                   type="text"
                   name="city"
+                  defaultValue={editAddressData ? editAddressData.city : ""}
                   placeholder="City"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                   required
+                  className="border rounded-md p-2 w-full"
                 />
                 <input
                   type="text"
                   name="state"
+                  defaultValue={editAddressData ? editAddressData.state : ""}
                   placeholder="State"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                   required
+                  className="border rounded-md p-2 w-full"
                 />
                 <input
-                  type="number"
+                  type="text"
                   name="zipCode"
+                  defaultValue={editAddressData ? editAddressData.zipCode : ""}
                   placeholder="Zip Code"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                   required
+                  className="border rounded-md p-2 w-full"
                 />
                 <input
                   type="text"
                   name="phone"
-                  placeholder="Phone number"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
+                  defaultValue={editAddressData ? editAddressData.phone : ""}
+                  placeholder="Phone Number"
                   required
+                  className="border rounded-md p-2 w-full"
                 />
-              </div>
-
-              <div className="flex gap-4 max-md:flex-col justify-end mt-8">
                 <button
                   type="submit"
-                  className="block max-w-[300px] w-full ml-auto px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold text-center rounded-full"
+                  className="px-4 py-3 bg-green-500 text-white rounded-md text-sm hover:bg-green-600"
                 >
-                  Add Address
+                  {editAddressData ? "Update Address" : "Add Address"}
                 </button>
-                <Link to="/cardpayment">
-                  <button
-                    type="button" // Change to button to prevent form submission
-                    className="block max-w-[300px] w-full ml-auto px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold text-center rounded-full"
-                  >
-                    Checkout 
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </form>
+              </form>
+            )}
+          </div>
+
+          {selectedAddress && (
+            <button
+              onClick={handleProceedToPayment}
+              className="px-6 py-3 mt-8 bg-red-500 text-white rounded-md text-sm hover:bg-red-600"
+            >
+              Proceed to Payment
+            </button>
+          )}
         </div>
       </div>
     </div>

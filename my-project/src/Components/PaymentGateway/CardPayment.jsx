@@ -5,11 +5,21 @@ import { useNavigate } from 'react-router-dom';
 const CardPayment = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState("card"); 
+  const [cardDetails, setCardDetails] = useState({ cardNumber: "", expiry: "", cvv: "" });
+  const [upiId, setUpiId] = useState("");
+  
   const navigate = useNavigate();
-
-
   const userId = localStorage.getItem('userId'); 
   const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (userId && token) {
+      getCartItems();
+    } else {
+      navigate("/login");
+    }
+  }, [userId, token, navigate]);
 
   const getCartItems = async () => {
     try {
@@ -26,177 +36,189 @@ const CardPayment = () => {
       }
     }
   };
-  const handlePayment = async () => {
-    try {
-      const response = await axios.post(`http://localhost:3003/api/payment/create-order`, {
-        amount: totalPrice * 100, // Razorpay expects amount in paise
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
 
-      const { orderId, currency } = response.data;
-
-      const options = {
-        key: "YOUR_RAZORPAY_KEY_ID",
-        amount: totalPrice * 100,
-        currency,
-        name: "Your Store",
-        description: "Thank you for your purchase",
-        order_id: orderId,
-        handler: async (paymentResponse) => {
-          try {
-            // Verify payment on the server
-            const verifyRes = await axios.post(`http://localhost:3003/api/payment/verify`, {
-              paymentResponse,
-            }, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-
-            if (verifyRes.data.success) {
-              alert("Payment successful!");
-              navigate("/order-confirmation");
-            }
-          } catch (error) {
-            console.error("Verification error:", error);
-          }
-        },
-        prefill: {
-          name: "Your Customer's Name",
-          email: "customer@example.com",
-          contact: "9999999999",
-        },
-        theme: {
-          color: "#F37254",
-        },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error("Error in payment initiation:", error);
-    }
-  };
+ 
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.price, 0);
     setTotalPrice(total);
   };
 
-  useEffect(() => {
-    if (userId && token) {
-      getCartItems();
-    } else {
-      navigate("/login");
+  const handlePayment = async () => {
+    try {
+      const response = await axios.post('http://localhost:3003/api/payment/create-order', { 
+        amount: totalPrice, 
+        currency: 'INR' 
+      });
+      const { order } = response.data;
+      openRazorpay(order);
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert("Error while initiating payment");
     }
-  }, [userId, token, navigate]);
+  };
+
+   const openRazorpay = (order) => {
+    const options = {
+      key: 'rzp_test_wqQZK7PHsAYpBP', 
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Your Company',
+      description: 'Test Transaction',
+      order_id: order.id,
+      handler: async (response) => {
+        await verifyPayment(response);
+      },
+      prefill: {
+        name: 'nidin',
+        email: 'nidin@example.com',
+        contact: '9999999999',
+      },
+      notes: {
+        address: 'note value',
+      },
+      theme: {
+        color: '#F37254',
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
+  const verifyPayment = async (response) => {
+    try {
+      await axios.post('http://localhost:3003/api/payment/verify-payment', {
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+      });
+      alert("Payment successful");
+      navigate("/success");
+    } catch (error) {
+      console.error("Payment verification error:", error);
+      alert("Payment verification failed");
+    }
+  };
+
+  
+  const initiateUpiPayment = async () => {
+    try {
+      const { data } = await axios.post('http://localhost:3003/api/payment/upi-payment', {
+        amount: totalPrice,
+        upiId,
+        name: 'Your Company'
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      window.location.href = data.upiUrl;
+    } catch (error) {
+      console.error("UPI Payment Error:", error);
+      alert("Error initiating UPI payment");
+    }
+  };
+
+
+  const handlePaymentClick = () => {
+    if (paymentMethod === "card") {
+      handlePayment();
+    } else if (paymentMethod === "upi") {
+      initiateUpiPayment();
+    }
+  };
+
   return (
-    <div className="font-[sans-serif] bg-white/10 p-4 lg:max-w-7xl max-w-xl mx-auto">
+    <div className="font-sans bg-gray-100 p-4 lg:max-w-7xl max-w-xl mx-auto rounded-md shadow-lg">
       <div className="grid lg:grid-cols-3 gap-10">
-        {/* Left Section */}
-        <div className="lg:col-span-2 max-lg:order-1">
-          <div className="flex items-start">
-            <div className="w-full">
-              <div className="flex items-center w-full">
-                <div className="w-8 h-8 shrink-0 mx-[-1px] bg-emerald-500 p-1.5 flex items-center justify-center rounded-full">
-                  <span className="text-sm text-white font-bold">1</span>
-                </div>
-                <div className="w-full h-[3px] mx-4 rounded-lg bg-emerald-500"></div>
-              </div>
-              <div className="mt-2 mr-4">
-                <h6 className="text-sm font-bold text-white/40">Shipping</h6>
-              </div>
-            </div>
+         <div className="lg:col-span-2">
+          <h2 className="text-2xl font-extrabold text-red-600">Payment Method</h2>
 
-            <div className="w-full">
-              <div className="flex items-center w-full">
-                <div className="w-8 h-8 shrink-0 mx-[-1px] bg-gray-600 p-1.5 flex items-center justify-center rounded-full">
-                  <span className="text-sm text-white font-bold">2</span>
-                </div>
-                <div className="w-full h-[3px] mx-4 rounded-lg bg-red-600"></div>
+          <div className="grid gap-4 sm:grid-cols-2 mt-8">
+            {['card', 'upi'].map(method => (
+              <div className="flex items-center" key={method}>
+                <input
+                  type="radio"
+                  id={method}
+                  name="paymentMethod"
+                  className="w-5 h-5 cursor-pointer"
+                  checked={paymentMethod === method}
+                  onChange={() => setPaymentMethod(method)}
+                />
+                <label htmlFor={method} className="ml-4 cursor-pointer">
+                  {method.charAt(0).toUpperCase() + method.slice(1)} Payment
+                </label>
               </div>
-              <div className="mt-2 mr-4">
-                <h6 className="text-sm font-bold text-white/40">Billing</h6>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center">
-                <div className="w-8 h-8 shrink-0 mx-[-1px] bg-red-600 p-1.5 flex items-center justify-center rounded-full">
-                  <span className="text-sm text-white font-bold">3</span>
-                </div>
-              </div>
-              <div className="mt-2">
-                <h6 className="text-sm font-bold text-white/40">Confirm</h6>
-              </div>
-            </div>
+            ))}
           </div>
 
-          <form className="mt-16 max-w-lg">
-            <h2 className="text-2xl font-extrabold text-red-600">Payment method</h2>
-
-            <div className="grid gap-4 sm:grid-cols-2 mt-8">
-              <div className="flex items-center">
-                <input type="radio" className="w-5 h-5 cursor-pointer bg-red-600" id="card" defaultChecked />
-                <label htmlFor="card" className="ml-4 flex gap-2 cursor-pointer bg-red">
-                  <img src="https://readymadeui.com/images/visa.webp" className="w-12" alt="Visa Card" />
-                  <img src="https://readymadeui.com/images/american-express.webp" className="w-12" alt="Amex Card" />
-                  <img src="https://readymadeui.com/images/master.webp" className="w-12" alt="MasterCard" />
-                </label>
+          <div className="mt-8">
+            {paymentMethod === "card" && (
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  name="cardNumber"
+                  placeholder="Card Number"
+                  value={cardDetails.cardNumber}
+                  onChange={(e) => setCardDetails({ ...cardDetails, cardNumber: e.target.value })}
+                  className="w-full p-3 border border-gray-300 rounded-md"
+                />
+                <div className="flex space-x-4">
+                  <input
+                    type="text"
+                    name="expiry"
+                    placeholder="MM/YY"
+                    value={cardDetails.expiry}
+                    onChange={(e) => setCardDetails({ ...cardDetails, expiry: e.target.value })}
+                    className="w-1/2 p-3 border border-gray-300 rounded-md"
+                  />
+                  <input
+                    type="text"
+                    name="cvv"
+                    placeholder="CVV"
+                    value={cardDetails.cvv}
+                    onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
+                    className="w-1/2 p-3 border border-gray-300 rounded-md"
+                  />
+                </div>
               </div>
+            )}
 
-              <div className="flex items-center">
-                <input type="radio" className="w-5 h-5 cursor-pointer" id="paypal" />
-                <label htmlFor="paypal" className="ml-4 flex gap-2 cursor-pointer">
-                  <img src="https://readymadeui.com/images/paypal.webp" className="w-20" alt="PayPal" />
-                </label>
+            {paymentMethod === "upi" && (
+              <div className="mt-4">
+                <input
+                  type="text"
+                  name="upiId"
+                  placeholder="Enter UPI ID"
+                  value={upiId}
+                  onChange={(e) => setUpiId(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-md"
+                />
               </div>
-            </div>
+            )}
+          </div>
 
-            <div className="grid gap-4 mt-8">
-              <input type="text" placeholder="Cardholder's Name"
-                className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b-2 focus:border-gray-800 outline-none" />
 
-              <div className="flex bg-white border-b-2 focus-within:border-gray-800 overflow-hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-12 ml-3" viewBox="0 0 291.764 291.764">
-                  <path fill="#2394bc" d="..."></path>
-                  <path fill="#efc75e" d="..."></path>
-                </svg>
-                <input type="number" placeholder="Card Number"
-                  className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm outline-none" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-6">
-                <input type="date" placeholder="EXP."
-                  className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b-2 focus:border-gray-800 outline-none" />
-                <input type="number" placeholder="CVV"
-                  className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b-2 focus:border-gray-800 outline-none" />
-              </div>
-
-              <div className="flex items-center">
-                <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 shrink-0 text-red-600 focus:ring-red-600 border-gray-300 rounded bg-red" />
-                <label htmlFor="remember-me" className="ml-3 block text-sm text-white/40 ">
-                  I accept the <a href="javascript:void(0);" className="text-red-600 font-semibold hover:underline ml-1">Terms and Conditions</a>
-                </label>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-4 mt-8">
-              <button type="button" className="min-w-[150px] px-6 py-3.5 text-sm bg-white/60 text-gray-800 rounded-md hover:bg-red-600">Back</button>
-              <button type="button" onClick={handlePayment} className="min-w-[150px] px-6 py-3.5 text-sm bg-gray-800 text-white rounded-md hover:bg-[#111]">Pay INR {totalPrice}</button>
-            </div>
-          </form>
+          <div className="mt-8">
+            <button
+              type="button"
+              onClick={handlePaymentClick}
+              className="min-w-[150px] px-6 py-3.5 text-sm bg-gray-800 text-white rounded-md hover:bg-[#111]"
+            >
+              Pay INR {totalPrice.toFixed(2)}
+            </button>
+          </div>
         </div>
 
-        {/* Right Section */}
-        <div className="bg-white/10 p-6 rounded-md">
-          <h2 className="text-4xl font-extrabold text-red-600">INR : {totalPrice}</h2>
-          <ul className="text-white/50 mt-8 space-y-4">
+
+        <div className="bg-white/10 p-6 rounded-md shadow">
+          <h2 className="text-4xl font-extrabold text-red-600">INR: {totalPrice.toFixed(2)}</h2>
+          <ul className="text-gray-700 mt-8 space-y-4">
             {cartItems.map((item) => (
-              <li key={item.id} className="flex flex-wrap gap-4 text-sm">
-                {item.name} <span className="ml-auto font-bold">INR : {item.price}</span>
+              <li key={item.id} className="flex justify-between text-sm">
+                {item.name} <span className="font-bold">INR: {item.price.toFixed(2)}</span>
               </li>
             ))}
-            <li className="flex flex-wrap gap-4 text-sm font-bold border-t-2 pt-4">
-              Total <span className="ml-auto text-red-600">INR : {totalPrice.toFixed(2)}</span>
+            <li className="flex justify-between text-sm font-bold border-t-2 pt-4">
+              Total <span className="text-red-600">INR: {totalPrice.toFixed(2)}</span>
             </li>
           </ul>
         </div>
@@ -206,4 +228,3 @@ const CardPayment = () => {
 };
 
 export default CardPayment;
-

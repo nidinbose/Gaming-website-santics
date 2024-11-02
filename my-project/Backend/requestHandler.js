@@ -8,6 +8,9 @@ import adminSchema from './models/admin.model.js'
 import nodemailer from 'nodemailer'
 import cartSchema from './models/cart.model.js'
 import addressSchema from './models/address.model.js'
+import { set } from 'mongoose'
+import Razorpay from 'razorpay'
+import crypto from 'crypto'
 
 
 // products  CRUD
@@ -656,4 +659,110 @@ export async function getAddress(req, res) {
 }
 
 
+export async function deleteAddress(req,res){
+  try {
+    const {id}=req.params
+    console.log(id);
+    const data=await addressSchema.deleteOne({_id:id}).then((data)=>{
+      return res.status(201).send("Deleted succesfully")
+    })
+    
+  } catch (error) {
+    return res.status(500).send("error in Deleting address")
+  }
+}
 
+export async function updateAddress(req,res){
+  try {
+    const {id}=req.params
+    console.log(id);
+    const {...address}=req.body
+    const data=await addressSchema.updateOne({_id:id},{$set:{...address}}).then((data)=>{
+      return res.status(200).send("updated succusfully")
+    })
+    
+  } catch (error) {
+    return res.status(500).json({ message: "An error occurred while updating the address", error: error.message });
+  }
+}
+
+
+
+export async function upiPayment(req, res) {
+  try {
+        const { upiId, amount, name } = req.body;
+
+       if (!upiId || !amount || !name) {
+          return res.status(400).json({ message: 'All fields are required' });
+      }
+
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+
+      res.status(200).json({ upiUrl });
+  } catch (error) {
+      console.error("Error generating UPI URL:", error);
+      res.status(500).json({ message: 'Server error while generating UPI URL' });
+  }
+}
+
+
+
+
+export async function getUserData(req,res){
+  try {
+    const {id}=req.params;
+    console.log(id);
+    
+
+    const data=await userSchema.findOne({_id:id}).then((data)=>{
+      return res.status(201).send(data)
+
+    })
+  } catch (error) {
+    return res.status(500).send("error in getting")
+  }
+}
+// PAYMENTS
+
+
+
+
+const instance = new Razorpay({
+  key_id: 'rzp_test_wqQZK7PHsAYpBP',
+  key_secret: 'XGyEGPhTrUWDjYNVKzLaXlfh',
+});
+
+export async function razorpayPayment(req, res) {
+  const { amount, currency } = req.body; // Get amount and currency from request
+
+  // Create an order
+  const options = {
+    amount: amount * 100, // amount in paise
+    currency: currency,
+    receipt: `receipt_order_${Math.random()}`,
+    payment_capture: 1, // Auto capture
+  };
+
+  try {
+    const order = await instance.orders.create(options);
+    res.json({ order });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create order' });
+  }
+}
+
+// Endpoint to verify payment
+export async function verifyPayment(req, res) {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+  const generated_signature = crypto.createHmac('sha256', 'XGyEGPhTrUWDjYNVKzLaXlfh')
+    .update(razorpay_order_id + '|' + razorpay_payment_id)
+    .digest('hex');
+
+  if (generated_signature === razorpay_signature) {
+    // Payment is verified
+    res.json({ status: 'success' });
+  } else {
+    res.status(400).json({ status: 'failure' });
+  }
+}

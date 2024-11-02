@@ -40,6 +40,22 @@ router.post('/decrement-cart-item', request.decrementCart);
 
 router.route('/addaddress').post(request.addAddress)
 router.route('/getaddress/:userId').get(request.getAddress)
+router.route('/deleteaddress/:id').delete(request.deleteAddress)
+router.route('/updateaddress/:id').patch(request.updateAddress)
+
+
+
+router.route('/payment/upi-payment').post(request.upiPayment)
+router.route('/getuserdata/:id').get(request.getUserData)
+
+
+router.route('/create-order').post(request.razorpayPayment)
+router.route('/verify-payment').post(request.verifyPayment)
+
+
+
+
+
 
 
 
