@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 const CardPayment = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("card"); 
+  const [paymentMethod, setPaymentMethod] = useState("card");
   const [cardDetails, setCardDetails] = useState({ cardNumber: "", expiry: "", cvv: "" });
   const [upiId, setUpiId] = useState("");
   const navigate = useNavigate();
-  const userId = localStorage.getItem('userId'); 
+  const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -36,26 +36,32 @@ const CardPayment = () => {
     const total = items.reduce((sum, item) => sum + item.price, 0);
     setTotalPrice(total);
   };
-
   const handlePayment = async () => {
     try {
-      const response = await axios.post('http://localhost:3003/api/payment/create-order', { 
-        amount: totalPrice, 
-        currency: 'INR' 
+      const response = await axios.post('http://localhost:3003/api/payment/createorder', {
+        amount: totalPrice,
+        currency: 'INR',
       });
-      openRazorpay(response.data.order);
+  
+      // Check if `order` is defined before calling openRazorpay
+      if (response.data && response.data.order) {
+        openRazorpay(response.data.order);
+      } else {
+        console.error("Unexpected response format:", response.data);
+        alert("Error while creating payment order. Please try again.");
+      }
     } catch (error) {
-      console.error('Payment error:', error);
+      console.error('Payment initiation error:', error);
       alert("Error while initiating payment");
     }
-  };
+  }; 
 
   const openRazorpay = (order) => {
     const options = {
-      key: 'rzp_test_wqQZK7PHsAYpBP', 
+      key: 'rzp_test_wqQZK7PHsAYpBP', // Replace with your Razorpay key
       amount: order.amount,
       currency: order.currency,
-      name: 'Your Company',
+      name: 'Santics Gaming',
       description: 'Test Transaction',
       order_id: order.id,
       handler: async (response) => {
@@ -80,7 +86,7 @@ const CardPayment = () => {
 
   const verifyPayment = async (response) => {
     try {
-      await axios.post('http://localhost:3003/api/payment/verify-payment', {
+      await axios.post('http://localhost:3003/api/payment/verifypayment', {
         razorpay_order_id: response.razorpay_order_id,
         razorpay_payment_id: response.razorpay_payment_id,
         razorpay_signature: response.razorpay_signature,
@@ -97,7 +103,7 @@ const CardPayment = () => {
     if (paymentMethod === "card") {
       handlePayment();
     } else if (paymentMethod === "upi") {
-      initiateUpiPayment();
+      initiateUpiPayment(); 
     }
   };
 
@@ -108,83 +114,93 @@ const CardPayment = () => {
         <div className="lg:col-span-2">
           <h2 className="text-2xl font-bold mb-6">Choose Payment Method</h2>
           <div className="flex gap-4">
-            {['card', 'upi'].map((method) => (
-              <label key={method} className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value={method}
-                  checked={paymentMethod === method}
-                  onChange={() => setPaymentMethod(method)}
-                  className="form-radio h-5 w-5 text-indigo-600"
-                />
-                <span className="ml-2 capitalize">{method} Payment</span>
-              </label>
-            ))}
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                value="card"
+                checked={paymentMethod === "card"}
+                onChange={() => setPaymentMethod("card")}
+              />
+              <span>Card</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                value="upi"
+                checked={paymentMethod === "upi"}
+                onChange={() => setPaymentMethod("upi")}
+              />
+              <span>UPI</span>
+            </label>
           </div>
 
-          {/* Payment Details */}
-          <div className="mt-8">
-            {paymentMethod === "card" ? (
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Card Number"
-                  value={cardDetails.cardNumber}
-                  onChange={(e) => setCardDetails({ ...cardDetails, cardNumber: e.target.value })}
-                  className="w-full p-2 border rounded-md"
-                />
-                <div className="flex gap-4">
-                  <input
-                    type="text"
-                    placeholder="MM/YY"
-                    value={cardDetails.expiry}
-                    onChange={(e) => setCardDetails({ ...cardDetails, expiry: e.target.value })}
-                    className="w-1/2 p-2 border rounded-md"
-                  />
-                  <input
-                    type="text"
-                    placeholder="CVV"
-                    value={cardDetails.cvv}
-                    onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
-                    className="w-1/2 p-2 border rounded-md"
-                  />
-                </div>
-              </div>
-            ) : (
+          {paymentMethod === "card" ? (
+            <div className="mt-4">
+              <h3 className="font-semibold mb-2">Enter Card Details</h3>
               <input
                 type="text"
-                placeholder="Enter UPI ID"
+                placeholder="Card Number"
+                className="w-full p-2 border rounded mb-2"
+                value={cardDetails.cardNumber}
+                onChange={(e) =>
+                  setCardDetails({ ...cardDetails, cardNumber: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Expiry (MM/YY)"
+                className="w-full p-2 border rounded mb-2"
+                value={cardDetails.expiry}
+                onChange={(e) =>
+                  setCardDetails({ ...cardDetails, expiry: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="CVV"
+                className="w-full p-2 border rounded mb-2"
+                value={cardDetails.cvv}
+                onChange={(e) =>
+                  setCardDetails({ ...cardDetails, cvv: e.target.value })
+                }
+              />
+            </div>
+          ) : (
+            <div className="mt-4">
+              <h3 className="font-semibold mb-2">Enter UPI ID</h3>
+              <input
+                type="text"
+                placeholder="UPI ID"
+                className="w-full p-2 border rounded"
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
-                className="w-full p-2 border rounded-md mt-4"
               />
-            )}
-          </div>
-
-          <button
-            onClick={handlePaymentClick}
-            className="mt-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
-          >
-            Pay INR {totalPrice.toFixed(2)}
-          </button>
+            </div>
+          )}
         </div>
 
-        {/* Cart Summary */}
-        <div className="bg-white rounded-md p-6 shadow-md">
-          <h2 className="text-lg font-semibold mb-4">Cart Summary</h2>
-          <ul className="space-y-4 text-gray-700">
+        {/* Summary and Pay Button */}
+        <div className="lg:col-span-1 bg-white p-6 rounded shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+          <ul className="mb-4">
             {cartItems.map((item) => (
-              <li key={item.id} className="flex justify-between">
-                {item.name}
-                <span className="font-medium">INR {item.price.toFixed(2)}</span>
+              <li key={item.id} className="flex justify-between mb-2">
+                <span>{item.name}</span>
+                <span>₹{item.price}</span>
               </li>
             ))}
-            <li className="border-t pt-4 flex justify-between font-semibold text-red-600">
-              Total
-              <span>INR {totalPrice.toFixed(2)}</span>
-            </li>
           </ul>
+          <hr className="mb-4" />
+          <div className="flex justify-between text-lg font-bold">
+            <span>Total:</span>
+            <span>₹{totalPrice}</span>
+          </div>
+          <button
+            onClick={handlePaymentClick}
+            className="mt-6 w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Pay Now
+          </button>
         </div>
       </div>
     </div>

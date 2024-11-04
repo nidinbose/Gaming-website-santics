@@ -49,8 +49,8 @@ router.route('/payment/upi-payment').post(request.upiPayment)
 router.route('/getuserdata/:id').get(request.getUserData)
 
 
-router.route('/createorder').post(request.razorpayPayment)
-router.route('/verify-payment').post(request.verifyPayment)
+router.route('/payment/createorder').post(request.razorpayPayment)
+router.route('/verifypayment').post(request.verifyPayment)
 
 
 // admin

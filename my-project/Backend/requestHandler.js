@@ -11,7 +11,7 @@ import addressSchema from './models/address.model.js'
 import { set } from 'mongoose'
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
-import paymentOrder from './models/order.model.js'
+import  PaymentOrder from './models/order.model.js'
 import PaymentVerification from './models/payment.schema.js'
 
 
@@ -733,12 +733,12 @@ export async function getUserData(req,res){
 export async function razorpayPayment(req, res) {
   try {
     const instance = new Razorpay({
-      key_id: process.env.KEY_ID,
-      key_secret: process.env.KEY_SECRET,
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 
     const options = {
-      amount: req.body.amount * 100,
+      amount: req.body.amount * 100, // Amount in paise
       currency: "INR",
       receipt: crypto.randomBytes(10).toString("hex"),
     };
@@ -746,24 +746,27 @@ export async function razorpayPayment(req, res) {
     instance.orders.create(options, async (error, order) => {
       if (error) {
         console.error("Razorpay Order Creation Error:", error);
-        return res.status(500).json({ message: "Something Went Wrong!" });
+        return res.status(500).json({ message: "Something went wrong while creating the order." });
       }
 
+      // Save the order details to the database
       const paymentOrder = new PaymentOrder({
         razorpayOrderId: order.id,
         amount: order.amount,
         currency: order.currency,
         receipt: order.receipt,
+        status: order.status,
       });
 
       await paymentOrder.save();
-      res.status(200).json({ data: order });
+      return res.status(200).json({ order }); 
     });
   } catch (error) {
     console.error("Internal Server Error:", error);
     res.status(500).json({ message: "Internal Server Error!" });
   }
 }
+
 
 
 export async function verifyPayment(req, res) {
