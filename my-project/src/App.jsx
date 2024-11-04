@@ -39,6 +39,7 @@ import CardPayment from './Components/PaymentGateway/CardPayment'
 import Orderes from './Components/PaymentGateway/Orderes'
 import Download from './Components/Navbar/Downlord'
 import AccountView from './Components/Navbar/AccountView'
+import UserLists from './Components/AdminHandle/UserLists'
 
 
 
@@ -77,11 +78,12 @@ function AppContent() {
         <Route path="/adminlogin" Component={AdminLogin} />
         <Route path="/adminforgotpassword" Component={AdminForgotPassword} />
         <Route path="/adminresetpassword" Component={AdminResetPassword} />
-        <Route path="/admin" Component={Admin} />
+        <Route path="/admin" Component={Admin} /> 
         <Route path="/admin/addproducts" Component={AddProducts} />
         <Route path="/admin/viewproducts/:id" Component={ViewProducts} />
         <Route path="/admin/productslist" Component={ProductList} />
         <Route path="/admin/editproducts/:id" Component={EditProducts} />
+        <Route path="/admin/userlists" Component={UserLists} />
 
         <Route path="/" Component={Home} />
         <Route path="/signup" Component={Signup} />
@@ -110,6 +112,11 @@ function AppContent() {
         <Route path="/orderes" Component={Orderes} />
         <Route path="/download" Component={Download} />
         <Route path="/account" Component={AccountView} />
+
+
+
+
+
 
       </Routes>
       {!isAdminRoute && <Footer />}

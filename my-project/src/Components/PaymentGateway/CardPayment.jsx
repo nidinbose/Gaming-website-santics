@@ -8,7 +8,6 @@ const CardPayment = () => {
   const [paymentMethod, setPaymentMethod] = useState("card"); 
   const [cardDetails, setCardDetails] = useState({ cardNumber: "", expiry: "", cvv: "" });
   const [upiId, setUpiId] = useState("");
-  
   const navigate = useNavigate();
   const userId = localStorage.getItem('userId'); 
   const token = localStorage.getItem('token');
@@ -26,18 +25,13 @@ const CardPayment = () => {
       const response = await axios.get(`http://localhost:3003/api/cart/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const items = response.data.items;
-      setCartItems(items);
-      calculateTotal(items);
+      setCartItems(response.data.items);
+      calculateTotal(response.data.items);
     } catch (error) {
       console.error("Error fetching cart items:", error);
-      if (error.response && error.response.status === 401) {
-        navigate("/login");
-      }
     }
   };
 
- 
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.price, 0);
     setTotalPrice(total);
@@ -49,15 +43,14 @@ const CardPayment = () => {
         amount: totalPrice, 
         currency: 'INR' 
       });
-      const { order } = response.data;
-      openRazorpay(order);
+      openRazorpay(response.data.order);
     } catch (error) {
       console.error('Payment error:', error);
       alert("Error while initiating payment");
     }
   };
 
-   const openRazorpay = (order) => {
+  const openRazorpay = (order) => {
     const options = {
       key: 'rzp_test_wqQZK7PHsAYpBP', 
       amount: order.amount,
@@ -100,24 +93,6 @@ const CardPayment = () => {
     }
   };
 
-  
-  const initiateUpiPayment = async () => {
-    try {
-      const { data } = await axios.post('http://localhost:3003/api/payment/upi-payment', {
-        amount: totalPrice,
-        upiId,
-        name: 'Your Company'
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      window.location.href = data.upiUrl;
-    } catch (error) {
-      console.error("UPI Payment Error:", error);
-      alert("Error initiating UPI payment");
-    }
-  };
-
-
   const handlePaymentClick = () => {
     if (paymentMethod === "card") {
       handlePayment();
@@ -129,96 +104,85 @@ const CardPayment = () => {
   return (
     <div className="font-sans bg-gray-100 p-4 lg:max-w-7xl max-w-xl mx-auto rounded-md shadow-lg">
       <div className="grid lg:grid-cols-3 gap-10">
-         <div className="lg:col-span-2">
-          <h2 className="text-2xl font-extrabold text-red-600">Payment Method</h2>
-
-          <div className="grid gap-4 sm:grid-cols-2 mt-8">
-            {['card', 'upi'].map(method => (
-              <div className="flex items-center" key={method}>
+        {/* Payment Method Selection */}
+        <div className="lg:col-span-2">
+          <h2 className="text-2xl font-bold mb-6">Choose Payment Method</h2>
+          <div className="flex gap-4">
+            {['card', 'upi'].map((method) => (
+              <label key={method} className="flex items-center cursor-pointer">
                 <input
                   type="radio"
-                  id={method}
                   name="paymentMethod"
-                  className="w-5 h-5 cursor-pointer"
+                  value={method}
                   checked={paymentMethod === method}
                   onChange={() => setPaymentMethod(method)}
+                  className="form-radio h-5 w-5 text-indigo-600"
                 />
-                <label htmlFor={method} className="ml-4 cursor-pointer">
-                  {method.charAt(0).toUpperCase() + method.slice(1)} Payment
-                </label>
-              </div>
+                <span className="ml-2 capitalize">{method} Payment</span>
+              </label>
             ))}
           </div>
 
+          {/* Payment Details */}
           <div className="mt-8">
-            {paymentMethod === "card" && (
+            {paymentMethod === "card" ? (
               <div className="space-y-4">
                 <input
                   type="text"
-                  name="cardNumber"
                   placeholder="Card Number"
                   value={cardDetails.cardNumber}
                   onChange={(e) => setCardDetails({ ...cardDetails, cardNumber: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-md"
+                  className="w-full p-2 border rounded-md"
                 />
-                <div className="flex space-x-4">
+                <div className="flex gap-4">
                   <input
                     type="text"
-                    name="expiry"
                     placeholder="MM/YY"
                     value={cardDetails.expiry}
                     onChange={(e) => setCardDetails({ ...cardDetails, expiry: e.target.value })}
-                    className="w-1/2 p-3 border border-gray-300 rounded-md"
+                    className="w-1/2 p-2 border rounded-md"
                   />
                   <input
                     type="text"
-                    name="cvv"
                     placeholder="CVV"
                     value={cardDetails.cvv}
                     onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
-                    className="w-1/2 p-3 border border-gray-300 rounded-md"
+                    className="w-1/2 p-2 border rounded-md"
                   />
                 </div>
               </div>
-            )}
-
-            {paymentMethod === "upi" && (
-              <div className="mt-4">
-                <input
-                  type="text"
-                  name="upiId"
-                  placeholder="Enter UPI ID"
-                  value={upiId}
-                  onChange={(e) => setUpiId(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md"
-                />
-              </div>
+            ) : (
+              <input
+                type="text"
+                placeholder="Enter UPI ID"
+                value={upiId}
+                onChange={(e) => setUpiId(e.target.value)}
+                className="w-full p-2 border rounded-md mt-4"
+              />
             )}
           </div>
 
-
-          <div className="mt-8">
-            <button
-              type="button"
-              onClick={handlePaymentClick}
-              className="min-w-[150px] px-6 py-3.5 text-sm bg-gray-800 text-white rounded-md hover:bg-[#111]"
-            >
-              Pay INR {totalPrice.toFixed(2)}
-            </button>
-          </div>
+          <button
+            onClick={handlePaymentClick}
+            className="mt-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+          >
+            Pay INR {totalPrice.toFixed(2)}
+          </button>
         </div>
 
-
-        <div className="bg-white/10 p-6 rounded-md shadow">
-          <h2 className="text-4xl font-extrabold text-red-600">INR: {totalPrice.toFixed(2)}</h2>
-          <ul className="text-gray-700 mt-8 space-y-4">
+        {/* Cart Summary */}
+        <div className="bg-white rounded-md p-6 shadow-md">
+          <h2 className="text-lg font-semibold mb-4">Cart Summary</h2>
+          <ul className="space-y-4 text-gray-700">
             {cartItems.map((item) => (
-              <li key={item.id} className="flex justify-between text-sm">
-                {item.name} <span className="font-bold">INR: {item.price.toFixed(2)}</span>
+              <li key={item.id} className="flex justify-between">
+                {item.name}
+                <span className="font-medium">INR {item.price.toFixed(2)}</span>
               </li>
             ))}
-            <li className="flex justify-between text-sm font-bold border-t-2 pt-4">
-              Total <span className="text-red-600">INR: {totalPrice.toFixed(2)}</span>
+            <li className="border-t pt-4 flex justify-between font-semibold text-red-600">
+              Total
+              <span>INR {totalPrice.toFixed(2)}</span>
             </li>
           </ul>
         </div>

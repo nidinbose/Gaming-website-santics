@@ -4,6 +4,7 @@ import axios from "axios";
 import CartComponent from "./Navbar/Cartdrop";
 import { MdShoppingCart } from 'react-icons/md';
 import { SlUserFollow } from 'react-icons/sl';
+import { TbCircleDotted } from "react-icons/tb";
 import { PiUserFocusThin } from "react-icons/pi";
 
 const Navbar = () => {
@@ -152,7 +153,27 @@ const Navbar = () => {
         {/* Search & Cart Icons */}
         <div className="flex items-center space-x-10">
           {/* Cart Hover */}
-          <div className="relative group">
+      
+
+          {/* User Login/Logout */}
+          {user ? (
+  <div className="flex items-center space-x-2">
+    <Link to={`/account`}>
+      <span className="text-red-600">{user.username}</span>
+    </Link>
+  </div>
+) : (
+  <Link to="/login">
+    <button className="focus:outline-none bg-black flex items-center">
+      <Suspense fallback={<span>Loading...</span>}>
+        <h1 className="text-red bg-black text-lg pl-3 font-semibold hover:text-red-500">
+          <SlUserFollow />
+        </h1>
+      </Suspense>
+    </button>
+  </Link>
+)}
+    <div className="relative group">
             <Link to="/cart" className=" hover:text-red-500">
             <MdShoppingCart/>
             </Link>
@@ -162,28 +183,6 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* User Login/Logout */}
-          {user ? (
-        <div className="flex items-center space-x-2">
-          <Link to={`/account`}><span className="text-red-600">{user.username}</span></Link>
-          <button
-            onClick={handleLogout}
-            className="focus:outline-none text-red-600"
-          >
-            Logout
-          </button>
-        </div>
-      ) : (
-        <Link to="/login">
-          <button className="focus:outline-none bg-black flex items-center">
-            <Suspense fallback={<span>Loading...</span>}>
-              <h1 className="text-red bg-black text-lg pl-3 font-semibold hover:text-red-500">
-                <SlUserFollow />
-              </h1>
-            </Suspense>
-          </button>
-        </Link>
-      )}
         </div>
 
         {/* Mobile Menu Button */}

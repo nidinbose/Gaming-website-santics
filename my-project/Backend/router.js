@@ -49,12 +49,16 @@ router.route('/payment/upi-payment').post(request.upiPayment)
 router.route('/getuserdata/:id').get(request.getUserData)
 
 
-router.route('/create-order').post(request.razorpayPayment)
+router.route('/createorder').post(request.razorpayPayment)
 router.route('/verify-payment').post(request.verifyPayment)
 
 
+// admin
 
 
+router.route('/admin/userlists').get(request.userlist)
+
+router.route('/admin/deleteuser/:id').delete(request.deleteUser)
 
 
 

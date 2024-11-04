@@ -11,6 +11,8 @@ import addressSchema from './models/address.model.js'
 import { set } from 'mongoose'
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
+import paymentOrder from './models/order.model.js'
+import PaymentVerification from './models/payment.schema.js'
 
 
 // products  CRUD
@@ -727,40 +729,100 @@ export async function getUserData(req,res){
 
 
 
-const instance = new Razorpay({
-  key_id: 'rzp_test_wqQZK7PHsAYpBP',
-  key_secret: 'XGyEGPhTrUWDjYNVKzLaXlfh',
-});
 
 export async function razorpayPayment(req, res) {
-  const { amount, currency } = req.body; 
-
-  const options = {
-    amount: amount * 100,
-    currency: currency,
-    receipt: `receipt_order_${Math.random()}`,
-    payment_capture: 1, 
-  };
-
   try {
-    const order = await instance.orders.create(options);
-    res.json({ order });
+    const instance = new Razorpay({
+      key_id: process.env.KEY_ID,
+      key_secret: process.env.KEY_SECRET,
+    });
+
+    const options = {
+      amount: req.body.amount * 100,
+      currency: "INR",
+      receipt: crypto.randomBytes(10).toString("hex"),
+    };
+
+    instance.orders.create(options, async (error, order) => {
+      if (error) {
+        console.error("Razorpay Order Creation Error:", error);
+        return res.status(500).json({ message: "Something Went Wrong!" });
+      }
+
+      const paymentOrder = new PaymentOrder({
+        razorpayOrderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        receipt: order.receipt,
+      });
+
+      await paymentOrder.save();
+      res.status(200).json({ data: order });
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create order' });
+    console.error("Internal Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error!" });
   }
 }
 
 
 export async function verifyPayment(req, res) {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-  const generated_signature = crypto.createHmac('sha256', 'XGyEGPhTrUWDjYNVKzLaXlfh')
-    .update(razorpay_order_id + '|' + razorpay_payment_id)
-    .digest('hex');
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.KEY_SECRET)
+      .update(sign.toString())
+      .digest("hex");
 
-  if (generated_signature === razorpay_signature) {
-    res.json({ status: 'success' });
-  } else {
-    res.status(400).json({ status: 'failure' });
+    const verified = razorpay_signature === expectedSign;
+
+    // Save verification result to the database
+    const paymentVerification = new PaymentVerification({
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
+      razorpaySignature: razorpay_signature,
+      verified,
+      message: verified ? "Payment verified successfully" : "Invalid signature sent!",
+    });
+
+    await paymentVerification.save();
+
+    if (verified) {
+      return res.status(200).json({ message: "Payment verified successfully" });
+    } else {
+      return res.status(400).json({ message: "Invalid signature sent!" });
+    }
+  } catch (error) {
+    console.error("Verification Error:", error);
+    res.status(500).json({ message: "Internal Server Error!" });
+  }
+}
+
+
+
+
+// ADMIN REQ
+
+
+export async function userlist(req,res){
+  try {
+   const data= await userSchema.find({}).then((data)=>{
+      return res.status(201).send(data)
+    })
+  } catch (error) {
+    return res.status(500).send("Internal error")
+  }
+}
+
+export async function deleteUser(req,res){
+  try {
+    const {id}=req.params
+    const data=await userSchema.deleteOne({_id:id}).then((data)=>{
+      return res.status(200).send("Susscusfully deleted")
+    })
+  } catch (error) {
+    return res.status(500).send("internal error in deleting")
   }
 }

@@ -137,7 +137,7 @@ const Admin = () => {
               Order List's
             </Link>
             <Link
-              to="/admin/viewproducts"
+              to="/admin/userlists"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 mt-2"
             >
               <FaCircleUser className="text-center h-6 w-7" />
