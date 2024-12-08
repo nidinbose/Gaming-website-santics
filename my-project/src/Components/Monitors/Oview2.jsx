@@ -7,8 +7,7 @@ const Oview2 = () => {
   return (
     <div className="container mx-auto p-4" 
     >
-      {/* Heading */}
-      <motion.h1
+       <motion.h1
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-white xl:mb-[20vh] xl:mt-[10vh]"
         initial={{ x: -200, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -17,10 +16,8 @@ const Oview2 = () => {
         Monitors
       </motion.h1>
 
-      {/* Grid of Photos */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Photo 1 */}
-     <Link to={`http://localhost:5173/viewcase/66d8a3ddf3083324b076cda0`}>
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <Link to={`http://localhost:5173/viewcase/66d8a3ddf3083324b076cda0`}>
      <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -36,9 +33,9 @@ const Oview2 = () => {
   />
 
   <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
-    whileHover={{ opacity: 1 }}
-    transition={{ duration: 0.2 }}
+    className=""
+    whileHover={{ opacity: 2 }}
+    transition={{ duration: 0.1 }}
   >
     <h1 className="text-white text-5xl font-bold text-center">
       ROG <br />
@@ -46,6 +43,8 @@ const Oview2 = () => {
     </h1>
   </motion.div>
 </motion.div></Link>
+
+
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -61,7 +60,7 @@ const Oview2 = () => {
   />
 
   <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
+    className=""
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.6 }}
   >
@@ -87,7 +86,7 @@ const Oview2 = () => {
   />
 
   <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
+    className=""
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.3 }}
   >
@@ -114,7 +113,7 @@ const Oview2 = () => {
   />
 
   <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
+    className=""
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.6 }}
   >
@@ -138,7 +137,7 @@ const Oview2 = () => {
   />
 
   <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
+    className=""
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.9 }}
   >
@@ -162,7 +161,7 @@ const Oview2 = () => {
   />
 
   <motion.div
-    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0"
+    className=""
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.9 }}
   >

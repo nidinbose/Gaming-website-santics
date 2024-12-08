@@ -1,25 +1,26 @@
 import React from "react";
 import { motion } from "framer-motion";
-import './Css/img1.css';
+// import './Css/img1.css';
+import { Link } from "react-router-dom";
 
 const Img1 = () => {
   return (
     <div className="container mx-auto p-4 h-auto w-auto" 
     style={{ backgroundImage: "url('/images/bgrog.pn')" }}>
-      {/* Heading */}
-      <motion.h1
+         <motion.h1
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-white xl:mb-[20vh] xl:mt-[10vh] text-start"
         initial={{ x: -200, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        Custom Cases 
+       <h1 className="bg-gradient-to-r from-green-400 via-blue-500 to-green-400 bg-clip-text text-transparent text-5xl font-bold font-mono">
+  Custom Cases
+</h1>
+ 
       </motion.h1>
-
-      {/* Grid of Photos */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Photo 1 */}
-        <motion.div
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <Link to={`http://localhost:5173/viewcase/66f9921527f4db6d22acc448`}>
+      <motion.div
           className="relative overflow-hidden image-container"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -32,9 +33,8 @@ const Img1 = () => {
             alt="Photo 1"
             className="w-full h-full object-cover"
           />
-        </motion.div>
-
-        {/* Photo 2 */}
+        </motion.div></Link>
+        <Link to={`http://localhost:5173/viewcase/6753dfc3fbaa1f03cbe2be95`}>
         <motion.div
           className="relative overflow-hidden image-container"
           whileHover={{ scale: 1.05 }}
@@ -48,8 +48,9 @@ const Img1 = () => {
             alt="Photo 2"
             className="w-full h-full object-cover"
           />
-        </motion.div>
-        <motion.div
+        </motion.div></Link>
+    <Link to={`http://localhost:5173/viewcase/67541901bddfa8827c144902`}>
+    <motion.div
           className="relative overflow-hidden image-container"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -62,7 +63,7 @@ const Img1 = () => {
             alt="Photo 2"
             className="w-full h-full object-cover"
           />
-        </motion.div>
+        </motion.div></Link>
       </div>
     </div>
   );

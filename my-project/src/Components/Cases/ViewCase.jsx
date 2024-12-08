@@ -8,17 +8,19 @@ const ViewCase = () => {
   const [product, setProduct] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [count, setCount] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(null);
+  
 
-  // Get the scroll position
-  const { scrollY } = useViewportScroll();
+    const { scrollY } = useViewportScroll();
 
-  // Parallax effects for video and images
   const videoY = useTransform(scrollY, [0, 300], [0, -100]);
   const image1Y = useTransform(scrollY, [0, 600], [0, -200]);
   const image2Y = useTransform(scrollY, [0, 800], [0, -250]);
   const image3Y = useTransform(scrollY, [0, 1000], [0, -300]);
 
-  // Fetch product details
+  const handleImageSelect = (link) => {
+    setSelectedImage(link);
+  };
   const getCase = async () => {
     try {
       const res = await axios.get(`http://localhost:3003/api/getcaseedit/${id}`);
@@ -28,7 +30,6 @@ const ViewCase = () => {
     }
   };
 
-  // Add to cart functionality
   const handleAddToCart = async () => {
     try {
       const userId = localStorage.getItem("userId");
@@ -155,30 +156,41 @@ const ViewCase = () => {
           </motion.div>
         </div>
       </div>
+      {selectedImage && (
+        <div className="mt-8">
+          <h2 className="text-center text-2xl mb-4">Selected Image</h2>
+          <div className="relative w-full h-full mx-auto">
+            <img
+              src={selectedImage}
+              alt="Selected Product"
+              className="object-cover w-full h-full rounded-lg"
+            />
+           
+          </div>
+        </div>
+      )}
+      <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-[70vw] xl:w-[60vw] items-center gap-7 xl:ml-[15vw] xl:mt-[20vh] mx-auto">
+        {[product.link1, product.link2, product.link3, product.link4, product.link5, product.link6]
+          .filter((link) => link)
+          .map((link, index) => (
+            <motion.div
+              key={index}
+              className="relative overflow-hidden border border-white/20 cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              onClick={() => handleImageSelect(link)}
+            >
+              <motion.img
+                src={link}
+                alt={`Product Image ${index + 1}`}
+                className="object-cover w-full h-full transition-transform duration-500 ease-in-out hover:scale-110 rounded-lg"
+              />
+            </motion.div>
+          ))}
+      </div>
+    </div>
 
-      {/* Product Images */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-[70vw] xl:w-[60vw] items-center gap-7 xl:ml-[15vw] xl:mt-[20vh]">
-  {[product.link1, product.link2, product.link3, product.link4, product.link5, product.link6]
-    .filter((link) => link)
-    .map((link, index) => (
-      <motion.div
-        key={index}
-        className="relative overflow-hidden border border-white/20 "
-        whileHover={{ scale: 1.05 }} 
-      >
-        <motion.img
-          src={link}
-          alt={`Product Image ${index + 1}`}
-          className="object-cover w-full h-full transition-transform duration-500 ease-in-out hover:scale-110 rounded-lg"
-        />
-      </motion.div>
-    ))}
-</div>
-
-
-      {/* Parallax Scrolling Sections */}
       <div className="min-h-screen flex flex-col space-y-20 bg-transparent xl:mt-[30vh] mt-20">
-  {/* Video Section */}
   <motion.div
 
     className="relative flex justify-center items-center bg-black h-[80vh]" 
@@ -191,8 +203,6 @@ const ViewCase = () => {
       className="object-cover w-full h-full"
     />
   </motion.div>
-
-  {/* Image 1 */}
   <motion.div className="bg-transparent">
     <div className="flex justify-center items-center py-20">
       <img
@@ -202,8 +212,6 @@ const ViewCase = () => {
       />
     </div>
   </motion.div>
-
-  {/* Image 2 */}
   <motion.div className="bg-transparent">
     <div className="flex justify-center items-center py-20">
       <img
@@ -213,8 +221,6 @@ const ViewCase = () => {
       />
     </div>
   </motion.div>
-
-  {/* Image 3 */}
   <motion.div className="bg-transparent">
     <div className="flex justify-center items-center py-20">
       <img

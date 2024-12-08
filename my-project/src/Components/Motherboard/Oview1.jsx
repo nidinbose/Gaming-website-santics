@@ -1,27 +1,26 @@
 import React from "react";
 import { motion } from "framer-motion";
+import {Link} from 'react-router-dom'
 
 
 const Oview1 = () => {
   return (
     <div className="container mx-auto p-4" 
     style={{ backgroundImage: "url('/images/bgog.png')" }}>
-      {/* Heading */}
-      <motion.h1
+       <motion.h1
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-white xl:mb-[20vh] xl:mt-[10vh]"
         initial={{ x: -200, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        Mother Boardes <br />
+<div className="text-start text-5xl font-mono bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent mb-2">
+<h1 className="txt-start">Mother Boards</h1>
+</div>
+            </motion.h1>
 
-        <span className="text-lg">all the cure  dshuwuifj acjwd</span>
-      </motion.h1>
-
-      {/* Grid of Photos */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-        {/* Photo 1 */}
-        <motion.div
+<Link to={`http://localhost:5173/viewcase/66dd50313a7d99f1438009a7`}>
+<motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
@@ -34,12 +33,11 @@ const Oview1 = () => {
     alt="Photo 1"
     className="w-full h-full object-cover"
   />
-  <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
-    Rog
-  </h1>
-</motion.div>
 
-        <motion.div
+</motion.div></Link>
+
+       <Link to={`http://localhost:5173/viewcase/675476a17f49f13239c0c4e3`}>
+       <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
@@ -52,10 +50,9 @@ const Oview1 = () => {
     alt="Photo 2"
     className="w-full xl:h-[4b0vh] object-cover"
   />
-   <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
-    Msi
-  </h1>
-</motion.div>
+</motion.div></Link>
+
+<Link to={`http://localhost:5173/viewcase/675482127f49f13239c0c5b7`}>
 
      
 <motion.div
@@ -71,11 +68,9 @@ const Oview1 = () => {
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
-   <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
-    Predator
-  </h1>
-</motion.div>
-        <motion.div
+ </motion.div></Link>      
+ <Link to={`http://localhost:5173/viewcase/6755bf6d9f72529cc63f2f3d`}>
+ <motion.div
           className="relative overflow-hidden image-container"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -88,10 +83,7 @@ const Oview1 = () => {
             alt="Photo 2"
             className="w-full h-full object-cover"
           />
-           <h1 className="absolute inset-0 flex items-top justify-center text-white text-5xl opacity-0 hover:opacity-100 transition-opacity duration-300 font-bold">
-    Asus
-  </h1>
-        </motion.div>
+          </motion.div></Link>
 
        
       </div>

@@ -773,36 +773,26 @@ export async function verifyPayment(req, res) {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-    const sign = razorpay_order_id + "|" + razorpay_payment_id;
-    const expectedSign = crypto
-      .createHmac("sha256", process.env.KEY_SECRET)
-      .update(sign.toString())
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
       .digest("hex");
 
-    const verified = razorpay_signature === expectedSign;
-
-    // Save verification result to the database
-    const paymentVerification = new PaymentVerification({
-      razorpayOrderId: razorpay_order_id,
-      razorpayPaymentId: razorpay_payment_id,
-      razorpaySignature: razorpay_signature,
-      verified,
-      message: verified ? "Payment verified successfully" : "Invalid signature sent!",
-    });
-
-    await paymentVerification.save();
-
-    if (verified) {
-      return res.status(200).json({ message: "Payment verified successfully" });
+    if (expectedSignature === razorpay_signature) {
+      await PaymentOrder.updateOne(
+        { razorpayOrderId: razorpay_order_id },
+        { status: 'paid', paymentId: razorpay_payment_id }
+      );
+      res.status(200).json({ message: "Payment verified successfully" });
     } else {
-      return res.status(400).json({ message: "Invalid signature sent!" });
+      res.status(400).json({ message: "Invalid signature" });
     }
   } catch (error) {
-    console.error("Verification Error:", error);
-    res.status(500).json({ message: "Internal Server Error!" });
+    console.error("Payment verification error:", error);
+    res.status(500).json({ message: "Payment verification failed" });
   }
 }
-
 
 
 

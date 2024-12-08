@@ -38,7 +38,7 @@ const Category = () => {
     <div className="relative bg-white">
       <h1 className="text-black text-center text-5xl font-bold py-4 xl:pt-[12vh] font-mono">EXPLORE OUR PRODUCTS</h1>
       
-      {/* Scroll Left Button */}
+  
       <button
         onClick={scrollLeft}
         className="absolute left-2 top-1/2 transform -translate-y-1/2 text-red-600 p-2 rounded-full z-10 text-xl xl:mt-20"

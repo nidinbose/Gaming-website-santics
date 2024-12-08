@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Relate = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
@@ -18,7 +19,6 @@ const Relate = () => {
     getCase();
   }, []);
 
-  // Filter products by category 'cases' and stock less than 30
   const filteredProducts = products.filter(
     (product) => product.category === "cases" && product.stock < 30
   );
@@ -33,9 +33,10 @@ const Relate = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
+           <Link to={`/viewcase/${product._id}`} >
               <div
                 key={product._id}
-                className="border border-transparent bg-white overflow-hidden p-10"
+               className="border border-transparent bg-white overflow-hidden p-10 h-[80vh] sm:h-[60vh] md:h-[60vh] lg:h-[40vh] xl:h-[70vh]"
               >
                 <img
                   src={product.imagelink}
@@ -53,10 +54,10 @@ const Relate = () => {
                     {product.specifications}
                   </h2>
                   <p className="text-red-500 font-bold mt-4">
-                    {/* Only {product.stock} left in stock! */}
+                   
                   </p>
                 </div>
-              </div>
+              </div></Link>
             ))
           ) : (
             <p className="text-center col-span-4">No products available.</p>

@@ -1,41 +1,68 @@
+html {
+  background-color: #808080;
+}
+
+/* Image container with border hover effect */
 .image-container {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 300px; /* Example fixed width */
+  height: 300px; /* Example fixed height */
   cursor: pointer;
+  overflow: hidden;
+  margin: 50px auto; /* Centered on the page */
 }
 
 .image-container::before,
-.image-container::after {
+.image-container::after,
+.image-container .vertical::before,
+.image-container .vertical::after {
   content: "";
   position: absolute;
   background: white;
+  opacity: 0.9;
   transition: all 0.6s ease-in-out;
-  opacity: 0.7;
 }
 
+/* Horizontal lines (top and bottom) */
 .image-container::before {
-    bottom: 0;
-    right: 0;
-    top:0;
-    left:0;
-  height: 2px;
-  width: 0%;
+  top: 0;
+  left: 50%;
+  width: 0%; /* Start as a point */
+  height: 2px; /* Thin border */
 }
 
 .image-container::after {
   bottom: 0;
+  left: 50%;
+  width: 0%; /* Start as a point */
+  height: 2px; /* Thin border */
+}
+
+/* Vertical lines (left and right) */
+.image-container .vertical::before {
+  left: 0;
+  top: 50%;
+  width: 2px; /* Thin border */
+  height: 0%; /* Start as a point */
+}
+
+.image-container .vertical::after {
   right: 0;
-  top:0;
-  left:0;
-  height: 0%;
-  width: 2px;
+  top: 50%;
+  width: 2px; /* Thin border */
+  height: 0%; /* Start as a point */
 }
 
-.image-container:hover::before {
-  width: 100%;
-}
-
+/* Hover effect for horizontal borders */
+.image-container:hover::before,
 .image-container:hover::after {
-  height: 100%;
+  left: 0;
+  width: 100%; /* Expand to full width */
+}
+
+/* Hover effect for vertical borders */
+.image-container:hover .vertical::before,
+.image-container:hover .vertical::after {
+  top: 0;
+  height: 100%; /* Expand to full height */
 }

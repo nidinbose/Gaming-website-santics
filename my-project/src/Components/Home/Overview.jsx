@@ -16,8 +16,7 @@ const Overview = () => {
         transition: 'background-position 0.1s ease-out'
       }}
     >
-      {/* Title */}
-      <motion.h3
+        <motion.h3
         className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-blue-500 to-red-900 mb-4 font-mono"
         initial={{ opacity: 0, x: -100 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -25,13 +24,9 @@ const Overview = () => {
       >
         Republic OF Gamers
       </motion.h3>
-
-      {/* Grid Layout for Text and Images */}
       <div className="container mx-auto h-full flex items-center px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 xl:p-8">
-          
-          {/* Text Column */}
-          <motion.div
+              <motion.div
             className="flex flex-col justify-center"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -66,8 +61,6 @@ The lights… The cameras…
 
             </motion.p>
           </motion.div>
-
-          {/* Images Column */}
           <div className="grid grid-cols-2 gap-4">
             <motion.img
               src="https://dlcdnwebimgs.asus.com/gain/D215A157-ABB4-4D8B-B869-ADEEFB7237DA/w717/h525"

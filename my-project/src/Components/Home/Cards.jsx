@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Cards = () => {
   const [offsetY, setOffsetY] = useState(0);
@@ -32,8 +33,7 @@ const Cards = () => {
           View All Motherboards
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
-          {/* Card 1 */}
-          <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg"> 
+                  <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg"> 
             <img
               src="https://dlcdnwebimgs.asus.com/gain/3290BA3F-4B88-4C55-AF07-90C96EABA774/w1000/h732"
               alt="Product 1"
@@ -52,21 +52,21 @@ Dark Hero</p>
               </h2>
             </div>
           </div>
-          {/* Repeat similar cards for Card 2, 3, and 4 */}
-          <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
+                  <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
               src="https://images.acer.com/is/image/acer/Predator-Orion-7000-Homepage-Photo?$responsive$"
               alt="Product 2"
               className="w-full h-64 object-cover"
             />
-            <div className="p-4 text-center">
+      <Link to={`http://localhost:5173/viewcase/6753dfc3fbaa1f03cbe2be95`}>
+      <div className="p-4 text-center">
               <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">PREDATOR ORION 5000</p>
               <h2 className="text-xs medium text-gray-200 font-mono">
               Keep frames high and temps low with the new ARGB-infused Predator FrostBlade™ 2.0 fans. Each of the fans includes 
               eight ARGB LEDS and utilize a static pressure design to optimize airflow while reducing vibration and noise via
                sealed rifle bearings and a new arc-shaped design along the ends of the fins.
               </h2>
-            </div>
+            </div></Link>
           </div>
           <div className="bg-white/10  hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img

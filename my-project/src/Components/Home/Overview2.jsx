@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import './CSS/Overview2.css';
 
 const slideInFromRight = {
@@ -13,10 +14,9 @@ const Overview2 = () => {
       className="relative min-h-screen bg-cover bg-center bg-no-repeat pt-2 "
       style={{
         backgroundImage: "url('/images/bgacer.png')",
-        transition: 'background-position 0.1s ease-out' // Optional smooth transition
+        transition: 'background-position 0.1s ease-out' 
       }}
     >
-      {/* Title */}
       <motion.h3
         className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-green-600 via-blue-700 to-red-900 mb-4 font-mono"
         initial={{ opacity: 0, x: -100 }}
@@ -25,12 +25,9 @@ const Overview2 = () => {
       >
         Gaming With Predator
       </motion.h3>
-
-      {/* Grid Layout for Text and Images */}
       <div className="container mx-auto h-full flex items-center px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 xl:p-8">
-          
-          {/* Text Column */}
+
           <motion.div
             className="flex flex-col justify-center"
             initial={{ opacity: 0, x: -50 }}
@@ -63,7 +60,6 @@ const Overview2 = () => {
             </motion.p>
           </motion.div>
 
-          {/* Images Column */}
           <div className="grid grid-cols-2 gap-4">
             <motion.img
               src="https://images.acer.com/is/image/acer/predator-bifrost-arc-a770-01?$Series-Component-XL$"
@@ -71,12 +67,13 @@ const Overview2 = () => {
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
-            <motion.img
-              src="https://images.acer.com/is/image/acer/Predator-Orion-5000-PO5-640-light-rgb-02?$Line-Overview-XL$"
-              alt="Image 2"
-              className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
-              whileHover={{ scale: 1.1 }}
-            />
+         <Link to={`http://localhost:5173/viewcase/6753dfc3fbaa1f03cbe2be95`}>
+         <motion.img
+                src="https://images.acer.com/is/image/acer/Predator-Orion-5000-PO5-640-light-rgb-02?$Line-Overview-XL$"
+                alt="Image 2"
+                className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
+                whileHover={{ scale: 1.1 }}
+              /></Link>
             <motion.img
               src="https://images.acer.com/is/image/acer/X27_None%20Eye%20tracking_wp_02?$Series-Component-XL$"
               alt="Image 3"
