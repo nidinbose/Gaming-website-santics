@@ -13,7 +13,7 @@ const Oview2 = () => {
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        Monitors
+      <h1 className="text-start">  Monitors</h1>
       </motion.h1>
 
          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -45,6 +45,7 @@ const Oview2 = () => {
 </motion.div></Link>
 
 
+<Link to={`http://localhost:5173/viewcase/6755c4719f72529cc63f2fd2`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -68,9 +69,10 @@ const Oview2 = () => {
       Rog
     </h1>
   </motion.div>
-</motion.div>
+</motion.div></Link>
 
      
+<Link to={`http://localhost:5173/viewcase/67567975f504e480061de282`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -95,9 +97,10 @@ const Oview2 = () => {
     </h1>
   </motion.div>
 </motion.div>
+</Link>
 
 
-{/* sec */}
+<Link to={`http://localhost:5173/viewcase/67567dfef504e480061de2a7`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -122,6 +125,9 @@ const Oview2 = () => {
     </h1>
   </motion.div>
 </motion.div>
+</Link>
+
+<Link to={`http://localhost:5173/viewcase/67568e51f504e480061de379`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -131,7 +137,7 @@ const Oview2 = () => {
   transition={{ duration: 0.5, delay: 0.9 }} 
 >
   <img
-    src="https://cdn.mwave.com.au/images/400/asus_rog_strix_xg_xg16ahp_156_144hz_fhd_3ms_ips_portable_gaming_monitor_ac43821_20375.jpg"
+    src="https://dlcdnwebimgs.asus.com/gain/209DAF4F-AE6E-461D-BD09-0C55C6D432A9/w750/h470"
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
@@ -146,6 +152,9 @@ const Oview2 = () => {
     </h1>
   </motion.div>
 </motion.div>
+</Link >
+
+<Link to={`http://localhost:5173/viewcase/675680cbf504e480061de2bf`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -169,7 +178,7 @@ const Oview2 = () => {
       Rog
     </h1>
   </motion.div>
-</motion.div>
+</motion.div></Link>
        
 
        

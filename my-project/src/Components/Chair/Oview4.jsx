@@ -1,5 +1,6 @@
   import React from "react";
   import { motion } from "framer-motion";
+  import { Link } from "react-router-dom";
 
   const Oview4 = () => {
     return (
@@ -10,13 +11,13 @@
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          Gaming Chairs
+        <div className="flex items-center justify-start ">
+          <h1>  Gaming Chairs</h1>
+        </div>
         </motion.h1>
-
-        {/* Grid of Photos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Photo 1 */}
-          <motion.div
+       <Link to={`http://localhost:5173/viewcase/66fae4d5430510aba5ac0870`}>
+       <motion.div
             className="relative overflow-hidden image-container border-animation"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -31,9 +32,10 @@
             />
             <div className="absolute inset-0 border-animation-frame"></div>
           </motion.div>
-
-          {/* Photo 2 */}
-          <motion.div
+       </Link>
+     
+         <Link to={`http://localhost:5173/viewcase/6757dad02715c3c0588c724e`}>
+         <motion.div
             className="relative overflow-hidden image-container border-animation"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -48,9 +50,9 @@
             />
             <div className="absolute inset-0 border-animation-frame"></div>
           </motion.div>
-
-          {/* Photo 3 */}
-          <motion.div
+         </Link>
+<Link to={`http://localhost:5173/viewcase/6757d93e2715c3c0588c7233`}>
+<motion.div
             className="relative overflow-hidden image-container border-animation"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -65,6 +67,8 @@
             />
             <div className="absolute inset-0 border-animation-frame"></div>
           </motion.div>
+</Link>
+
         </div>
       </div>
     );

@@ -46,8 +46,33 @@ const ProductList = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Search and Category Dropdown */}
-      <div className="flex justify-between mb-6">
+   <div className="flex justify-end items-center mb-7">
+    <Link to={`/admin/addproducts`}>
+    <motion.button
+        whileHover={{ scale: 1.1, boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)" }}
+        whileTap={{ scale: 0.95 }}
+        className="flex items-center justify-end gap-2 px-6 py-3 bg-white/20 text-white text-lg font-semibold hover:bg-red-600 focus:outline-none transition-all duration-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16 11V7a4 4 0 10-8 0v4m-2 0a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2m-10 0h8"
+          />
+        </svg>
+        ADD PRODUCTS
+      </motion.button>
+    </Link>
+    </div>
+
+        <div className="flex justify-between mb-6">
         <input
           type="text"
           placeholder="Search by name..."

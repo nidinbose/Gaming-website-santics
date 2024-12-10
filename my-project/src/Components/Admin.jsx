@@ -4,11 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { Pie, Bar } from "react-chartjs-2";
 import axios from "axios";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from "chart.js";
-import { MdProductionQuantityLimits } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
-import { LuPackageOpen } from "react-icons/lu";
-import { FaCircleUser } from "react-icons/fa6";
-
+import { LuLayoutDashboard } from "react-icons/lu";
+import { GiShoppingCart } from "react-icons/gi";
+import { FaUserFriends } from "react-icons/fa";
+import { FcSalesPerformance } from "react-icons/fc";
+import { FaTags } from "react-icons/fa6";
+import { BiSolidOffer } from "react-icons/bi";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { TbBrandSwift } from "react-icons/tb";  
+import { RiLogoutBoxLine } from "react-icons/ri";
+import { LuPackage2 } from "react-icons/lu"; 
+import { FaShoppingBag } from "react-icons/fa"; 
+import { FaRupeeSign } from "react-icons/fa";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
@@ -61,13 +69,13 @@ const Admin = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Data for Pie Chart
+
   const pieData = {
     labels: ["Cpu", "moitors", "Books", "motherboard & Kitchen", "Toys"],
     datasets: [
       {
         label: "Product Categories",
-        data: [300, 50, 100, 80, 150], // Example data
+        data: [300, 50, 100, 80, 150],
         backgroundColor: [
           "#FF6384",
           "#36A2EB",
@@ -86,13 +94,12 @@ const Admin = () => {
     ],
   };
 
-  // Data for Bar Chart
   const barData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
     datasets: [
       {
         label: "Sales",
-        data: [30, 45, 50, 60, 70, 90, 100], // Example data
+        data: [30, 45, 50, 60, 70, 90, 100],
         backgroundColor: "#EF0107",
         borderColor: "#EF0107",
         borderWidth: 1,
@@ -102,74 +109,108 @@ const Admin = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <motion.aside
+        <motion.aside
         className="w-full md:w-64 bg-black h-full shadow-md flex flex-col justify-between border-2 border-white/10"
         initial={{ x: "-100%" }}
         animate={{ x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="p-6 bg-white/10">
-          <Link to="/admin" className="flex items-center space-x-2">
-            <img src="/images/Santics.png" alt="Logo" className="h-12 mr-3" />
-            <span className="text-white text-2xl font-bold">Admin</span>
-          </Link>
+        <div className="p-5 bg-black">
+          <Link to="/admin" className="flex items-center">
+            <img src="/images/Santics.png" alt="Logo" className="h-13" />
+                   </Link>
           <nav className="mt-10">
             <Link
-              to="/admin/addproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 "
+              to="/admin"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10  hover:text-red-600 text-white/70 flex gap-4 "
             >
-              <MdProductionQuantityLimits className="text-center h-6 w-7" />
-              <p>Add Product</p>
+              <LuLayoutDashboard className="text-center h-6 w-7" />
+              <p>DASHBOARD</p>
             </Link>
             <Link
               to="/admin/productslist"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 mt-2"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
               <BiPackage className="text-center h-6 w-7" />
-             <p> Products List</p>
+             <p> PRODUCTS</p>
             </Link>
             <Link
               to="/admin/viewproducts"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 mt-2"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
-            <LuPackageOpen className="text-center h-6 w-7" />
-              Order List's
+            <GiShoppingCart className="text-center h-6 w-7" />
+              ORDERES
             </Link>
             <Link
               to="/admin/userlists"
-              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 bg-white/10 hover:text-white text-[#FF0800] flex gap-2 mt-2"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
-              <FaCircleUser className="text-center h-6 w-7" />
-              User Lists
+              <FaUserFriends className="text-center h-6 w-7" />
+              CUSTOMERS
             </Link>
-       
-          </nav>
-        </div>
 
-        {/* Logout Button */}
-        <div className="p-6 bg-white/10">
-          <button
+            <Link
+              to="/admin/userlists"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
+            >
+              <FcSalesPerformance className="text-center h-6 w-7" />
+              SALES 
+            </Link>
+
+            <Link
+              to="/admin/userlists"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
+            >
+              <FaTags className="text-center h-6 w-7" />
+              COUPONS
+            </Link>
+
+            <Link
+              to="/admin/userlists"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
+            >
+              <BiSolidOffer className="text-center h-6 w-7" />
+              OFFERS
+            </Link>
+            <Link
+              to="/admin/userlists"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
+            >
+              <BiSolidCategoryAlt className="text-center h-6 w-7" />
+              CATEGORY
+            </Link>
+
+            <Link
+              to="/admin/userlists"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
+            >
+              <TbBrandSwift className="text-center h-6 w-7" />
+              BRANDS
+            </Link>
+                 </nav>
+        </div>
+        <div className="p-6 bg-white/10 flex items-center justify-between">
+
+        <h1>hii</h1>
+        <div className="flex items-center gap-1 text-white hover:text-red-600">
+        <RiLogoutBoxLine className="text-center h-6 w-7" onClick={handleLogout}/>
+        <button
             onClick={handleLogout}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+            className="text-white hover:text-red-600"
           >
             Logout
           </button>
         </div>
+        </div>
       </motion.aside>
-
-      {/* Main Dashboard Content */}
       <div className="flex-1 p-6 bg-black">
-        {/* Navbar */}
-        <motion.div
+          <motion.div
           className="bg-black shadow-md py-3 px-6 rounded-md flex justify-between items-center"
           initial={{ y: "-100%" }}
           animate={{ y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-
-          {/* Mobile Menu Button */}
           <button
             id="mobile-menu-button"
             className="md:hidden text-gray-700"
@@ -191,23 +232,43 @@ const Admin = () => {
             </svg>
           </button>
         </motion.div>
-
-        {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 ">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6 ">
           <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold text-white ">Total Products</h2>
+            <h2 className="text-xl font-bold text-white ">TOTAL PRODUCTS</h2>
+            <div className="flex gap-3 items-center ">
+            <LuPackage2 className="w-6 h-7 font-bold text-white"/>
             <h1 className="text-3xl font-bold text-white"> {productCount !== null ? productCount : "Loading..."}</h1>
-          </div>
+            </div>
+            </div>
 
-          <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold text-white">Orders</h2>
-            <p className="text-3xl mt-4 text-white">85</p>
-          </div>
+            <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold text-white ">TOTAL ORDERS</h2>
+            <div className="flex gap-3 items-center ">
+            <FaShoppingBag className="w-6 h-7 font-bold text-white"/>
+            <h1 className="text-3xl font-bold text-white"> {productCount !== null ? productCount : "Loading..."}</h1>
+            </div>
+            </div>
 
-          <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold text-white">user count</h2>
+            <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold text-white ">TOTAL USERS</h2>
+            <div className="flex gap-3 items-center ">
+            <FaUserFriends className="w-6 h-7 font-bold text-white"/>
             <h1 className="text-3xl font-bold text-white"> Users: {userCount !== null ? userCount : "Loading..."}</h1>
-          </div>
+            </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-pink-600 via-blue-500 to-pink-500 p-6 rounded-lg shadow-lg">
+  <h2 className="text-xl font-bold text-white mb-4">TOTAL REVENUE</h2>
+  <div className="flex items-center gap-3">
+       <FcSalesPerformance className="w-7 h-7" />
+    <h1 className="text-3xl font-bold text-white flex items-center gap-1">
+      <FaRupeeSign className="w-5 h-5" />
+      {userCount !== null ? userCount : "Loading..."}
+    </h1>
+  </div>
+</div>
+
+ 
         </div>
 {/* Charts Section */}
 <div className="mt-8 space-y-8">
