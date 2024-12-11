@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import './CSS/Overview.css';
+import { Link } from "react-router-dom";
 
 const slideInFromRight = {
   hidden: { opacity: 0, x: '100%' },
@@ -57,35 +58,44 @@ const Overview = () => {
                big rails. Mentally... On set that can feel like…this…heat.
 The lights… The cameras…
 …feel the fear in my chest every time I get on stage, but… 
-\
+
 
             </motion.p>
           </motion.div>
           <div className="grid grid-cols-2 gap-4">
-            <motion.img
+       <Link to={`http://localhost:5173/viewcase/67568e51f504e480061de379`}>
+       <motion.img
               src="https://dlcdnwebimgs.asus.com/gain/D215A157-ABB4-4D8B-B869-ADEEFB7237DA/w717/h525"
               alt="Image 1"
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
-            <motion.img
+       </Link>
+        <Link to={`http://localhost:5173/viewcase/66f9921527f4db6d22acc448`}>
+        <motion.img
               src="https://dlcdnwebimgs.asus.com/gain/117ACAB9-87EE-4E2B-8D1C-CE9E578768BB/w717/h525"
               alt="Image 2"
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
-            <motion.img
+        </Link>
+  <Link to={`http://localhost:5173/viewcase/66dd50313a7d99f1438009a7`}>
+  
+  <motion.img
               src="https://dlcdnwebimgs.asus.com/files/media/E8F9316B-CB25-42B5-9422-CA99338CDB38/v1/img/spec/performance.png"
               alt="Image 3"
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
-            <motion.img
+  </Link>
+  <Link to={`http://localhost:5173/viewcase/6758550df7157614adfdc17f`}>
+  <motion.img
               src="https://dlcdnwebimgs.asus.com/gain/CC24A593-7041-4152-A5E4-63628FF95576/w717/h525"
               alt="Image 4"
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
+  </Link>
           </div>
         </div>
       </div>

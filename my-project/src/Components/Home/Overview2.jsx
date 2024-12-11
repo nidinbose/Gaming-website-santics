@@ -61,12 +61,14 @@ const Overview2 = () => {
           </motion.div>
 
           <div className="grid grid-cols-2 gap-4">
-            <motion.img
+         <Link to={`http://localhost:5173/viewcase/6757df5d2715c3c0588c72eb`}>
+         <motion.img
               src="https://images.acer.com/is/image/acer/predator-bifrost-arc-a770-01?$Series-Component-XL$"
               alt="Image 1"
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
+         </Link>
          <Link to={`http://localhost:5173/viewcase/6753dfc3fbaa1f03cbe2be95`}>
          <motion.img
                 src="https://images.acer.com/is/image/acer/Predator-Orion-5000-PO5-640-light-rgb-02?$Line-Overview-XL$"
@@ -74,18 +76,22 @@ const Overview2 = () => {
                 className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
                 whileHover={{ scale: 1.1 }}
               /></Link>
-            <motion.img
+         <Link to={`http://localhost:5173/viewcase/67567975f504e480061de282`}>
+         <motion.img
               src="https://images.acer.com/is/image/acer/X27_None%20Eye%20tracking_wp_02?$Series-Component-XL$"
               alt="Image 3"
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
-            <motion.img
+         </Link>
+    <Link to={`http://localhost:5173/viewcase/67590ff2cd789d4a9d6a7a39`}>
+    <motion.img
               src="https://images.acer.com/is/image/acer/Aethon-301_TKL_01?$Series-Component-XL$"
               alt="Image 4"
               className="w-full h-auto object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
             />
+    </Link>
           </div>
         </div>
       </div>
