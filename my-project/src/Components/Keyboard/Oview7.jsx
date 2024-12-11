@@ -1,12 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 
 const Oview7 = () => {
   return (
     <div className="container mx-auto p-4" 
     >
-      {/* Heading */}
       <motion.h1
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-white xl:mb-[20vh] xl:mt-[10vh]"
         initial={{ x: -200, opacity: 0 }}
@@ -15,11 +15,10 @@ const Oview7 = () => {
       >
         Keyboards
       </motion.h1>
-
-      {/* Grid of Photos */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Photo 1 */}
-        <motion.div
+     
+     <Link to={`http://localhost:5173/viewcase/67591165cd789d4a9d6a7a4b`}>
+     <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
@@ -28,7 +27,7 @@ const Oview7 = () => {
   transition={{ duration: 0.5, delay: 0.3 }} 
 >
   <img
-    src="https://dlcdnwebimgs.asus.com/gain/CDE041C0-C8F4-43E9-BD58-28A63BC2F0CE/w750/h470"
+    src="https://asset.msi.com/resize/image/global/product/product_16420615993ba39b48719ae53c6866a4c70b126afb.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png"
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
@@ -38,11 +37,13 @@ const Oview7 = () => {
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.2 }}
   >
-    <h1 className="text-white text-5xl">
-      AURA RGB
-    </h1>
+  
   </motion.div>
 </motion.div>
+     </Link>
+
+<Link to={`http://localhost:5173/viewcase/66fae958430510aba5ac095d`}>
+
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -62,13 +63,13 @@ const Oview7 = () => {
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.6 }}
   >
-    <h1 className="text-white text-5xl">
-      COMPACT
-    </h1>
+   
   </motion.div>
 </motion.div>
 
+</Link>
      
+<Link to={`http://localhost:5173/viewcase/67590ff2cd789d4a9d6a7a39`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -78,7 +79,7 @@ const Oview7 = () => {
   transition={{ duration: 0.5, delay: 0.9 }} 
 >
   <img
-    src="https://m.media-amazon.com/images/I/71Sl9tngKEL._AC_UF1000,1000_QL80_.jpg"
+    src="https://images.acer.com/is/image/acer/ksp_02?$responsive$"
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
@@ -88,11 +89,10 @@ const Oview7 = () => {
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.3 }}
   >
-    <h1 className="text-white text-5xl">
-      PBT KEYCAPS
-    </h1>
+  
   </motion.div>
 </motion.div>
+</Link>
 
 
        
