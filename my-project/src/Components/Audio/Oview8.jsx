@@ -1,12 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 
 const Oview8 = () => {
   return (
     <div className="container mx-auto p-4" 
     >
-      {/* Heading */}
       <motion.h1
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-white xl:mb-[20vh] xl:mt-[10vh]"
         initial={{ x: -200, opacity: 0 }}
@@ -15,11 +15,10 @@ const Oview8 = () => {
       >
         Gaming Headfones
       </motion.h1>
-
-      {/* Grid of Photos */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Photo 1 */}
-        <motion.div
+      
+<Link to={`http://localhost:5173/viewcase/67591b95cd789d4a9d6a7a9b`}>
+<motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
@@ -38,11 +37,13 @@ const Oview8 = () => {
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.2 }}
   >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
+
   </motion.div>
 </motion.div>
+</Link>
+
+
+<Link to={`http://localhost:5173/viewcase/675922b5cd789d4a9d6a7acb`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -62,13 +63,13 @@ const Oview8 = () => {
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.6 }}
   >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
+
   </motion.div>
 </motion.div>
+</Link>
 
      
+<Link to={`http://localhost:5173/viewcase/67595d37e07c0a722241fe26`}>
 <motion.div
   className="relative overflow-hidden image-container"
   whileHover={{ scale: 1.05 }}
@@ -78,7 +79,7 @@ const Oview8 = () => {
   transition={{ duration: 0.5, delay: 0.9 }} 
 >
   <img
-    src="https://www.creativehatti.com/wp-content/uploads/2022/11/Best-gaming-headphones-with-banner-template-29-small.jpg"
+    src="https://storage-asset.msi.com/global/picture/image/feature/multimeda/headset/GH30v2/gh30v2-foldable.jpg"
     alt="Photo 2"
     className="w-full xl:h-[42vh] object-cover"
   />
@@ -88,11 +89,10 @@ const Oview8 = () => {
     whileHover={{ opacity: 3 }}
     transition={{ duration: 0.3 }}
   >
-    <h1 className="text-white text-5xl">
-      Rog
-    </h1>
+ 
   </motion.div>
 </motion.div>
+</Link>
 
 
        

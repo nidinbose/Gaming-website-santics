@@ -5,8 +5,9 @@ const Slide11 = () => {
 
   const images = [
    
-    'https://dlcdnwebimgs.asus.com/gain/0B173084-0CAC-4D53-B211-2D2FD8FD20A5/fwebp',
-    'https://storage-asset.msi.com/event/2023/CND/DT-NVIDIA-Landing/images/msi-dt-nvidia-studio-kv.jpg',
+    'https://dlcdnwebimgs.asus.com/gain/E6D2FBCC-47B6-4AF7-9B6E-635843462A29/fwebp',
+    'https://dlcdnwebimgs.asus.com/gain/34326B61-C593-4C58-89C6-0E7D03C0C55B/fwebp',
+    'https://storage-asset.msi.com/global/picture/image/feature/mouse/DM07/images/slogan.png',
 
   ];
 
@@ -25,7 +26,7 @@ const Slide11 = () => {
     >
     
       <div
-        className="absolute inset-0 transform scale-100 hover:scale-105 transition-transform duration-700 ease-in-out"
+        className="absolute inset-0 transform scale-100 hover:scale-105 transition-transform duration-700 ease-in-out bg-cover"
         style={{ backgroundImage: `url(${images[currentImageIndex]})`, zIndex: -1 }} 
       ></div>
     </section>
