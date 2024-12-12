@@ -33,18 +33,20 @@ const Cards = () => {
           View All Motherboards
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
-                  <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg"> 
+      <Link to={`http://localhost:5173/viewcase/6755bf6d9f72529cc63f2f3d`}>
+      <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg"> 
             <img
-              src="https://dlcdnwebimgs.asus.com/gain/3290BA3F-4B88-4C55-AF07-90C96EABA774/w1000/h732"
+              src="https://asset.msi.com/resize/image/global/product/product_173028034930f57092f6b23f2405f88e4320a5171d.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png"
               alt="Product 1"
               className="w-full h-64 object-cover"
             />
             <div className="p-4 text-center">
               <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">
-ROG Maximus Z790
-Dark Hero</p>
+
+              MSI PRO Z890-S WIFI WHITE</p>
               <h2 className="text-xs medium text-gray-200 font-mono">
-              The ROG Maximus Z790 Dark Hero boasts robust cooling, WiFi 7 and ample PCIe 5.0 slot for unmatched 
+              The
+              MSI PRO Z890-S WIFI WHITE boasts robust cooling, WiFi 7 and ample PCIe 5.0 slot for unmatched 
               performance, and it offers full compatibility with 14th Gen Intel® Core™ processors. Meanwhile, its 
               stealthy design is accentuated by new Polymo lighting, which illuminates the I/O shroud with a
                microstructural array of dual-layer RGB and adds a personalized touch of style to your gaming setup.
@@ -52,6 +54,7 @@ Dark Hero</p>
               </h2>
             </div>
           </div>
+      </Link>
                   <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
               src="https://images.acer.com/is/image/acer/Predator-Orion-7000-Homepage-Photo?$responsive$"
@@ -68,14 +71,15 @@ Dark Hero</p>
               </h2>
             </div></Link>
           </div>
-          <div className="bg-white/10  hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
+           <Link to={`http://localhost:5173/viewcase/6759a8942f61b7bf3fb983de`}>
+           <div className="bg-white/10  hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
-              src="https://www.predatorstorage.com/u_file/fileUpload/2023-06/01/0.png"
+              src="https://dlcdnwebimgs.asus.com/gain/DDA5D7BA-6EAB-4EA8-A35E-464BE1B40848/w1000/h732"
               alt="Product 3"
               className="w-full h-64 object-cover"
             />
             <div className="p-4 text-center">
-              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">6.2GHZ1 TURBO!</p>
+              <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono"> ROG Strix Arion S500</p>
               <h2 className="text-xs medium text-gray-200 font-mono">
               NVIDIA® GeForce RTX™ 40 Series GPUs are beyond fast for gamers and creators.
                They're powered by the ultra-efficient NVIDIA Ada Lovelace architecture which
@@ -85,19 +89,24 @@ Dark Hero</p>
               </h2>
             </div>
           </div>
-          <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
+           </Link>
+        <Link to={`http://localhost:5173/viewcase/66fae4d5430510aba5ac0870`}>
+        <div className="bg-white/10 hover:bg-black/30 overflow-hidden p-10 rounded-lg shadow-lg">
             <img
-              src="https://dlcdnwebimgs.asus.com/gain/93A45483-9989-49EE-84B1-DA1566F31354/w382"
+              src="https://dlcdnwebimgs.asus.com/gain/43993576-CA02-46A8-9BBE-10D6F11F2E25/w1000/h732"
               alt="Product 4"
-              className="w-full h-64 object-cover"
+              className="w-full h-65 object-cover"
             />
             <div className="p-4 text-center ">
               <p className="text-gray-300 text-2xl mb-5 mt-5 font-bold font-mono">ROG Chariot X Core</p>
               <h2 className="text-xs medium text-gray-200 font-mono">
-              ROG Chariot X Core gaming chair in racing-car style, featuring an adjustable high-density foam headrest, memory-foam lumbar support, 4D armrests, tilt mechanism, durable class 4 gas lift, and durable premium PU leather for a premium gaming experience.
+              ROG Chariot X Core gaming chair in racing-car style, featuring an adjustable high-density foam headrest
+              lifelike virtual worlds with ray tracing and ultra-high FPS gaming with the lowest
+              latency. Discover revolutionary new ways to create anghdj kkjjb., memory-foam lumbar support, 4D armrests, tilt mechanism, durable class 4 gas lift, and durable premium PU leather for a premium gaming experience.
               </h2>
             </div>
           </div>
+        </Link>
         </div>
       </div>
     </div>

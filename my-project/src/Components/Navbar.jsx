@@ -76,9 +76,9 @@ const Navbar = () => {
       ],
     },
     {
-      name: "Innovation",
+      name: "Whats hot",
       links: [
-        { name: "Innovation 1", path: "/innovation1" },
+        { name: "COMMUNITY", path: "" },
         { name: "Innovation 2", path: "/innovation2" },
       ],
     },
@@ -90,10 +90,10 @@ const Navbar = () => {
       ],
     },
     {
-      name: "Community",
+      name: "Support",
       links: [
-        { name: "Community 1", path: "/community1" },
-        { name: "Community 2", path: "/community2" },
+        { name: "Support", path: "/community1" },
+        { name: "Coustmer care", path: "/community2" },
       ],
     },
     {
@@ -110,8 +110,7 @@ const Navbar = () => {
   return (
     <nav className="bg-black text-white shadow-md pb-1 pt-2">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
-        {/* Logo */}
-      <Link to={`/`}>  <div className="flex items-center">
+            <Link to={`/`}>  <div className="flex items-center">
           <img src={`/images/Santics.png`} alt="Logo" className="h-12 w-auto" />
         </div></Link>
 
@@ -125,8 +124,7 @@ const Navbar = () => {
               >
                 {item.name}
               </button>
-              {/* Dropdown */}
-              <div
+                         <div
   className={`absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 border-b-2 border-gray-200 z-50 transition-all ease-in-out duration-200 ${
     isDropdownOpen === index ? "block" : "hidden"
   }`}
@@ -150,13 +148,8 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Search & Cart Icons */}
-        <div className="flex items-center space-x-10">
-          {/* Cart Hover */}
-      
-
-          {/* User Login/Logout */}
-          {user ? (
+              <div className="flex items-center space-x-10">
+                {user ? (
   <div className="flex items-center space-x-2">
     <Link to={`/account`}>
       <span className="text-red-600">{user.username}</span>
@@ -177,16 +170,12 @@ const Navbar = () => {
             <Link to="/cart" className=" hover:text-red-500">
             <MdShoppingCart/>
             </Link>
-            {/* Show CartComponent only on hover */}
-            <div className="absolute top-full right-0 mt-2 z-50 hidden group-hover:block">
-              {/* <CartComponent /> */}
-            </div>
+                  <div className="absolute top-full right-0 mt-2 z-50 hidden group-hover:block">
+                     </div>
           </div>
 
         </div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
+       <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
             className="text-gray-700 focus:outline-none"
@@ -208,8 +197,6 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">

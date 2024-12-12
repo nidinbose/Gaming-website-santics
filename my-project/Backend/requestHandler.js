@@ -738,7 +738,7 @@ export async function razorpayPayment(req, res) {
     });
 
     const options = {
-      amount: req.body.amount * 100, // Amount in paise
+      amount: req.body.amount * 100,
       currency: "INR",
       receipt: crypto.randomBytes(10).toString("hex"),
     };
