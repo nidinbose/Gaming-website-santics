@@ -51,7 +51,7 @@ router.route('/getuserdata/:id').get(request.getUserData)
 
 router.route('/payment/createorder').post(request.razorpayPayment)
 router.route('/verifypayment').post(request.verifyPayment)
-router.route('/orders').get(request.getPaymentOrders)
+router.route('/orders/:userId').get(request.viewOrdersByUserId)
 
 
 
@@ -59,6 +59,7 @@ router.route('/orders').get(request.getPaymentOrders)
 
 
 router.route('/admin/userlists').get(request.userlist)
+router.route('/admin/getordersadmin').get(request.getOrdersAdmin)
 
 router.route('/admin/deleteuser/:id').delete(request.deleteUser)
 

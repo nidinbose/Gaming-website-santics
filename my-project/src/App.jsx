@@ -44,6 +44,7 @@ import Success from './Components/PaymentGateway/Sucess'
 import SupportAndTerms from './Components/Home/Support'
 import CustomerCare from './Components/Home/CoustmerCare'
 import Community from './Components/Home/Community'
+import OrdersList from './Components/AdminHandle/OrdersList'
 
 
 
@@ -88,6 +89,7 @@ function AppContent() {
         <Route path="/admin/productslist" Component={ProductList} />
         <Route path="/admin/editproducts/:id" Component={EditProducts} />
         <Route path="/admin/userlists" Component={UserLists} />
+        <Route path="/admin/orderlists" Component={OrdersList} />
 
         <Route path="/" Component={Home} />
         <Route path="/signup" Component={Signup} />
@@ -113,15 +115,14 @@ function AppContent() {
 
         <Route path="/address/:userId" Component={Address} />
         <Route path="/cardpayment" Component={CardPayment} />
-        {/* <Route path="/orderes" Component={Orderes} /> */}
         <Route path="/download" Component={Download} />
         <Route path="/account" Component={AccountView} />
-        {/* <Route path="/success/:orderId" component={Success} /> */}
         <Route path="/success" element={Success} />
-        <Route path="/orders/:orderId" Component={Orderes} />
+        <Route path="/orderes" Component={Orderes} />
         <Route path="/support" Component={SupportAndTerms} />
         <Route path="/coustmercare" Component={CustomerCare} />
         <Route path="/community" Component={Community} />
+       
 
 
 

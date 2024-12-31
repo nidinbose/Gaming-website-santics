@@ -810,18 +810,34 @@ export async function verifyPayment(req, res) {
 }
 
 
-export async function getPaymentOrders(req,res){
+export async function viewOrdersByUserId(req, res) {
+  try {
+    const { userId } = req.params; 
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required." });
+    }
 
+    const orders = await PaymentOrder.find({ userId }).sort({ createdAt: -1 });
+    if (orders.length === 0) {
+      return res.status(404).json({ message: "No orders found for this user." });
+    }
+
+    return res.status(200).json({ orders });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return res.status(500).json({ message: "Internal Server Error!" });
+  }
+}
+
+export async function getOrdersAdmin(req,res){
   try {
     const data=await PaymentOrder.find({}).then((data)=>{
       return res.status(201).send(data)
     })
   } catch (error) {
-    
+    return res.status(400).send("No data found")
   }
 }
-
-
 
 
 // ADMIN REQ

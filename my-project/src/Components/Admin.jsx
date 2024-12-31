@@ -135,7 +135,7 @@ const Admin = () => {
              <p> PRODUCTS</p>
             </Link>
             <Link
-              to="/admin/viewproducts"
+              to="/admin/orderlists"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
             <GiShoppingCart className="text-center h-6 w-7" />
