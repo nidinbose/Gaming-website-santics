@@ -729,61 +729,47 @@ export async function getUserData(req,res){
 
 export async function razorpayPayment(req, res) {
   try {
-    const { amount, currency = "INR", items } = req.body;
-
-    // Validate the required fields
+    const {userId, amount, currency = "INR", items,address } = req.body;
     if (!amount || !items || !Array.isArray(items)) {
       return res.status(400).json({ message: "Invalid request data. Amount and items are required." });
     }
-
-    // Log the request body for debugging
     console.log("Request Body:", req.body);
 
-    // Initialize Razorpay instance
-    const instance = new Razorpay({
+       const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 
-    // Create order options
-    const orderOptions = {
-      amount: amount * 100, // Convert to paise
+      const orderOptions = {
+      amount: amount * 100, 
       currency,
-      receipt: crypto.randomBytes(10).toString("hex"), // Generate unique receipt ID
-      payment_capture: 1, // Auto capture payment
+      receipt: crypto.randomBytes(10).toString("hex"), 
+      payment_capture: 1,
     };
-
-    // Create order with Razorpay
     instance.orders.create(orderOptions, async (error, order) => {
       if (error) {
         console.error("Razorpay Order Creation Error:", error);
         return res.status(500).json({ message: "Error creating Razorpay order." });
       }
 
-      // Log the Razorpay order for debugging
       console.log("Razorpay Order:", order);
-
-      // Save the order details to the database
       const paymentOrder = new PaymentOrder({
         razorpayOrderId: order.id,
         amount: order.amount,
         currency: order.currency,
+        userId,
         items,
+        address,
         receipt: order.receipt,
         status: order.status,
       });
 
       try {
         const savedOrder = await paymentOrder.save();
-
-        // Log the saved order for debugging
         console.log("Saved Order:", savedOrder);
-
         return res.status(200).json({ order });
       } catch (dbError) {
         console.error("Database Save Error:", dbError);
-
-        // Check validation errors in dbError
         if (dbError.errors) {
           console.error("Validation Errors:", dbError.errors);
         }
