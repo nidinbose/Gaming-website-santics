@@ -39,10 +39,11 @@ const CardPayment = () => {
     try {
       // Map the cartItems into an array of objects with necessary fields
       const cartData = cartItems.map((item) => ({
-        itemId: item.id,       // Item ID
-        price: item.price,     // Item price
-        quantity: item.quantity, // Item quantity
-        name: item.name,       // Item name
+        itemId: item.productId, 
+        price: item.price, 
+        quantity: item.quantity, 
+        name: item.name,
+        photo:item.imageLink       
       }));
 
       console.log(cartData); // Optional: Log cartData to verify
@@ -52,10 +53,10 @@ const CardPayment = () => {
         currency: 'INR',
         items: cartData,  // Send cart data as an array of objects
       });
-      console.log(response.data); // Optional: Log the response to verify
+      console.log(response.data); 
 
       if (response.data && response.data.order) {
-        openRazorpay(response.data.order);  // Open Razorpay with the order details
+        openRazorpay(response.data.order); 
       } else {
         console.error("Unexpected response format:", response.data);
         alert("Error while creating payment order. Please try again.");
@@ -68,7 +69,7 @@ const CardPayment = () => {
 
   const openRazorpay = (order) => {
     const options = {
-      key: 'rzp_test_wqQZK7PHsAYpBP',  // Your Razorpay key
+      key: 'rzp_test_wqQZK7PHsAYpBP',  
       amount: order.amount,
       currency: order.currency,
       name: 'Santics Gaming',
@@ -113,7 +114,7 @@ const CardPayment = () => {
     if (paymentMethod === "card") {
       handlePayment();
     } else if (paymentMethod === "upi") {
-      initiateUpiPayment(); // Implement this if UPI option is enabled
+      initiateUpiPayment(); 
     }
   };
 
