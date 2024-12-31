@@ -51,6 +51,8 @@ router.route('/getuserdata/:id').get(request.getUserData)
 
 router.route('/payment/createorder').post(request.razorpayPayment)
 router.route('/verifypayment').post(request.verifyPayment)
+router.route('/orders').get(request.getPaymentOrders)
+
 
 
 // admin

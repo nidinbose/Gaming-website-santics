@@ -1,4 +1,4 @@
-// models/PaymentVerification.js
+
 import mongoose from 'mongoose';
 
 const paymentVerificationSchema = new mongoose.Schema({

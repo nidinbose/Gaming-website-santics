@@ -40,6 +40,10 @@ import Orderes from './Components/PaymentGateway/Orderes'
 import Download from './Components/Navbar/Downlord'
 import AccountView from './Components/Navbar/AccountView'
 import UserLists from './Components/AdminHandle/UserLists'
+import Success from './Components/PaymentGateway/Sucess'
+import SupportAndTerms from './Components/Home/Support'
+import CustomerCare from './Components/Home/CoustmerCare'
+import Community from './Components/Home/Community'
 
 
 
@@ -109,9 +113,15 @@ function AppContent() {
 
         <Route path="/address/:userId" Component={Address} />
         <Route path="/cardpayment" Component={CardPayment} />
-        <Route path="/orderes" Component={Orderes} />
+        {/* <Route path="/orderes" Component={Orderes} /> */}
         <Route path="/download" Component={Download} />
         <Route path="/account" Component={AccountView} />
+        {/* <Route path="/success/:orderId" component={Success} /> */}
+        <Route path="/success" element={Success} />
+        <Route path="/orders/:orderId" Component={Orderes} />
+        <Route path="/support" Component={SupportAndTerms} />
+        <Route path="/coustmercare" Component={CustomerCare} />
+        <Route path="/community" Component={Community} />
 
 
 

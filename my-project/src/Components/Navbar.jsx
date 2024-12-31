@@ -1,6 +1,7 @@
 import React, { useState, useEffect ,Suspense} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
 import CartComponent from "./Navbar/Cartdrop";
 import { MdShoppingCart } from 'react-icons/md';
 import { SlUserFollow } from 'react-icons/sl';
@@ -78,22 +79,21 @@ const Navbar = () => {
     {
       name: "Whats hot",
       links: [
-        { name: "COMMUNITY", path: "" },
-        { name: "Innovation 2", path: "/innovation2" },
+        { name: "COMMUNITY", path: "/community" },
+        // { name: "Innovation 2", path: "/innovation2" },
       ],
     },
     {
       name: "Download",
       links: [
         { name: "Wallpapers", path: "/download" },
-        { name: "Download 2", path: "/download2" },
-      ],
+         ],
     },
     {
       name: "Support",
       links: [
-        { name: "Support", path: "/community1" },
-        { name: "Coustmer care", path: "/community2" },
+        { name: "Support", path: "/support" },
+        { name: "Coustmer care", path: "/coustmercare" },
       ],
     },
     {
@@ -119,7 +119,7 @@ const Navbar = () => {
           {navItems.map((item, index) => (
             <div key={index} className="relative">
               <button
-                className="inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-20 after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 hover:text-red-500 font-Roboto"
+                className="inline-block after:content-[''] after:absolute font-mono font-extrabold after:left-0 after:bottom-0 after:w-20 after:h-0.5 after:bg-red-500 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100 hover:text-red-500 font-Roboto"
                 onClick={() => toggleDropdown(index)}
               >
                 {item.name}
@@ -166,7 +166,7 @@ const Navbar = () => {
     </button>
   </Link>
 )}
-    <div className="relative group">
+    <div className="relative group ">
             <Link to="/cart" className=" hover:text-red-500">
             <MdShoppingCart/>
             </Link>
@@ -175,35 +175,61 @@ const Navbar = () => {
           </div>
 
         </div>
-       <div className="md:hidden">
-          <button
-            onClick={toggleMobileMenu}
-            className="text-gray-700 focus:outline-none"
+        <div className="md:hidden">
+      <motion.button
+        onClick={toggleMobileMenu}
+        className="text-gray-200 focus:outline-none"
+        initial={false}
+        animate={{ rotate: isMobileMenuOpen ? 180 : 0, scale: isMobileMenuOpen ? 1.2 : 1 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
+        {isMobileMenuOpen ? (
+          <motion.svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </motion.svg>
+        ) : (
+          <motion.svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </motion.svg>
+        )}
+      </motion.button>
+    </div>
       </div>
       {isMobileMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="px-2 pt-2 pb-3 space-y-5 sm:px-3">
             {navItems.map((item, index) => (
               <div key={index} className="relative">
                 <button
-                  className="block text-left w-full px-3 py-2 rounded-md text-base font-medium text-gray-700"
+                  className="block text-left w-full  border border-gray-800 hover:border-red-600 px-3 py-4  font-mono  text-base font-medium text-red-600"
                   onClick={() => toggleDropdown(index)}
                 >
                   {item.name}
@@ -217,7 +243,7 @@ const Navbar = () => {
                     <Link
                       key={i}
                       to={link.path}
-                      className="block px-3 py-2 text-sm font-medium text-gray-700"
+                      className="block px-3 py-2 text-sm font-medium text-gray-300"
                     >
                       {link.name}
                     </Link>
@@ -225,6 +251,12 @@ const Navbar = () => {
                 </div>
               </div>
             ))}
+          </div>
+   
+          <div className="p-4  border-t border-red-500 font-bold font-mono flex gap-7 items-center">
+         
+            <img src="http://localhost:5173/images/Santics.png" alt="" className="h-16 w-16" />
+            <h1>Santics gaming</h1>
           </div>
         </div>
       )}

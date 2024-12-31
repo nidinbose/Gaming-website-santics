@@ -727,46 +727,75 @@ export async function getUserData(req,res){
 // PAYMENTS
 
 
-
-
-
 export async function razorpayPayment(req, res) {
   try {
+    const { amount, currency = "INR", items } = req.body;
+
+    // Validate the required fields
+    if (!amount || !items || !Array.isArray(items)) {
+      return res.status(400).json({ message: "Invalid request data. Amount and items are required." });
+    }
+
+    // Log the request body for debugging
+    console.log("Request Body:", req.body);
+
+    // Initialize Razorpay instance
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 
-    const options = {
-      amount: req.body.amount * 100,
-      currency: "INR",
-      receipt: crypto.randomBytes(10).toString("hex"),
+    // Create order options
+    const orderOptions = {
+      amount: amount * 100, // Convert to paise
+      currency,
+      receipt: crypto.randomBytes(10).toString("hex"), // Generate unique receipt ID
+      payment_capture: 1, // Auto capture payment
     };
 
-    instance.orders.create(options, async (error, order) => {
+    // Create order with Razorpay
+    instance.orders.create(orderOptions, async (error, order) => {
       if (error) {
         console.error("Razorpay Order Creation Error:", error);
-        return res.status(500).json({ message: "Something went wrong while creating the order." });
+        return res.status(500).json({ message: "Error creating Razorpay order." });
       }
+
+      // Log the Razorpay order for debugging
+      console.log("Razorpay Order:", order);
 
       // Save the order details to the database
       const paymentOrder = new PaymentOrder({
         razorpayOrderId: order.id,
         amount: order.amount,
         currency: order.currency,
+        items,
         receipt: order.receipt,
         status: order.status,
       });
 
-      await paymentOrder.save();
-      return res.status(200).json({ order }); 
+      try {
+        const savedOrder = await paymentOrder.save();
+
+        // Log the saved order for debugging
+        console.log("Saved Order:", savedOrder);
+
+        return res.status(200).json({ order });
+      } catch (dbError) {
+        console.error("Database Save Error:", dbError);
+
+        // Check validation errors in dbError
+        if (dbError.errors) {
+          console.error("Validation Errors:", dbError.errors);
+        }
+
+        return res.status(500).json({ message: "Error saving order to the database." });
+      }
     });
   } catch (error) {
     console.error("Internal Server Error:", error);
-    res.status(500).json({ message: "Internal Server Error!" });
+    return res.status(500).json({ message: "Internal Server Error!" });
   }
 }
-
 
 
 export async function verifyPayment(req, res) {
@@ -793,6 +822,19 @@ export async function verifyPayment(req, res) {
     res.status(500).json({ message: "Payment verification failed" });
   }
 }
+
+
+export async function getPaymentOrders(req,res){
+
+  try {
+    const data=await PaymentOrder.find({}).then((data)=>{
+      return res.status(201).send(data)
+    })
+  } catch (error) {
+    
+  }
+}
+
 
 
 

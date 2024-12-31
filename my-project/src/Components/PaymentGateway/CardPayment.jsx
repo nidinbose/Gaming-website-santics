@@ -6,8 +6,6 @@ const CardPayment = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("card");
-  const [cardDetails, setCardDetails] = useState({ cardNumber: "", expiry: "", cvv: "" });
-  const [upiId, setUpiId] = useState("");
   const navigate = useNavigate();
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('token');
@@ -31,20 +29,33 @@ const CardPayment = () => {
       console.error("Error fetching cart items:", error);
     }
   };
-  
+
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     setTotalPrice(total);
   };
-  
+
   const handlePayment = async () => {
     try {
+      // Map the cartItems into an array of objects with necessary fields
+      const cartData = cartItems.map((item) => ({
+        itemId: item.id,       // Item ID
+        price: item.price,     // Item price
+        quantity: item.quantity, // Item quantity
+        name: item.name,       // Item name
+      }));
+
+      console.log(cartData); // Optional: Log cartData to verify
+
       const response = await axios.post('http://localhost:3003/api/payment/createorder', {
         amount: totalPrice,
         currency: 'INR',
+        items: cartData,  // Send cart data as an array of objects
       });
-        if (response.data && response.data.order) {
-        openRazorpay(response.data.order);
+      console.log(response.data); // Optional: Log the response to verify
+
+      if (response.data && response.data.order) {
+        openRazorpay(response.data.order);  // Open Razorpay with the order details
       } else {
         console.error("Unexpected response format:", response.data);
         alert("Error while creating payment order. Please try again.");
@@ -53,11 +64,11 @@ const CardPayment = () => {
       console.error('Payment initiation error:', error);
       alert("Error while initiating payment");
     }
-  }; 
+  };
 
   const openRazorpay = (order) => {
     const options = {
-      key: 'rzp_test_wqQZK7PHsAYpBP', 
+      key: 'rzp_test_wqQZK7PHsAYpBP',  // Your Razorpay key
       amount: order.amount,
       currency: order.currency,
       name: 'Santics Gaming',
@@ -85,7 +96,7 @@ const CardPayment = () => {
 
   const verifyPayment = async (response) => {
     try {
-      await axios.post('http://localhost:3003/api/payment/verifypayment', {
+      await axios.post('http://localhost:3003/api/verifypayment', {
         razorpay_order_id: response.razorpay_order_id,
         razorpay_payment_id: response.razorpay_payment_id,
         razorpay_signature: response.razorpay_signature,
@@ -102,16 +113,13 @@ const CardPayment = () => {
     if (paymentMethod === "card") {
       handlePayment();
     } else if (paymentMethod === "upi") {
-      initiateUpiPayment(); 
+      initiateUpiPayment(); // Implement this if UPI option is enabled
     }
   };
 
   return (
     <div className="font-sans bg-black p-4 lg:max-w-7xl max-w-xl mx-auto rounded-md shadow-lg">
       <div className="grid lg:grid-cols-1 p-5">
-        
-
-       
         <div className="lg:col-span-1 bg-white/20 p-6 rounded shadow-md">
           <h2 className="text-xl font-semibold mb-4 text-red-500">Order Summary</h2>
           <ul className="mb-4">

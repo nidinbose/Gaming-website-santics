@@ -17,20 +17,20 @@ import Bottom from "./Navbar/bottom";
 
 const Home=()=>{
     return (
-        <div>
+        <div className="overflow-hidden">
           <Bottom/>
              {/* <Navbar/> */}
              <Curosals/>
              <Category/>
           
              <Overview/>
-          
+             <GameChanger/>
              <Overview2/>
 
              <Overview3/>
              <Sliding/>
              <Cards/>
-             <GameChanger/>
+          
              {/* <About/> */}
            
             

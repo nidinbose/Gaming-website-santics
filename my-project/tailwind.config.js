@@ -11,7 +11,7 @@ export default {
         '10': '10',
       },
       fontFamily: {
-        roboto: ['Roboto', 'sans-serif'], // Define the font here
+        roboto: ['Roboto', 'sans-serif'], 
       },
       fontFamily:{
         'mono': ['"jetBrains Mono"','monospace'],
@@ -21,6 +21,15 @@ export default {
         rotate: {
           "0%": { transform: "rotate(0deg) scale(10)" },
           "100%": { transform: "rotate(-360deg) scale(10)" },
+        },
+      },
+      animation: {
+        scroll: 'scroll 10s linear infinite',
+      },
+      keyframes: {
+        scroll: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(-100%)' },
         },
       },
     },
