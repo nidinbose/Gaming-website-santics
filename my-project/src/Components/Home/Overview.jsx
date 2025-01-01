@@ -23,7 +23,7 @@ const Overview = () => {
       }}
     >
       <motion.h3
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-blue-500 to-red-900 mb-4 font-mono"
+        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-5 font-bold xl:ml-[7vw] bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-blue-500 to-red-900 mb-4 font-mono"
         initial={{ opacity: 0, x: -100 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 1.2 }}
@@ -39,14 +39,15 @@ const Overview = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-mono font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-6 p-5"
-              variants={slideInFromLeft}
-              initial="hidden"
-              animate="visible"
-              transition={{ duration: 1, ease: "easeOut" }}
-            >
-              Be The Game Changer
-            </motion.h1>
+  className="text-xl sm:text-xl md:text-1xl lg:text-3xl xl:text-4xl font-mono font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-red-600 mb-3"
+  variants={slideInFromLeft}
+  initial="hidden"
+  animate="visible"
+  transition={{ duration: 1, ease: "easeOut" }}
+>
+  Be The Game Changer
+</motion.h1>
+
 
             <motion.p
               className="text-base md:text-lg text-white/40 font-mono sm:text-xs"
@@ -56,6 +57,9 @@ const Overview = () => {
               transition={{ duration: 1, ease: "easeOut" }}
             >
               ROG (Republic of Gamers) is a gaming brand developed by ASUS, focused on creating high-performance hardware and gear...
+              producing high-performance computer hardware and peripherals designed specifically for gamers, enthusiasts, and overclockers.
+               ROG focuses on delivering cutting-edge technologies
+
             </motion.p>
           </motion.div>
 

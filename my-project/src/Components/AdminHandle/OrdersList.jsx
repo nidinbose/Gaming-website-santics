@@ -42,13 +42,13 @@ const OrdersList = () => {
   }, []);
 
   return (
-    <div className="bg-black text-white p-6 h-screen overflow-auto">
+    <div className="bg-black text-white p-6 h-full mb-[45vh] overflow-auto">
       <h1 className="text-2xl font-bold mb-4">Orders List</h1>
       {loading && <p>Loading orders...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && !error && orders.length === 0 && <p>No orders found.</p>}
       {!loading && orders.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
           {orders.map((order) => (
             <div key={order._id} className="bg-white/10 p-6 rounded shadow">
               <h3 className="text-xl font-semibold text-red-500 mb-4">
@@ -94,7 +94,7 @@ const OrdersList = () => {
                       </select>
                       <button
                         onClick={() => handleUpdateStatus(order._id)}
-                        className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"
+                        className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
                       >
                         Save
                       </button>
@@ -104,7 +104,7 @@ const OrdersList = () => {
                       {order.status}{" "}
                       <button
                         onClick={() => setUpdatingOrder(order._id)}
-                        className="text-blue-500 underline"
+                        className="text-red-500 underline"
                       >
                         Edit
                       </button>

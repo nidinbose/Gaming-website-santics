@@ -6,7 +6,8 @@ const adminSchema= new mongoose.Schema({
     password:{type:String},
     username:{type:String},
     otp:{type:String},
-    newPassword:{type:String}
+    newPassword:{type:String},
+    role:{type:String},
    
 })
 

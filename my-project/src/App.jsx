@@ -45,6 +45,11 @@ import SupportAndTerms from './Components/Home/Support'
 import CustomerCare from './Components/Home/CoustmerCare'
 import Community from './Components/Home/Community'
 import OrdersList from './Components/AdminHandle/OrdersList'
+import Sales from './Components/AdminHandle/Sales'
+import Coupons from './Components/AdminHandle/Coupons'
+import Offeres from './Components/AdminHandle/Offeres'
+import Brands from './Components/AdminHandle/Brands'
+import Pcategories from './Components/AdminHandle/Pcategories'
 
 
 
@@ -90,6 +95,11 @@ function AppContent() {
         <Route path="/admin/editproducts/:id" Component={EditProducts} />
         <Route path="/admin/userlists" Component={UserLists} />
         <Route path="/admin/orderlists" Component={OrdersList} />
+        <Route path="/admin/sales" Component={Sales} />
+        <Route path="/admin/coup" Component={Coupons} />
+        <Route path="/admin/off" Component={Offeres} />
+        <Route path="/admin/brands" Component={Brands} />
+        <Route path="/admin/cate" Component={Pcategories} />
 
         <Route path="/" Component={Home} />
         <Route path="/signup" Component={Signup} />

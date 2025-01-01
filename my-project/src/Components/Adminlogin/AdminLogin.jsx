@@ -57,6 +57,7 @@ const AdminLogin = () => {
       const { token, userId } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
+      // localStorage.setItem("role", role); 
 
       navigate("/admin");
     } catch (error) {
@@ -165,7 +166,7 @@ const AdminLogin = () => {
             </Typography>
            </Link>
           </div>
-          <Button
+          {/* <Button
             variant="outlined"
             size="lg"
             className="mt-6 flex h-12 items-center justify-center gap-2"
@@ -177,8 +178,8 @@ const AdminLogin = () => {
               className="h-6 w-6"
             />
             Sign in with Google
-          </Button>
-          <Typography
+          </Button> */}
+          {/* <Typography
             variant="small"
             color="gray"
             className="mt-4 text-center font-normal"
@@ -187,7 +188,7 @@ const AdminLogin = () => {
             <Link to={`/adminregester`} className="font-medium text-gray-900">
               Create an account
             </Link>
-          </Typography>
+          </Typography> */}
         </form>
       </div>
     </section>

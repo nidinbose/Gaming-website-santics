@@ -10,7 +10,8 @@ const AdminRegister = () => {
     email: '',
     username: '',
     password: '',
-    cpassword: '' 
+    cpassword: '',
+    role: 'admin', // The role is hardcoded as 'admin' for this form
   });
   const [passwordShown, setPasswordShown] = useState(false);
   const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
@@ -29,16 +30,18 @@ const AdminRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Ensure password and confirm password match
     if (formData.password !== formData.cpassword) {
+      console.error('Passwords do not match');
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:3003/api/adminregester', formData); // Corrected the API endpoint
+      const response = await axios.post('http://localhost:3003/api/adminregester', formData); 
 
       if (response.status === 201) {
         console.log('Registration successful');
-        navigate('/adminlogin');
+        navigate('/adminlogin');  // Redirect to login page after successful registration
       } else {
         console.log('Registration failed');
       }
@@ -164,7 +167,7 @@ const AdminRegister = () => {
               }}
               className="w-full placeholder:opacity-100 focus:border-primary border-blue-gray-200"
               type={confirmPasswordShown ? "text" : "password"}
-              name="cpassword" // Correct the name to 'cpassword' to match the state
+              name="cpassword" // Ensure name matches the state
               value={formData.cpassword}
               onChange={handleChange}
               icon={
@@ -184,7 +187,7 @@ const AdminRegister = () => {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth onSubmit={handleSubmit}>
+          <Button type="submit" color="gray" size="lg" className="mt-6 h-12" fullWidth>
             Register
           </Button>
 
@@ -206,3 +209,6 @@ const AdminRegister = () => {
 };
 
 export default AdminRegister;
+
+
+

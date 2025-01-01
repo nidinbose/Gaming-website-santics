@@ -25,6 +25,8 @@ const Admin = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [userCount , setUserCount]=useState(null);
   const [productCount , setProductCount]=useState(null);
+  const [orderCount , setOrderCount]=useState(null);
+  const [fullCount , setFullCount]=useState(0);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("token");
@@ -58,8 +60,28 @@ const Admin = () => {
         console.error("Error fetching user count:", error);
       }
     };
+
+    const fetchOrderCount = async () => {
+      try {
+        const response = await axios.get("http://localhost:3003/api/ordercount");
+        setOrderCount(response.data.count);
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+      }
+    };
+
+    const fetchFullCount = async () => {
+      try {
+        const response = await axios.get("http://localhost:3003/api/fullrevenue"); 
+        setFullCount(response.data.totalRevenue); 
+      } catch (error) {
+        console.error("Error fetching full count:", error);
+      }
+    };
     fetchUserCount();
     fetchProductrCount();
+    fetchOrderCount();
+    fetchFullCount();
   }, []);
 
 
@@ -150,7 +172,7 @@ const Admin = () => {
             </Link>
 
             <Link
-              to="/admin/userlists"
+              to="/admin/sales"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
               <FcSalesPerformance className="text-center h-6 w-7" />
@@ -158,7 +180,7 @@ const Admin = () => {
             </Link>
 
             <Link
-              to="/admin/userlists"
+              to="/admin/coup"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
               <FaTags className="text-center h-6 w-7" />
@@ -166,14 +188,14 @@ const Admin = () => {
             </Link>
 
             <Link
-              to="/admin/userlists"
+              to="/admin/off"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
               <BiSolidOffer className="text-center h-6 w-7" />
               OFFERS
             </Link>
             <Link
-              to="/admin/userlists"
+              to="/admin/cate"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
               <BiSolidCategoryAlt className="text-center h-6 w-7" />
@@ -181,11 +203,19 @@ const Admin = () => {
             </Link>
 
             <Link
-              to="/admin/userlists"
+              to="/admin/brands"
               className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
             >
               <TbBrandSwift className="text-center h-6 w-7" />
               BRANDS
+            </Link>
+
+            <Link
+              to="/adminregester"
+              className="block py-2.5 px-4 rounded transition duration-200 hover:bg-white/10 hover:text-red-600 text-white/70 flex gap-4 mt-2"
+            >
+              <TbBrandSwift className="text-center h-6 w-7" />
+              ADD ADMINS
             </Link>
                  </nav>
         </div>
@@ -245,7 +275,7 @@ const Admin = () => {
             <h2 className="text-xl font-bold text-white ">TOTAL ORDERS</h2>
             <div className="flex gap-3 items-center ">
             <FaShoppingBag className="w-6 h-7 font-bold text-white"/>
-            <h1 className="text-3xl font-bold text-white"> {productCount !== null ? productCount : "Loading..."}</h1>
+            <h1 className="text-3xl font-bold text-white"> {orderCount !== null ? orderCount : "Loading..."}</h1>
             </div>
             </div>
 
@@ -263,7 +293,7 @@ const Admin = () => {
        <FcSalesPerformance className="w-7 h-7" />
     <h1 className="text-3xl font-bold text-white flex items-center gap-1">
       <FaRupeeSign className="w-5 h-5" />
-      {userCount !== null ? userCount : "Loading..."}
+      {fullCount !== null ? fullCount : "Loading..."}
     </h1>
   </div>
 </div>

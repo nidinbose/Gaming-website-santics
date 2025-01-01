@@ -14,6 +14,8 @@ router.route('/resetadminpassword').post(request.resetAdminPassword)
 router.route('/adminhome').post(Auth,request.adminHome)
 router.route('/usercount').get(request.userCount)
 router.route('/productcount').get(request.productCount)
+router.route('/ordercount').get(request.orderCount)
+router.route('/fullrevenue').get(request.fullRevenue)
 
 // User Routes
 router.route('/user').post(request.userRegister)

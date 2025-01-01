@@ -18,7 +18,7 @@ const Cards = () => {
     <div
       className="w-full h-full py-8 xl:p-20"
       style={{
-        backgroundImage: "url('https://wallpapers.com/images/hd/purple-gaming-nepi2tnxp6g0mvz9.jpg')",
+        backgroundImage: "url('https://img.freepik.com/free-photo/gamer-sitting-chair-full-shot_23-2149829174.jpg?t=st=1735715516~exp=1735719116~hmac=a7afa6ae1bb691dae26d11b7f492521dd74676688a8541e081e92b68b18c09e1&w=1480')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
@@ -30,7 +30,7 @@ const Cards = () => {
           HOT PRODUCTS
         </h1>
         <p className="text-center text-md font-semibold mt-7 mb-16 text-white/50">
-          View All Motherboards
+          {/* View All Motherboards */}
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
                    <Link to={`http://localhost:5173/viewcase/6755bf6d9f72529cc63f2f3d`}>

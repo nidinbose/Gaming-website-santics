@@ -422,16 +422,16 @@ export async function decrementCart(req, res) {
 
 export async function adminRegister(req,res) {
 
-  const {username,email,password,cpassword,otp}=req.body
+  const {username,email,password,cpassword,otp,role}=req.body
 
-  if(!(username&&email&&password&&cpassword))
+  if(!(username&&email&&password&&cpassword&&role))
       return res.status(404).send("fields are empty")
 
   if(password!==cpassword)
       return res.status(404).send("password not matched")
 
 bcrypt.hash(password,10).then(async(hpassword)=>{
-  adminSchema.create({username,password:hpassword,email,otp:""}).then(()=>{
+  adminSchema.create({username,password:hpassword,email,otp:"",role}).then(()=>{
       return res.status(201).send({msg:"successfully created"})
 
   })
@@ -448,7 +448,7 @@ bcrypt.hash(password,10).then(async(hpassword)=>{
 
 export async function adminLogin(req, res) {
   try {
-    const { email, password } = req.body;
+    const { email, password,role } = req.body;
     const user = await adminSchema.findOne({ email });
 
     if (!user) {
@@ -463,7 +463,7 @@ export async function adminLogin(req, res) {
     const { _id: id } = user;
     const token = await sign({ id, email }, process.env.JWT_KEY, { expiresIn: "24h" });
 
-    return res.status(200).send({ token });
+    return res.status(200).send({ token,role });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
@@ -616,6 +616,28 @@ export async function productCount(req, res) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+export async function orderCount(req, res) {
+  try {
+    const orderCounts = await PaymentOrder.countDocuments({});
+      res.status(200).json({ count: orderCounts });
+  } catch (error) {
+    console.error('Error fetching order count:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+export async function fullRevenue(req, res) {
+  try {
+     const allOrders = await PaymentOrder.find(); 
+    const totalAmount = allOrders.reduce((sum, order) => sum + order.amount, 0);
+    res.status(200).json({ totalRevenue: totalAmount });
+  } catch (error) {
+    console.error("Error calculating total amount:", error);
+    res.status(500).json({ error: "Error calculating total revenue" });
+  }
+}
+
+
 
 
 
