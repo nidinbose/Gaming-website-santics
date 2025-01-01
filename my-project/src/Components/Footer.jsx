@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -9,7 +10,7 @@ const Footer = () => {
           <div>
             <img src={`/images/Santics.png`} alt="" className="h-46 w-46" />
           </div>
-          {/* Company Section */}
+      
           <div>
             <h3 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Company</h3>
             <ul className="text-gray-500 dark:text-gray-400 font-medium">
@@ -19,9 +20,11 @@ const Footer = () => {
               <li className="mb-4">
                 <a href="#" className="hover:underline">Careers</a>
               </li>
-              <li className="mb-4">
+             <Link to={`/admin/brands`}>
+             <li className="mb-4">
                 <a href="#" className="hover:underline">Brand Center</a>
               </li>
+             </Link>
               <li className="mb-4">
                 <a href="#" className="hover:underline">Blog</a>
               </li>
@@ -62,8 +65,6 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
-          {/* Download Section */}
           <div>
             <h3 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Download</h3>
             <ul className="text-gray-500 dark:text-gray-400 font-medium">
@@ -82,16 +83,13 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-
-        {/* Footer Bottom */}
         <div className="px-4 py-6 bg-gray-100 dark:bg-red-600 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
             © 2024 <a href="https://flowbite.com/">santicsgaming™</a>. All Rights Reserved.. || <a href="">www.santicsgaming.tech.com</a>
           </span>
 
           <div className="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">
-            {/* Social Media Icons */}
-            <a href="#" className="text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                     <a href="#" className="text-gray-400 hover:text-gray-900 dark:hover:text-white">
               <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19">
                 <path fillRule="evenodd" d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z" clipRule="evenodd" />
               </svg>
