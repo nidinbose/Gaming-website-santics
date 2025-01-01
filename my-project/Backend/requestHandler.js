@@ -839,6 +839,51 @@ export async function getOrdersAdmin(req,res){
   }
 }
 
+export async function updateStatus(req,res){
+  const { orderId } = req.params; 
+  const { status } = req.body;  
+  if (!status) {
+    return res.status(400).json({ message: "Status is required." });
+  }
+
+  try {
+     const updatedOrder = await PaymentOrder.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true } 
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found." });
+    }
+
+    res.status(200).json({
+      message: "Order status updated successfully.",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Failed to update order status." });
+  }
+}
+
+
+export async function deleteFromCart(req,res){
+  const { userId } = req.params; 
+  try {
+   
+    const cart = await cartSchema.findOneAndDelete({ userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found for this user." });
+    }
+
+    res.status(200).json({ message: "Cart cleared successfully after payment." });
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+    res.status(500).json({ message: "Failed to clear the cart." });
+  }
+}
 
 // ADMIN REQ
 

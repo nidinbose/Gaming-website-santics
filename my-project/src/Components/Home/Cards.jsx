@@ -22,6 +22,7 @@ const Cards = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
+        opacity:'10',
       }}
     >
       <div className="bg-transparent rounded-lg p-10">

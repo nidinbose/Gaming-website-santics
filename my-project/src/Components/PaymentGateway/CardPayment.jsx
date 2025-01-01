@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const CardPayment = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [addresses,setAddresses]=useState([])
+  const [addresses, setAddresses] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const navigate = useNavigate();
   const userId = localStorage.getItem('userId');
@@ -50,9 +50,21 @@ const CardPayment = () => {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     setTotalPrice(total);
   };
+
+  const clearCartAfterPayment = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:3003/api/clear-cart/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("Cart cleared:", response.data.message);
+    } catch (error) {
+      console.error("Failed to clear cart:", error?.response?.data?.message || error.message);
+    }
+  };
+
   const handlePayment = async () => {
     try {
-       const cartData = cartItems.map((item) => ({
+      const cartData = cartItems.map((item) => ({
         itemId: item.productId,
         price: item.price,
         quantity: item.quantity,
@@ -60,35 +72,32 @@ const CardPayment = () => {
         photo: item.imageLink,
       }));
 
-      const addressData=addresses.map((address)=>({
-        Name:address.name,
-        AddressLine:address.addressLine,
-        City:address.city,
-        State:address.state,
-        Pincode:address.zipCode,
-        Phone:address.phone,
+      const addressData = addresses.map((address) => ({
+        Name: address.name,
+        AddressLine: address.addressLine,
+        City: address.city,
+        State: address.state,
+        Pincode: address.zipCode,
+        Phone: address.phone,
+      }));
 
-      }))
-  
-      console.log(cartData); 
+      console.log(cartData);
       console.log(addressData);
-      
-  
+
       const response = await axios.post(
         'http://localhost:3003/api/payment/createorder',
         {
-          userId, 
+          userId,
           amount: totalPrice,
           currency: 'INR',
-          items: cartData, 
-          address:addressData,
+          items: cartData,
+          address: addressData,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response.data);
-  
+
       if (response.data && response.data.order) {
         openRazorpay(response.data.order);
       } else {
@@ -100,11 +109,10 @@ const CardPayment = () => {
       alert("Error while initiating payment");
     }
   };
-  
 
   const openRazorpay = (order) => {
     const options = {
-      key: 'rzp_test_wqQZK7PHsAYpBP',  
+      key: 'rzp_test_wqQZK7PHsAYpBP',
       amount: order.amount,
       currency: order.currency,
       name: 'Santics Gaming',
@@ -138,6 +146,9 @@ const CardPayment = () => {
         razorpay_signature: response.razorpay_signature,
       });
       alert("Payment successful");
+
+      await clearCartAfterPayment();
+
       navigate("/success");
     } catch (error) {
       console.error("Payment verification error:", error);
@@ -168,17 +179,17 @@ const CardPayment = () => {
           </ul>
           <hr className="mb-4" />
           <h1 className='text-2xl font-bold text-white mb-4 font-mono'>Shipping Address</h1>
-          {addresses.map((address)=>(
-             <div key={address._id} className='mb-6'>
-             <h4 className="font-bold text-red-500 ">{address.name}</h4>
-             <p className="text-sm text-white/60">{address.addressLine}</p>
-             <p className="text-sm text-white/60">{address.city}, {address.state} {address.zipCode}</p>
-             <p className="text-sm text-white/60">Phone: {address.phone}</p>
-           </div>
+          {addresses.map((address) => (
+            <div key={address._id} className='mb-6'>
+              <h4 className="font-bold text-red-500">{address.name}</h4>
+              <p className="text-sm text-white/60">{address.addressLine}</p>
+              <p className="text-sm text-white/60">{address.city}, {address.state} {address.zipCode}</p>
+              <p className="text-sm text-white/60">Phone: {address.phone}</p>
+            </div>
           ))}
           <div className="flex justify-between text-lg font-bold">
             <span className='text-white'>Total:</span>
-            <span className='border-red-500 bg-red-600 hover:bg-white/10  border p-3 text-white '>₹{totalPrice}</span>
+            <span className='border-red-500 bg-red-600 hover:bg-white/10 border p-3 text-white'>₹{totalPrice}</span>
           </div>
           <button
             onClick={handlePaymentClick}
